@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Unbugit.Models
 {
-    public class Class
+    public class Notification
     {
         public int Id { get; set; }
 

@@ -50,9 +50,9 @@ namespace Unbugit.Models
         public int TicketStatusId { get; set; }
 
         [DisplayName("Ticket Owner")]
-        public int OwnerUserId { get; set; }
+        public string OwnerUserId { get; set; }
         [DisplayName("Ticket Developer")]
-        public int DeveloperUserId { get; set; }
+        public string DeveloperUserId { get; set; }
 
         //navigational properties
         public virtual Project Project { get; set; }
@@ -63,7 +63,7 @@ namespace Unbugit.Models
         public virtual BTUser DeveloperUser { get; set; }
 
         public virtual ICollection<TicketComment> Comments { get; set; } = new HashSet<TicketComment>();
-        public virtual ICollection<TicketAttachment> Attachments { get; set} = new HashSet<TicketAttachment>();
+        public virtual ICollection<TicketAttachment> Attachments { get; set; } = new HashSet<TicketAttachment>();
         public virtual ICollection<Notification> Notifications { get; set; } = new HashSet<Notification>();
         public virtual ICollection<TicketHistory> TicketHistory { get; set; } = new HashSet<TicketHistory>(); 
 
