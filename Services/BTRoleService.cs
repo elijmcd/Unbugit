@@ -16,7 +16,7 @@ namespace Unbugit.Services
         private readonly UserManager<BTUser> _userManager;
 
         public BTRoleService(ApplicationDbContext context,
-            RoleManager<IdentityRole> roleManager, 
+            RoleManager<IdentityRole> roleManager,
             UserManager<BTUser> userManager)
         {
             _context = context;
@@ -54,19 +54,31 @@ namespace Unbugit.Services
             return result;
         }
 
+        public async Task<bool> RemoveUserFromRolesAsync(BTUser user, IEnumerable<string> roles)
+        {
+            bool finalResult = new();
+            foreach (var role in roles)
+            {
+                bool result = (await _userManager.RemoveFromRoleAsync(user, role)).Succeeded;
+                finalResult = result;
+            }
+            return finalResult;
+        }
+
         public async Task<List<BTUser>> UsersNotInRoleAsync(string roleName)
         {
             List<BTUser> usersNotInRole = new();
-            try {
+            try
+            {
 
                 //TODO modify for multi-tenants
-               foreach(BTUser user in _context.Users.ToList())
+                foreach (BTUser user in _context.Users.ToList())
                 {
-                    if(!await IsUserInRoleAsync(user, roleName))
+                    if (!await IsUserInRoleAsync(user, roleName))
                     {
                         usersNotInRole.Add(user);
                     }
-                } 
+                }
             }
             catch (Exception ex)
             {
