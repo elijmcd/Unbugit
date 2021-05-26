@@ -19,6 +19,7 @@ namespace Unbugit.Models
         [DataType(DataType.DateTime)]
         public DateTimeOffset Created { get; set; }
 
+        [Required]
         [DisplayName("Ticket")]
         public int TicketId { get; set; }
 
