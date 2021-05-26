@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unbugit.Services;
+using Unbugit.Services.Interfaces;
 
 namespace Unbugit
 {
@@ -40,6 +42,8 @@ namespace Unbugit
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IBTRoleService, BTRoleService>();
 
             services.AddMvc();
         }
