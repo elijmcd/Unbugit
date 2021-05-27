@@ -18,15 +18,12 @@ namespace Unbugit.Controllers
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<BTUser> _userManager;
         private readonly IBTRoleService _roleService;
 
         public UserRolesController(ApplicationDbContext context,
-                                   UserManager<BTUser> userManager,
                                    IBTRoleService roleService) 
         {
             _context = context;
-            _userManager = userManager;
             _roleService = roleService;
         }
 
@@ -57,10 +54,10 @@ namespace Unbugit.Controllers
             BTUser user = _context.Users.Find(member.BTUser.Id);
 
             IEnumerable<string> roles = await _roleService.ListUserRolesAsync(user);
-
             //homework
-            await _userManager.RemoveFromRolesAsync(user, roles); // this is homework, make in service
+            //await _userManager.RemoveFromRolesAsync(user, roles); // this is homework, make in service
             //did you do your homework?
+            await _roleService.RemoveUserFromRolesAsync(user, roles);
 
             string userRole = member.SelectedRoles.FirstOrDefault();
 

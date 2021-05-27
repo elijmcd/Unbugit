@@ -12,6 +12,5 @@ namespace Unbugit.Models.Enums
         Developer,
         Submitter,
         DemoUser,
-        NewUser
     }
 }

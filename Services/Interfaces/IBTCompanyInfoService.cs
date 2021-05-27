@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Unbugit.Models;
 
-namespace Unbugit.Services
+namespace Unbugit.Services.Interfaces
 {
     public interface IBTCompanyInfoService
     {
@@ -12,7 +12,9 @@ namespace Unbugit.Services
 
         Task<List<BTUser>> GetAllMembersAsync(int companyId);
 
-        Task<List<BTUser>> GetAllProjectsAsync(int companyId);
+        Task<List<Project>> GetAllProjectsAsync(int companyId);
+
+        Task<List<Ticket>> GetAllTicketsAsync(int companyId);
 
         Task<List<BTUser>> GetMembersInRoleAsync(string roleName, int CompanyId);
     }

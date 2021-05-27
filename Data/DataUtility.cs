@@ -71,7 +71,7 @@ namespace Unbugit.Services
             //TsTEP 1: This is the programmatic equivalent to Update-Database
             await dbContextSvc.Database.MigrateAsync();
 
-            //Custom  Bug Tracker Seed Methods
+            //Custom Bug Tracker Seed Methods
             await SeedRolesAsync(userManagerSvc, roleManagerSvc);
             await SeedDefaultCompaniesAsync(dbContextSvc);
             await SeedDefaultUsersAsync(userManagerSvc, roleManagerSvc);
@@ -92,7 +92,7 @@ namespace Unbugit.Services
             await roleManager.CreateAsync(new IdentityRole(Roles.Developer.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.Submitter.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.DemoUser.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.NewUser.ToString()));
+            //await roleManager.CreateAsync(new IdentityRole(Roles.NewUser.ToString()));
         }
 
         public static async Task SeedDefaultCompaniesAsync(ApplicationDbContext context)

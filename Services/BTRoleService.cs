@@ -56,13 +56,8 @@ namespace Unbugit.Services
 
         public async Task<bool> RemoveUserFromRolesAsync(BTUser user, IEnumerable<string> roles)
         {
-            bool finalResult = new();
-            foreach (var role in roles)
-            {
-                bool result = (await _userManager.RemoveFromRoleAsync(user, role)).Succeeded;
-                finalResult = result;
-            }
-            return finalResult;
+            bool result = (await _userManager.RemoveFromRolesAsync(user, roles)).Succeeded;
+            return result;
         }
 
         public async Task<List<BTUser>> UsersNotInRoleAsync(string roleName)
