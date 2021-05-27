@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,17 @@ using Unbugit.Services.Interfaces;
 
 namespace Unbugit.Services
 {
+
     public class BTCompanyInfoService : IBTCompanyInfoService
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BTUser> _userManager;
 
-        public BTCompanyInfoService(ApplicationDbContext context)
+        public BTCompanyInfoService(ApplicationDbContext context,
+                                    UserManager<BTUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<List<BTUser>> GetAllMembersAsync(int companyId)
@@ -81,9 +86,13 @@ namespace Unbugit.Services
             return company;
         }
 
-        public Task<List<BTUser>> GetMembersInRoleAsync(string roleName, int CompanyId)
+        public async Task<List<BTUser>> GetMembersInRoleAsync(string roleName, int CompanyId)
         {
-            throw new NotImplementedException();
+            List<BTUser> users = (await _userManager.GetUsersInRoleAsync(roleName)).ToList();
+
+            List<BTUser> roleUsers = users.Where(u => u.CompanyId == CompanyId).ToList();
+
+            return roleUsers;
         }
     }
 }
