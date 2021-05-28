@@ -14,14 +14,17 @@ namespace Unbugit.Services
         private readonly ApplicationDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IBTCompanyInfoService _infoService;
 
         public BTRoleService(ApplicationDbContext context,
             RoleManager<IdentityRole> roleManager,
-            UserManager<BTUser> userManager)
+            UserManager<BTUser> userManager,
+            IBTCompanyInfoService infoService)
         {
             _context = context;
             _roleManager = roleManager;
             _userManager = userManager;
+            _infoService = infoService;
         }
 
         public async Task<bool> AddUserToRoleAsync(BTUser user, string roleName)
@@ -60,14 +63,13 @@ namespace Unbugit.Services
             return result;
         }
 
-        public async Task<List<BTUser>> UsersNotInRoleAsync(string roleName)
+        public async Task<List<BTUser>> UsersNotInRoleAsync(string roleName, int companyId)
         {
             List<BTUser> usersNotInRole = new();
             try
             {
-
                 //TODO modify for multi-tenants
-                foreach (BTUser user in _context.Users.ToList())
+                foreach (BTUser user in await _infoService.GetAllMembersAsync(companyId))
                 {
                     if (!await IsUserInRoleAsync(user, roleName))
                     {

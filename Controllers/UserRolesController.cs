@@ -32,7 +32,7 @@ namespace Unbugit.Controllers
         {
             List<ManageUserRolesViewModel> model = new();
 
-            //TODO company users
+            //TODO company users ... little more work to do
             List<BTUser> users = _context.Users.ToList();
 
             foreach (var user in users)
@@ -54,9 +54,7 @@ namespace Unbugit.Controllers
             BTUser user = _context.Users.Find(member.BTUser.Id);
 
             IEnumerable<string> roles = await _roleService.ListUserRolesAsync(user);
-            //homework
-            //await _userManager.RemoveFromRolesAsync(user, roles); // this is homework, make in service
-            //did you do your homework?
+
             await _roleService.RemoveUserFromRolesAsync(user, roles);
 
             string userRole = member.SelectedRoles.FirstOrDefault();

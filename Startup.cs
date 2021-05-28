@@ -46,7 +46,9 @@ namespace Unbugit
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
+            services.AddScoped<IBTCompanyInfoService, BTCompanyInfoService>();
             services.AddScoped<IBTRoleService, BTRoleService>();
+            services.AddScoped<IBTProjectService, BTProjectService>();
 
             services.AddMvc();
         }
