@@ -16,7 +16,7 @@ namespace Unbugit.Services.Interfaces
 
         public Task RemoveUsersFromProjectByRoleAsync(string userId, int projectId);
 
-        public Task<List<Project>> ListUserProjectAsync(string userId);
+        public Task<List<Project>> ListUserProjectsAsync(string userId);
 
         public Task<List<Project>> GetAllProjectsByCompany(int companyId);
 
@@ -36,9 +36,11 @@ namespace Unbugit.Services.Interfaces
 
         public Task<List<BTUser>> UsersNotOnProjectAsync(int projectId, int companyId);
 
-        public Task<List<BTUser>> DevelopersOnProjectAsync(int projectId);
+        //public Task<List<BTUser>> DevelopersOnProjectAsync(int projectId);
 
-        public Task<List<BTUser>> SubmittersOnProjectAsync(int projectId);
+        //public Task<List<BTUser>> SubmittersOnProjectAsync(int projectId);
+
+        public Task<int> LookupProjectPriorityId(string priorityName);
 
 
     }

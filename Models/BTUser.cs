@@ -41,6 +41,5 @@ namespace Unbugit.Models
         //navigational properties
         public virtual Company Company { get; set; }
         public virtual ICollection<Project> Projects { get; set; } = new HashSet<Project>();
-
     }
 }
