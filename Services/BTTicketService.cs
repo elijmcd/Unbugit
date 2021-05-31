@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Unbugit.Data;
@@ -28,9 +29,32 @@ namespace Unbugit.Services
         public async Task AssignTicketAsync(int ticketId, string userId)
         {
             BTUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            
-            throw new NotImplementedException();
-        }//CLARIFY ****
+            Ticket ticket = await _context.Ticket.FirstOrDefaultAsync(t => t.Id == ticketId);
+
+            try
+            {
+                if (user != null)
+                {
+                    try
+                    {
+                        if (ticket.DeveloperUser != null)
+                        {
+                            ticket.DeveloperUser = null;
+                        }
+                        ticket.DeveloperUser = user;
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine($"***ERROR *** - No ticket was assign. -> {x.Message}");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"***ERROR *** - No ticket was assign. -> {x.Message}");
+            }
+        }//--
 
         public async Task<List<Ticket>> GetAllPMTicketsAsync(string userId)
         {
@@ -38,7 +62,7 @@ namespace Unbugit.Services
                 .ThenInclude(t => t.Tickets)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
-            List<Ticket> tickets = await _context.Project.Include(p=>p.Members).Where(Ticket.await _roleService.IsUserInRoleAsync(user, "ProjectManager"));
+            List<Ticket> tickets = await _context.Project.Include(p => p.Members).Where(Ticket.await _roleService.IsUserInRoleAsync(user, "ProjectManager"));
 
             return tickets;
         }// ****
@@ -46,11 +70,11 @@ namespace Unbugit.Services
         public async Task<List<Ticket>> GetAllTicketsByCompanyAsync(int companyId)
         {
             Company company = await _context.Company
-                .Include(c=>c.Projects)
-                    .ThenInclude(p=>p.Tickets)
+                .Include(c => c.Projects)
+                    .ThenInclude(p => p.Tickets)
                 .FirstOrDefaultAsync(c => c.CompanyId == companyId);
 
-            List<Ticket> tickets = company.Projects.SelectMany(t=>t.Tickets).ToList();
+            List<Ticket> tickets = company.Projects.SelectMany(t => t.Tickets).ToList();
 
             return tickets;
         }// --
@@ -97,7 +121,7 @@ namespace Unbugit.Services
             List<Ticket> tickets = new();
             Project project = await _context.Project
                 .Include(p => p.Members)
-                .Include(p=>p.Tickets)
+                .Include(p => p.Tickets)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
 
             throw new NotImplementedException();
