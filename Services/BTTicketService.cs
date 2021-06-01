@@ -147,7 +147,7 @@ namespace Unbugit.Services
             return tickets;
         }// --
 
-        public async Task<List<Ticket>> GetProjectTicketsByRoleAsync(string role, string userId, int projectId)
+        public async Task<List<Ticket>> GetProjectTicketsByRoleAsync(string role, string userId, int projectId)//- BAM!
         {
             Project project = await _context.Project
                 .Include(p => p.Members)
