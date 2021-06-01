@@ -28,7 +28,7 @@ namespace Unbugit.Services
         public string FormatFileSize(long bytes)
         {
             throw new NotImplementedException();
-        }//
+        }
 
         public string GetFileIcon(string file)
         {
