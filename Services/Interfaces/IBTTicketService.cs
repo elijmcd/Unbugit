@@ -27,6 +27,9 @@ namespace Unbugit.Services.Interfaces
         Task<List<Ticket>> GetAllTicketsByRoleAsync(string role, string userId);
 
         Task<List<Ticket>> GetProjectTicketsByRoleAsync(string role, string userId, int projectId);
+        Task<List<Ticket>> GetProjectTicketsByTypeAsync(string typeName, int companyId, int projectId);
+        Task<List<Ticket>> GetProjectTicketsByStatusAsync(string statusName, int companyId, int projectId);
+        Task<List<Ticket>> GetProjectTicketsByPriorityAsync(string priorityName, int companyId, int projectId);
 
         Task<int?> LookupTicketPriorityIdAsync(string priorityName);
 
