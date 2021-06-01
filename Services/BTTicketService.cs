@@ -46,24 +46,36 @@ namespace Unbugit.Services
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLine($"***ERROR *** - No ticket was assign. -> {e.Message}");
+                        Debug.WriteLine($"***ERROR *** - No ticket was assigned. -> {e.Message}");
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"***ERROR *** - No ticket was assign. -> {e.Message}");
+                Debug.WriteLine($"***ERROR *** - No ticket was assigned. -> {e.Message}");
             }
         }//--
 
         public async Task<List<Ticket>> GetAllPMTicketsAsync(string userId)
         {
             BTUser user = await _context.Users.Include(u => u.Projects)
-                .ThenInclude(t => t.Tickets)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+                                                .ThenInclude(t => t.Tickets)
+                                              .FirstOrDefaultAsync(u => u.Id == userId);
 
-            List<Ticket> tickets = await _context.Project.Include(p => p.Members).Where(Ticket.await _roleService.IsUserInRoleAsync(user, "ProjectManager"));
+            List<Ticket> tickets = new();
 
+            try
+            {
+                if(await _roleService.IsUserInRoleAsync(user, "ProjectManager"))
+                {
+                    tickets = user.Projects.SelectMany(p => p.Tickets).ToList();
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"***ERROR *** - User has no tickets in Project Manager role. -> {e.Message}");
+            }
             return tickets;
         }// ****
 
@@ -91,10 +103,29 @@ namespace Unbugit.Services
             return tickets.Where(t => t.TicketPriorityId == priorityId).ToList();
         }// -- Is this...
 
-        public Task<List<Ticket>> GetAllTicketsByRoleAsync(string role, string userId)
+        public async Task<List<Ticket>> GetAllTicketsByRoleAsync(string role, string userId)
         {
-            throw new NotImplementedException();
-        }// ***
+            BTUser user = await _context.Users
+                                        .Include(u => u.Projects)
+                                          .ThenInclude(p => p.Tickets)
+                                        .FirstOrDefaultAsync(u => u.Id == userId);
+
+            List<Ticket> tickets = new();
+
+            try
+            {
+                if((await _roleService.ListUserRolesAsync(user)).Contains(role))
+                {
+                    tickets = user.Projects.SelectMany(p => p.Tickets).ToList();
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"***ERROR *** - User has no tickets in Project Manager role. -> {e.Message}");
+            }
+            return tickets;
+        }// ****
 
         public async Task<List<Ticket>> GetAllTicketsByStatusAsync(int companyId, string statusName)
         {
@@ -118,14 +149,31 @@ namespace Unbugit.Services
 
         public async Task<List<Ticket>> GetProjectTicketsByRoleAsync(string role, string userId, int projectId)
         {
-            List<Ticket> tickets = new();
             Project project = await _context.Project
                 .Include(p => p.Members)
                 .Include(p => p.Tickets)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
+            BTUser user = await _context.Users.Include(u => u.Projects)
+                .ThenInclude(p => p.Tickets)
+                .FirstOrDefaultAsync();
 
-            throw new NotImplementedException();
-        }// ***
+            List<Ticket> tickets = new();
+
+            try
+            {
+                if ((await _roleService.ListUserRolesAsync(user)).Contains(role))
+                {
+                    tickets = _context.Ticket.Include(t => t.ProjectId == projectId && (project.Members.Contains(user))).ToList();
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"***ERROR *** - User has no tickets in selected role. -> {e.Message}");
+            }
+
+            return tickets;
+        }// *** INCOMPLETE??
 
         public async Task<BTUser> GetTicketDeveloperAsync(int ticketId)
         {

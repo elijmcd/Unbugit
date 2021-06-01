@@ -34,7 +34,7 @@ namespace Unbugit.Services
             List<TicketHistory> histories = tickets.SelectMany(h => h.TicketHistory).ToList();
 
             return histories;
-        }
+        }//
 
         public async Task<List<TicketHistory>> GetProjectTicketHistories(int projectId)
         {
@@ -44,6 +44,6 @@ namespace Unbugit.Services
             List<TicketHistory> histories = project.Tickets.SelectMany(h => h.TicketHistory).ToList();
 
             return histories;
-        }
+        }//
     }
 }
