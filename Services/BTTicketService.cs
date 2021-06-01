@@ -46,13 +46,13 @@ namespace Unbugit.Services
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLine($"***ERROR *** - No ticket was assign. -> {x.Message}");
+                        Debug.WriteLine($"***ERROR *** - No ticket was assign. -> {e.Message}");
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"***ERROR *** - No ticket was assign. -> {x.Message}");
+                Debug.WriteLine($"***ERROR *** - No ticket was assign. -> {e.Message}");
             }
         }//--
 
