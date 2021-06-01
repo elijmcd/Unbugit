@@ -6,17 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Unbugit.Data;
+using Unbugit.Extensions;
 using Unbugit.Models;
+using Unbugit.Models.ViewModels;
+using Unbugit.Services.Interfaces;
 
 namespace Unbugit.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBTProjectService _projectService;
 
-        public ProjectsController(ApplicationDbContext context)
+        public ProjectsController(ApplicationDbContext context, IBTProjectService projectService)
         {
             _context = context;
+            _projectService = _projectService;
         }
 
         // GET: Projects
@@ -125,6 +130,25 @@ namespace Unbugit.Controllers
             ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name", project.CompanyId);
             ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id", project.ProjectPriorityId);
             return View(project);
+        }
+
+        //[Authorize(Roles = "Admin,ProjectManager"_]
+        [HttpGet]
+        public async Task<IActionResult> AssignUsers(int id)
+        {
+            ProjectMembersViewModel model = new();
+
+            //get companyId
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            Project project = (await _projectService.GetAllProjectsByCompany())
+                                                    .FirstOrDefaultAsync(p => p.Id == id);
+                
+            model.Project = project;
+            List<BTUser> users = await _context.Users.ToListAsync();
+            List<BTUser> members = (List<BTUser>)await _projectService.UsersOnProjectAsync(id);
+            model.Users = new MultiSelectList(users, "Id", "FullName", members);
+            return View(model);
         }
 
         // GET: Projects/Delete/5

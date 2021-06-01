@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Unbugit.Services;
 using Unbugit.Services.Interfaces;
+using Unbugit.Services.Factories;
 
 namespace Unbugit
 {
@@ -43,6 +44,7 @@ namespace Unbugit
 
             services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddClaimsPrincipalFactory<BTUserClaimsPrincipalFactory>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
