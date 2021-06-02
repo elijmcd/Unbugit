@@ -12,9 +12,9 @@ namespace Unbugit.Services.Factories
     public class BTUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<BTUser, IdentityRole>
     {
         public BTUserClaimsPrincipalFactory(
-            UserManager<BTUser> userManager,
-            RoleManager<IdentityRole> roleManager,
-            IOptions<IdentityOptions> optionsAccessor)
+                    UserManager<BTUser> userManager,
+                    RoleManager<IdentityRole> roleManager,
+                    IOptions<IdentityOptions> optionsAccessor)
         : base(userManager, roleManager, optionsAccessor)
         {
         }
@@ -23,6 +23,7 @@ namespace Unbugit.Services.Factories
         {
             ClaimsIdentity identity = await base.GenerateClaimsAsync(user);
             identity.AddClaim(new Claim("CompanyId", user.CompanyId.ToString()));
+
             return identity;
         }
     }
