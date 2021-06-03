@@ -51,6 +51,7 @@ namespace Unbugit
             services.AddScoped<IBTCompanyInfoService, BTCompanyInfoService>();
             services.AddScoped<IBTRoleService, BTRoleService>();
             services.AddScoped<IBTProjectService, BTProjectService>();
+            services.AddScoped<IBTTicketService, BTTicketService>();
 
             services.AddMvc();
         }

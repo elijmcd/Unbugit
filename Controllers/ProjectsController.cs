@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Unbugit.Data;
 using Unbugit.Extensions;
 using Unbugit.Models;
+using Unbugit.Models.Enums;
 using Unbugit.Models.ViewModels;
 using Unbugit.Services.Interfaces;
 
@@ -17,11 +18,15 @@ namespace Unbugit.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _projectService;
+        private readonly IBTCompanyInfoService _companyInfoService;
 
-        public ProjectsController(ApplicationDbContext context, IBTProjectService projectService)
+        public ProjectsController(ApplicationDbContext context, 
+            IBTProjectService projectService,
+            IBTCompanyInfoService companyInfoService)
         {
             _context = context;
             _projectService = projectService;
+            _companyInfoService = companyInfoService;
         }
 
         // GET: Projects
@@ -40,6 +45,7 @@ namespace Unbugit.Controllers
             }
 
             var project = await _context.Project
+                .Include(p=>p.Members)
                 .Include(p => p.Company)
                 .Include(p => p.ProjectPriority)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -145,8 +151,11 @@ namespace Unbugit.Controllers
                                                     .FirstOrDefault(p => p.Id == id);
 
             model.Project = project;
-            List<BTUser> users = await _projectService.UsersNotOnProjectAsync(id, companyId);
-            List<BTUser> members = project.Members.ToList();
+            List<BTUser> developers = await _companyInfoService.GetMembersInRoleAsync(Roles.Developer.ToString(), companyId);
+            List<BTUser> submitters = await _companyInfoService.GetMembersInRoleAsync(Roles.Submitter.ToString(), companyId);
+
+            List<BTUser> users = developers.Concat(submitters).ToList();
+            List<string> members = project.Members.Select(m=>m.Id).ToList();
             model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
         }
@@ -172,8 +181,8 @@ namespace Unbugit.Controllers
                     {
                         await _projectService.AddUserToProjectAsync(id, model.Project.Id);
                     }
-                    //go to project details
-                    return RedirectToAction("Index", "Projects");
+                    //go to Project 'Details' instead
+                    return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
                 }
                 else
                 {

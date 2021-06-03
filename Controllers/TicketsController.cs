@@ -7,16 +7,36 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Unbugit.Data;
 using Unbugit.Models;
+using Unbugit.Extensions;
+using Unbugit.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Unbugit.Models.Enums;
 
 namespace Unbugit.Controllers
 {
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBTTicketService _ticketService;
+        private readonly IBTCompanyInfoService _companyService;
+        private readonly IBTRoleService _roleService;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<BTUser> _userManager;
 
-        public TicketsController(ApplicationDbContext context)
+
+        public TicketsController(ApplicationDbContext context,
+            IBTTicketService ticketService,
+            IBTCompanyInfoService companyService,
+            IBTRoleService roleService,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<BTUser> userManager)
         {
             _context = context;
+            _ticketService = ticketService;
+            _companyService = companyService;
+            _roleService = roleService;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         // GET: Tickets
@@ -31,6 +51,36 @@ namespace Unbugit.Controllers
                                         .Include(t => t.TicketType).ToListAsync();
 
             return View(await applicationDbContext);
+        }
+        public async Task<IActionResult> AllTickets()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            List<Ticket> tickets = await _companyService.GetAllTicketsAsync(companyId);
+
+            return View(tickets);
+        }
+        public async Task<IActionResult> MyTickets()
+        {
+            string userId = (await _userManager.GetUserAsync(User)).Id;
+            int companyId = User.Identity.GetCompanyId().Value;
+            List<Ticket> companyTickets = await _companyService.GetAllTicketsAsync(companyId);
+            List<Ticket> submitterTickets = companyTickets.Where(t=>t.OwnerUserId == userId).ToList();
+            List<Ticket> developerTickets = companyTickets.Where(t=>t.DeveloperUserId == userId).ToList();
+
+            List<Ticket> myTickets = developerTickets.Concat(submitterTickets).ToList();
+
+            //var model = myTickets.Where(t => t.DeveloperUserId == userId && t.OwnerUserId == userId).ToList();
+
+            //if (User.IsInRole("Developer"))
+            //{
+            //    myTickets = (await _ticketService.GetAllTicketsByRoleAsync(Roles.Developer.ToString(), userId));
+            //}
+            //if (User.IsInRole("Submitter"))
+            //{
+            //    myTickets = (await _ticketService.GetAllTicketsByRoleAsync(Roles.Submitter.ToString(), userId));
+            //}
+            return View(myTickets);
         }
 
         // GET: Tickets/Details/5
