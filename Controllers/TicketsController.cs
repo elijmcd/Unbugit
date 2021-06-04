@@ -70,16 +70,6 @@ namespace Unbugit.Controllers
 
             List<Ticket> myTickets = developerTickets.Concat(submitterTickets).ToList();
 
-            //var model = myTickets.Where(t => t.DeveloperUserId == userId && t.OwnerUserId == userId).ToList();
-
-            //if (User.IsInRole("Developer"))
-            //{
-            //    myTickets = (await _ticketService.GetAllTicketsByRoleAsync(Roles.Developer.ToString(), userId));
-            //}
-            //if (User.IsInRole("Submitter"))
-            //{
-            //    myTickets = (await _ticketService.GetAllTicketsByRoleAsync(Roles.Submitter.ToString(), userId));
-            //}
             return View(myTickets);
         }
 
