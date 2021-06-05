@@ -31,8 +31,9 @@
         <div class="dropdown-menu">
             <ul class="dropdown-menu-right">
                 <li>
-                    <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home Index</a>
+                    <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
+                <li class="dropdown-divider"></li>
                 <li>
                     <a class="nav-link text-dark" asp-controller="Companies" asp-action="Index"> Companies</a>
                 </li>
@@ -42,11 +43,22 @@
                 <li>
                     <a class="nav-link text-dark" asp-controller="Notifications" asp-action="Index"> Notifications</a>
                 </li>
+                <li class="dropdown-divider"></li>
+                <li>
+                    <a class="nav-link text-dark" asp-controller="Projects" asp-action="Index"> Project Index</a>
+                </li>
+                <li>
+                    <a class="nav-link text-dark" asp-controller="Projects" asp-action="MyProjects"> <b>My Projects</b></a>
+                </li>
                 <li>
                     <a class="nav-link text-dark" asp-controller="ProjectPriorities" asp-action="Index"> Project Priorities</a>
                 </li>
+                <li class="dropdown-divider"></li>
                 <li>
-                    <a class="nav-link text-dark" asp-controller="Projects" asp-action="Index"> Projects</a>
+                    <a class="nav-link text-dark" asp-controller="Tickets" asp-action="Index"> Ticket Index</a>
+                </li>
+                <li>
+                    <a class="nav-link text-dark" asp-controller="Tickets" asp-action="MyTickets"> <b>My Tickets</b></a>
                 </li>
                 <li>
                     <a class="nav-link text-dark" asp-controller="TicketAttachments" asp-action="Index"> Ticket Attachments</a>
@@ -59,9 +71,6 @@
                 </li>
                 <li>
                     <a class="nav-link text-dark" asp-controller="TicketPriorities" asp-action="Index"> Ticket Priorities</a>
-                </li>
-                <li>
-                    <a class="nav-link text-dark" asp-controller="Tickets" asp-action="Index"> Tickets</a>
                 </li>
                 <li>
                     <a class="nav-link text-dark" asp-controller="TicketStatus" asp-action="Index"> Ticket Status</a>

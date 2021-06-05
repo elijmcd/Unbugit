@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,14 +21,17 @@ namespace Unbugit.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _projectService;
         private readonly IBTCompanyInfoService _companyInfoService;
+        private readonly UserManager<BTUser> _userManager;
 
-        public ProjectsController(ApplicationDbContext context, 
+        public ProjectsController(ApplicationDbContext context,
             IBTProjectService projectService,
-            IBTCompanyInfoService companyInfoService)
+            IBTCompanyInfoService companyInfoService,
+            UserManager<BTUser> userManager)
         {
             _context = context;
             _projectService = projectService;
             _companyInfoService = companyInfoService;
+            _userManager = userManager;
         }
 
         // GET: Projects
@@ -45,7 +50,7 @@ namespace Unbugit.Controllers
             }
 
             var project = await _context.Project
-                .Include(p=>p.Members)
+                .Include(p => p.Members)
                 .Include(p => p.Company)
                 .Include(p => p.ProjectPriority)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -57,11 +62,31 @@ namespace Unbugit.Controllers
             return View(project);
         }
 
+        public async Task<IActionResult> MyProjects()
+        {
+            string userId = (await _userManager.GetUserAsync(User)).Id;
+
+            List<Project> myProjects = await _projectService.ListUserProjectsAsync(userId);
+
+            return View(myProjects);
+        }
+
         // GET: Projects/Create
         public IActionResult Create()
         {
-            ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name");
-            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id");
+            //get current user
+            //BTUser btUser = await _userManager.GetUserAsync(User);
+
+            if ((User.IsInRole("Admin")) || (User.IsInRole("ProjectManager")))
+            {
+                ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Name");
+            }
+            else
+            {
+            //ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name");
+            return RedirectToAction("Index");
+            }
+
             return View();
         }
 
@@ -70,16 +95,22 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,Description,StartDate,EndDate,ProjectPriorityId,ImageFileName,ImageFileData,ImageContentType,Archived")] Project project)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,StartDate,EndDate,ProjectPriorityId")] Project project) //CompanyId,ImageFileName,ImageFileData,ImageContentType,Archived
         {
+            BTUser btUser = await _userManager.GetUserAsync(User);
+
             if (ModelState.IsValid)
             {
+                project.StartDate = DateTimeOffset.Now;
+                project.Company = btUser.Company;
+                project.CompanyId = (btUser.CompanyId).Value;
+
                 _context.Add(project);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction();
             }
-            ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name", project.CompanyId);
-            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id", project.ProjectPriorityId);
+            //ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name", project.CompanyId);
+            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Name", project.ProjectPriorityId);
             return View(project);
         }
 
@@ -155,7 +186,7 @@ namespace Unbugit.Controllers
             List<BTUser> submitters = await _companyInfoService.GetMembersInRoleAsync(Roles.Submitter.ToString(), companyId);
 
             List<BTUser> users = developers.Concat(submitters).ToList();
-            List<string> members = project.Members.Select(m=>m.Id).ToList();
+            List<string> members = project.Members.Select(m => m.Id).ToList();
             model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
         }

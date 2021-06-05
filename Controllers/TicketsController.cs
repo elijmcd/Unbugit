@@ -22,6 +22,8 @@ namespace Unbugit.Controllers
         private readonly IBTRoleService _roleService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IBTProjectService _projectService;
+
 
 
         public TicketsController(ApplicationDbContext context,
@@ -29,7 +31,8 @@ namespace Unbugit.Controllers
             IBTCompanyInfoService companyService,
             IBTRoleService roleService,
             RoleManager<IdentityRole> roleManager,
-            UserManager<BTUser> userManager)
+            UserManager<BTUser> userManager,
+            IBTProjectService projectService)
         {
             _context = context;
             _ticketService = ticketService;
@@ -37,6 +40,7 @@ namespace Unbugit.Controllers
             _roleService = roleService;
             _roleManager = roleManager;
             _userManager = userManager;
+            _projectService = projectService;
         }
 
         // GET: Tickets
@@ -65,8 +69,8 @@ namespace Unbugit.Controllers
             string userId = (await _userManager.GetUserAsync(User)).Id;
             int companyId = User.Identity.GetCompanyId().Value;
             List<Ticket> companyTickets = await _companyService.GetAllTicketsAsync(companyId);
-            List<Ticket> submitterTickets = companyTickets.Where(t=>t.OwnerUserId == userId).ToList();
-            List<Ticket> developerTickets = companyTickets.Where(t=>t.DeveloperUserId == userId).ToList();
+            List<Ticket> submitterTickets = companyTickets.Where(t => t.OwnerUserId == userId).ToList();
+            List<Ticket> developerTickets = companyTickets.Where(t => t.DeveloperUserId == userId).ToList();
 
             List<Ticket> myTickets = developerTickets.Concat(submitterTickets).ToList();
 
@@ -98,14 +102,27 @@ namespace Unbugit.Controllers
         }
 
         // GET: Tickets/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["ProjectId"] = new SelectList(_context.Project, "Id", "Name");
-            ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Id");
-            ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id");
-            ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Id");
+            //get current user
+            BTUser btUser = await _userManager.GetUserAsync(User);
+
+            // get current user's company Id
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            //TODO Filter List
+            if (User.IsInRole("Admin"))
+            {
+                ViewData["ProjectId"] = new SelectList(await _projectService.GetAllProjectsByCompany(companyId), "Id", "Name");
+            }
+            else
+            {
+                ViewData["ProjectId"] = new SelectList(await _projectService.ListUserProjectsAsync(btUser.Id), "Id", "Name");
+            }
+
+            ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Name");
+            ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Name");
+
             return View();
         }
 
@@ -114,20 +131,28 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,ArchivedDate,Archived,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,ProjectId,TicketTypeId,TicketPriorityId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
+                ticket.Created = DateTimeOffset.Now;
+
+                string userId = _userManager.GetUserId(User);
+                ticket.OwnerUserId = userId;
+
+                ticket.TicketStatusId = (await _ticketService.LookupTicketStatusIdAsync("New")).Value;
+
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
             }
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
-            ViewData["ProjectId"] = new SelectList(_context.Project, "Id", "Name", ticket.ProjectId);
-            ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Id", ticket.TicketPriorityId);
-            ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id", ticket.TicketStatusId);
-            ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Id", ticket.TicketTypeId);
+
+            //ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
+            //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
+            //ViewData["ProjectId"] = new SelectList(_context.Project, "Id", "Name", ticket.ProjectId);
+            //ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Id", ticket.TicketPriorityId);
+            //ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id", ticket.TicketStatusId);
+            //ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Id", ticket.TicketTypeId);
             return View(ticket);
         }
 
