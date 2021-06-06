@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,12 @@ namespace Unbugit.Controllers
     public class TicketCommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BTUser> _userManager;
 
-        public TicketCommentsController(ApplicationDbContext context)
+        public TicketCommentsController(ApplicationDbContext context, UserManager<BTUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: TicketComments
@@ -63,12 +66,15 @@ namespace Unbugit.Controllers
         {
             if (ModelState.IsValid)
             {
+                // created datetime
+                ticketComment.UserId = _userManager.GetUserId(User);
+
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Tickets", new {id = ticketComment.TicketId });
             }
             ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description", ticketComment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", ticketComment.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketComment.UserId);
             return View(ticketComment);
         }
 

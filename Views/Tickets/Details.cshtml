@@ -1,9 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Http;
 @using Unbugit.Services.Interfaces;
+@using Microsoft.AspNetCore.Identity
+@using Unbugit.Models.Enums
+
+@inject UserManager<BTUser> userManager
+@*@inject IBTFileService _fileService*@
 
 @model Unbugit.Models.Ticket
-
-@*@inject IBTFileService _fileService*@
 
 @{
     ViewData["Title"] = "Ticket Details";
@@ -45,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row-cols-1">
             <div class="card border shadow-sm my-2 w-100">
                 <div class="card-body">
                     <h5>Ticket Attachments</h5>
@@ -68,63 +71,61 @@
         <div class="row">
             <div class="card border shadow-sm my-2 w-100">
                 <div class="card-body">
-                    <h4>Comments</h4>
+                    <div class="col">
+                        <h4>Comments</h4>
+                        <hr style="border:3px solid; width: 100%; opacity:.8;" />
+                        <div class="offset-1 btn-sm"><h6>@Model.Comments.Count Comment(s)</h6></div>
+                        @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
+                        {
+                            <div class="row">
+                                <div class="col-lg-10 offset-1">
+                                    <div class="media border p-3 shadow" style="border:2px; border-radius: 7px; background: #ddd; margin-bottom: 4px;">
+                                        @*<div class="media-left media-top">
+                                                                        <img src="@_fileService.ConvertByteArrayToFile(comment.User.AvatarFileData, comment.User.AvatarContentType)" alt="@comment.User.FullName" class="mr-3 rounded-circle media-object" style="border: 4px #f0ad4e outset;
+                                            width: 64px;">
+                                                                    </div>*@
+                                        <div class="media-body" style="border:3px #ccc inset; padding:5px; background: #eee;">
+                                            <b class="strong">
+                                                @comment.User.FullName
+                                                <small><i>Posted on @comment.Created.ToString("MMM dd, yyyy")</i></small><br />
+                                                <small><i>@comment.Comment</i></small><br />
+                                            </b>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <hr />
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <a id="loginToComment" class="btn-sm btn-block registerButton" style="text-align:center;" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details", "Tickets")">Login to Comment</a>
+                        }
+                        else
+                        {
+                            //Once logged in, user is presented with a form to add a comment
+                            <div class="row">
+                                <div class="col-lg-8 offset-lg-2">
+                                    <form asp-action="Create" asp-controller="TicketComments" method="post">
+                                        <input type="hidden" name="TicketId" value="@Model.Id" />
+                                        <textarea name="Comment" rows="4" class="form-control"></textarea>
+                                        <button class="btn-sm btn-block registerButton" type="submit">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+
+                        <div>
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@Model.Id">Edit Post </a>
+                            }
+                            <a asp-action="Details" asp-controller="Projects" asp-route-id="@Model.ProjectId">Back to Project</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col">
-                <h4>Comments</h4>
-                <hr style="border:3px solid; width: 100%; opacity:.8;" />
-
-                <div class="offset-1 btn-sm"><h6>@Model.Comments.Count Comment(s)</h6></div>
-                @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
-                {
-                    <div class="row">
-                        <div class="col-lg-10 offset-1">
-                            <div class="media border p-3 shadow" style="border:2px; border-radius: 7px; background: #ddd; margin-bottom: 4px;">
-                                @*<div class="media-left media-top">
-                                    <img src="@_fileService.ConvertByteArrayToFile(comment.User.AvatarFileData, comment.User.AvatarContentType)" alt="@comment.User.FullName" class="mr-3 rounded-circle media-object" style="border: 4px #f0ad4e outset;
-        width: 64px;">
-                                </div>*@
-                                <div class="media-body" style="border:3px #ccc inset; padding:5px; background: #eee;">
-                                    <b class="strong">
-                                        @comment.User.FullName
-                                        <small><i>Posted on @comment.Created.ToString("MMM dd, yyyy")</i></small><br />
-                                        <small><i>@comment.Comment</i></small><br />
-                                    </b>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                <hr />
-                @if (!User.Identity.IsAuthenticated)
-                {
-                    <a id="loginToComment" class="btn-sm btn-block registerButton" style="text-align:center;" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details", "Tickets")">Login to Comment</a>
-                }
-                else
-                {
-                    //Once logged in, user is presented with a form to add a comment
-                    <div class="row">
-                        <div class="col-lg-8 offset-lg-2">
-                            <form asp-action="Create" asp-controller="TicketComments" method="post">
-                                <input type="hidden" name="TicketId" value="@Model.Id" />
-                                <textarea name="Comment" rows="4" class="form-control"></textarea>
-                                <button class="btn-sm btn-block registerButton" type="submit">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                }
-
-                <div>
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@Model.Id">Edit Post </a>
-                    }
-                    <a asp-action="Index">Back to Posts</a>
-                </div>
-            </div>
         </div>
     </div>
 </div>

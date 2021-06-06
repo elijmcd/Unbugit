@@ -52,6 +52,7 @@ namespace Unbugit.Controllers
             var project = await _context.Project
                 .Include(p => p.Members)
                 .Include(p => p.Company)
+                .Include(p=>p.Tickets)
                 .Include(p => p.ProjectPriority)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (project == null)

@@ -4,11 +4,13 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Model.Name</h1>
 
 <div>
-    <h4>Project</h4>
+    <h4>Details</h4>
     <hr />
+    <div class="row">
+        <div class="col"></div>
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
@@ -34,6 +36,7 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EndDate)
         </dd>
+        </div>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ImageFileName)
         </dt>
@@ -83,9 +86,9 @@
     <div class="row">
         Tickets:
         <ul>
-            @foreach (var ticket in Model.Tickets)
+            @foreach (Ticket ticket in Model.Tickets)
             {
-                <li>@ticket.Title</li>
+                <a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">@ticket.Title</a>
             }
         </ul>
     </div>

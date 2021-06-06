@@ -89,6 +89,8 @@ namespace Unbugit.Controllers
                 .Include(t => t.DeveloperUser)
                 .Include(t => t.OwnerUser)
                 .Include(t => t.Project)
+                .Include(t=>t.Comments)
+                    .ThenInclude(t=>t.User)
                 .Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
@@ -97,7 +99,6 @@ namespace Unbugit.Controllers
             {
                 return NotFound();
             }
-
             return View(ticket);
         }
 
@@ -146,7 +147,6 @@ namespace Unbugit.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
             }
-
             //ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
             //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
             //ViewData["ProjectId"] = new SelectList(_context.Project, "Id", "Name", ticket.ProjectId);
