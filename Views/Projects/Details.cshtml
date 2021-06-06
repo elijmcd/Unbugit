@@ -88,7 +88,11 @@
         <ul>
             @foreach (Ticket ticket in Model.Tickets)
             {
-                <a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">@ticket.Title</a>
+                <div class="row">
+                    <div class="col">
+                        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">@ticket.Title</a>
+                    </div>
+                    </div>
             }
         </ul>
     </div>

@@ -13,7 +13,9 @@
 }
 
 <h1>Ticket Details: @Model.Id</h1>
-
+<div class="row">
+    <p><a asp-action="Index" asp-controller="Projects" asp-route-id="@Model.Id">Return to Project</a></p>
+</div>
 <div class="row">
     <div class="col-6">
         <div class="row">

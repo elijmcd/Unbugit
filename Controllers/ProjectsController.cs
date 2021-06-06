@@ -73,10 +73,13 @@ namespace Unbugit.Controllers
         }
 
         // GET: Projects/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
             //get current user
             //BTUser btUser = await _userManager.GetUserAsync(User);
+
+            // get current user's company Id
+            //int companyId = User.Identity.GetCompanyId().Value;
 
             if ((User.IsInRole("Admin")) || (User.IsInRole("ProjectManager")))
             {
@@ -108,7 +111,7 @@ namespace Unbugit.Controllers
 
                 _context.Add(project);
                 await _context.SaveChangesAsync();
-                return RedirectToAction();
+                return RedirectToAction("Details", "Projects", new { id = project.Id });
             }
             //ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name", project.CompanyId);
             ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Name", project.ProjectPriorityId);
