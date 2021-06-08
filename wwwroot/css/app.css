@@ -4858,8 +4858,9 @@ body.modal-open .modal.show .modal-dialog {
 }
 
 body.form-membership {
-  padding: 3rem 0;
-  overflow: auto;
+    padding: 3rem 0;
+    overflow: auto;
+    width: 730px;
 }
 
 body.form-membership .form-wrapper {
@@ -4867,7 +4868,7 @@ body.form-membership .form-wrapper {
   box-shadow: 0 3px 10px rgba(62, 85, 120, 0.045);
   padding: 3rem;
   border-radius: 0.5rem;
-  width: 430px;
+  width: 730px;
   margin: 50px auto;
   text-align: center;
 }

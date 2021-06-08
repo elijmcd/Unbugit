@@ -10,6 +10,8 @@ using Unbugit.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Unbugit.Services.Interfaces;
 using Unbugit.Data;
+using Microsoft.AspNetCore.Authorization;
+using Unbugit.Extensions;
 
 namespace Unbugit.Controllers
 {
@@ -38,6 +40,7 @@ namespace Unbugit.Controllers
             return View();
         }
 
+        [Authorize]
         public async Task<IActionResult> Dashboard()
         {
             DashboardViewModel dashboard = new();
@@ -59,6 +62,27 @@ namespace Unbugit.Controllers
             return View(dashboard);
         }
 
+        public IActionResult Landing()
+        {
+            return View();
+        }
+
+        public async Task<JsonResult> PieChartMethod()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            List<Project> projects = await _projectService.GetAllProjectsByCompany(companyId);
+
+            List<object> chartData = new();
+            chartData.Add(new object[] { "ProjectName", "TicketCount" });
+
+            foreach (Project project in projects)
+            {
+                chartData.Add(new object[] { project.Name, project.Tickets.Count() });
+            }
+
+            return Json(chartData);
+        }
 
         public IActionResult Privacy()
         {
