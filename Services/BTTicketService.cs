@@ -67,7 +67,7 @@ namespace Unbugit.Services
                                                                   .Include(t => t.Comments)
                                                                   .Include(t => t.TicketHistory)
                                                                   .Include(t => t.DeveloperUser)
-                                                                  .Include(t => t.OwnerUser)                                                               
+                                                                  .Include(t => t.OwnerUser)
                                                                   .Include(t => t.TicketPriority)
                                                                   .Include(t => t.TicketStatus)
                                                                   .Include(t => t.TicketType)

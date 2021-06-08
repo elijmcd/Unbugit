@@ -728,11 +728,6 @@
     <!-- end::navigation -->
 
     <div class="layout-wrapper">
-        <section class="content">
-            <div class="container-fluid">
-                @RenderBody()
-            </div>
-        </section>
         <!-- Header -->
         <div class="header d-print-none">
             <div class="header-container">
@@ -1155,7 +1150,13 @@
             </div>
         </div>
         <!-- ./ Header -->
+        <section class="content">
+            <div class="content-body">
+                @RenderBody()
+            </div>
+        </section>
     </div>
+
     <!-- ./ Layout wrapper -->
     <!-- Main scripts -->
     <script src="~/vendors/bundle.js"></script>
@@ -1174,6 +1175,7 @@
 
     <!-- App scripts -->
     <script src="~/js/app.min.js"></script>
+
 </body>
 </html>
 @await RenderSectionAsync("Scripts", required: false)
