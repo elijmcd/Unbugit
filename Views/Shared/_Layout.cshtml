@@ -30,7 +30,7 @@
     <![endif]-->
 </head>
 <body class="dark">
-    <partial name="_LogoutPartial"/>
+    <partial name="_LogoutPartial" />
 
     <!-- Preloader -->
     <div class="preloader">
@@ -1151,9 +1151,11 @@
             </div>
         </div>
         <!-- ./ Header -->
-        <section class="content">
+        <section class="content-wrapper">
             <div class="content-body">
-                @RenderBody()
+                <div class="content">
+                    @RenderBody()
+                </div>
             </div>
         </section>
     </div>

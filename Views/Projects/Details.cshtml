@@ -1,43 +1,54 @@
 ﻿@model Unbugit.Models.Project
 
+@using Unbugit.Services.Interfaces
+@using Microsoft.AspNetCore.Identity
+@using Unbugit.Extensions
+
+@inject IBTCompanyInfoService CompanyInfoService
+@inject IBTRoleService RolesService
+@inject IBTTicketService TicketService
+@inject IBTProjectService ProjectService
+@inject UserManager<BTUser> UserManager
+
 @{
+    BTUser projectManager = await ProjectService.GetProjectManagerAsync(Model.Id);
     ViewData["Title"] = "Details";
 }
 
-<h1>@Model.Name</h1>
-
+<h3>@Model.Company.Name</h3>
+<hr />
+<h3>@Model.Name</h3>
 <div>
-    <h4>Details</h4>
     <hr />
     <div class="row">
         <div class="col"></div>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-        </div>
-        <dt class = "col-sm-2">
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.StartDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StartDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.EndDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.EndDate)
+            </dd>
+    </div>
+    @*<dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ImageFileName)
         </dt>
         <dd class = "col-sm-10">
@@ -60,19 +71,13 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Archived)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Company)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Company.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectPriority)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProjectPriority.Name)
-        </dd>
+        </dd>*@
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.ProjectPriority)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.ProjectPriority.Name)
+    </dd>
     </dl>
     <div class="row">
         Members:
@@ -83,21 +88,74 @@
             }
         </ul>
     </div>
-    <div class="row">
-        Tickets:
-        <ul>
-            @foreach (Ticket ticket in Model.Tickets)
-            {
-                <div class="row">
-                    <div class="col">
-                        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">@ticket.Title</a>
-                    </div>
-                    </div>
-            }
-        </ul>
+    Tickets:
+    <div class="table-responsive">
+        <table id="myTable" class="table table-hover">
+            <caption>Tickets for @Model.Name</caption>
+            <thead>
+                <tr>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Created
+                    </th>
+                    <th>
+                        Submitter
+                    </th>
+                    <th>
+                        Developer
+                    </th>
+                    <th>
+                        Priority
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Type
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Ticket ticket in Model.Tickets)
+                {
+                    <tr>
+                        <td>
+                            @ticket.Title
+                        </td>
+                        <td>
+                            @ticket.Description
+                        </td>
+                        <td>
+                            @ticket.Created.ToString("D")
+                        </td>
+                        <td>
+                            @ticket.OwnerUser.FullName
+                        </td>
+                        <td>
+                            @ticket.DeveloperUser.FullName
+                        </td>
+                        <td>
+                            @ticket.TicketPriority.Name
+                        </td>
+                        <td>
+                            @ticket.TicketStatus.Name
+                        </td>
+                        <td>
+                            @ticket.TicketType.Name
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @*<a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">@ticket.Title</a>*@
     </div>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
