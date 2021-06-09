@@ -36,7 +36,7 @@ namespace Unbugit.Services.Interfaces
 
         public Task<List<BTUser>> UsersNotOnProjectAsync(int projectId, int companyId);
 
-        //public Task<List<BTUser>> DevelopersOnProjectAsync(int projectId);
+        public Task<List<BTUser>> DevelopersOnProjectAsync(int projectId);
 
         //public Task<List<BTUser>> SubmittersOnProjectAsync(int projectId);
 

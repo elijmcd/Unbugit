@@ -325,22 +325,23 @@ namespace Unbugit.Services
         //    return submitters;
         //}//
 
-        //public async Task<List<BTUser>> DevelopersOnProjectAsync(int projectId)
-        //{
-        //    Project project = await _context.Project
-        //        .Include(p => p.Members)
-        //        .FirstOrDefaultAsync(u => u.Id == projectId);
+        public async Task<List<BTUser>> DevelopersOnProjectAsync(int projectId)
+        {
+            Project project = await _context.Project
+                .Include(p => p.Members)
+                  .ThenInclude(p => p.FullName)
+                .FirstOrDefaultAsync(u => u.Id == projectId);
 
-        //    List<BTUser> developers = new();
+            List<BTUser> developers = new();
 
-        //    foreach (var user in project.Members)
-        //    {
-        //        if (await _roleService.IsUserInRoleAsync(user, "Developer"))
-        //        {
-        //            developers.Add(user);
-        //        }
-        //    }
-        //    return developers;
-        //}
+            foreach (var user in project.Members)
+            {
+                if (await _roleService.IsUserInRoleAsync(user, "Developer"))
+                {
+                    developers.Add(user);
+                }
+            }
+            return developers;
+        }
     }
 }
