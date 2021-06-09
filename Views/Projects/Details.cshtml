@@ -47,6 +47,28 @@
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.EndDate)
             </dd>
+            <dt class="col-sm-2">
+                Priority
+            </dt>
+            <dd class="col-sm-10">
+                @if (Model.ProjectPriorityId == 1)
+                {
+                    <span class="btn-outline-danger">@Model.ProjectPriority.Name</span>
+                }
+                else if (Model.ProjectPriorityId == 2)
+                {
+                <span class="btn-outline-warning">@Model.ProjectPriority.Name</span>
+                }
+                else if (Model.ProjectPriorityId == 3)
+                {
+                <span class="btn-outline-info">@Model.ProjectPriority.Name</span>
+                }
+                else if (Model.ProjectPriorityId == 4)
+                {
+                <span class="btn-outline-primary">@Model.ProjectPriority.Name</span>
+                }
+            </dd>
+        </dl>
     </div>
     @*<dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ImageFileName)
@@ -72,15 +94,9 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Archived)
         </dd>*@
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.ProjectPriority)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.ProjectPriority.Name)
-    </dd>
-    </dl>
     <div class="row">
         Members:
+        <br />
         <ul>
             @foreach (BTUser member in Model.Members)
             {
@@ -135,19 +151,19 @@
                             @ticket.Created.ToString("D")
                         </td>
                         <td>
-                            @ticket.OwnerUser.FullName
+                            @ticket.OwnerUser.FirstName
                         </td>
                         <td>
-                            @ticket.DeveloperUser.FullName
+                            @ticket.DeveloperUser.FirstName
                         </td>
                         <td>
                             @ticket.TicketPriority.Name
                         </td>
                         <td>
-                            @ticket.TicketStatus.Name
+                            @ticket.TicketStatus
                         </td>
                         <td>
-                            @ticket.TicketType.Name
+                            @ticket.TicketType
                         </td>
                     </tr>
                 }

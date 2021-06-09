@@ -52,9 +52,11 @@ namespace Unbugit.Controllers
             var project = await _context.Project
                 .Include(p => p.Members)
                 .Include(p => p.Company)
-                .Include(p=>p.Tickets)
+                .Include(p => p.Tickets)
+                .ThenInclude(t => t.TicketPriority)
                 .Include(p => p.ProjectPriority)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (project == null)
             {
                 return NotFound();
@@ -87,8 +89,8 @@ namespace Unbugit.Controllers
             }
             else
             {
-            //ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name");
-            return RedirectToAction("Index");
+                //ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name");
+                return RedirectToAction("Index");
             }
 
             return View();

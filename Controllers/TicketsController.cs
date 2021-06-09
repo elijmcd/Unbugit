@@ -23,8 +23,7 @@ namespace Unbugit.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<BTUser> _userManager;
         private readonly IBTProjectService _projectService;
-
-
+        private readonly IBTHistoryService _historyService;
 
         public TicketsController(ApplicationDbContext context,
             IBTTicketService ticketService,
@@ -32,7 +31,8 @@ namespace Unbugit.Controllers
             IBTRoleService roleService,
             RoleManager<IdentityRole> roleManager,
             UserManager<BTUser> userManager,
-            IBTProjectService projectService)
+            IBTProjectService projectService,
+            IBTHistoryService historyService)
         {
             _context = context;
             _ticketService = ticketService;
@@ -41,6 +41,7 @@ namespace Unbugit.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
             _projectService = projectService;
+            _historyService = historyService;
         }
 
         // GET: Tickets
@@ -56,6 +57,7 @@ namespace Unbugit.Controllers
 
             return View(await applicationDbContext);
         }
+
         public async Task<IActionResult> AllTickets()
         {
             int companyId = User.Identity.GetCompanyId().Value;
@@ -64,6 +66,7 @@ namespace Unbugit.Controllers
 
             return View(tickets);
         }
+
         public async Task<IActionResult> MyTickets()
         {
             string userId = (await _userManager.GetUserAsync(User)).Id;
@@ -76,6 +79,12 @@ namespace Unbugit.Controllers
 
             return View(myTickets);
         }
+
+        public async Task<IActionResult> AssignTicket(int? ticketId)
+        {
+            return View();
+        }
+
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -192,8 +201,24 @@ namespace Unbugit.Controllers
 
             if (ModelState.IsValid)
             {
+
+                //companyId
+                int companyId = User.Identity.GetCompanyId().Value;
+                //currentUser
+                BTUser currentUser = await _userManager.GetUserAsync(User);
+                //projectManager
+                BTUser projectManager = await _projectService.GetProjectManagerAsync(ticket.ProjectId);
+
+                Ticket oldTicket = await _context.Ticket.Include(t => t.TicketPriority)
+                                                        .Include(t => t.TicketStatus)
+                                                        .Include(t => t.TicketType)
+                                                        .Include(t => t.Project)
+                                                        .Include(t => t.DeveloperUser)
+                                                        .AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
+
                 try
                 {
+                    ticket.Updated = DateTimeOffset.Now;
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();
                 }
@@ -208,6 +233,17 @@ namespace Unbugit.Controllers
                         throw;
                     }
                 }
+
+                //add history
+                Ticket newTicket = await _context.Ticket.Include(t => t.TicketPriority)
+                                        .Include(t => t.TicketStatus)
+                                        .Include(t => t.TicketType)
+                                        .Include(t => t.Project)
+                                        .Include(t => t.DeveloperUser)
+                                        .AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
+
+                await _historyService.AddHistoryAsync(oldTicket, newTicket, currentUser.Id);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);

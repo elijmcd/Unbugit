@@ -8,10 +8,10 @@ namespace Unbugit.Services.Interfaces
 {
     public interface IBTHistoryService
     {
-        Task AddHistory(Ticket oldTicket, Ticket newTicket, string userId);
+        Task AddHistoryAsync(Ticket oldTicket, Ticket newTicket, string userId);
 
-        Task<List<TicketHistory>> GetProjectTicketHistories(int projectId);
+        Task<List<TicketHistory>> GetProjectTicketHistoriesAsync(int projectId);
 
-        Task<List<TicketHistory>> GetCompanyTicketHistories(int companyId);
+        Task<List<TicketHistory>> GetCompanyTicketHistoriesAsync(int companyId);
     }
 }

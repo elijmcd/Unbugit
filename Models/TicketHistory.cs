@@ -26,7 +26,7 @@ namespace Unbugit.Models
         [DisplayName("Date Modified")]
         public DateTimeOffset Created { get; set; }
         [DisplayName("Team Member")]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         [DisplayName("Description of Change")]
         public string Description { get; set; }
