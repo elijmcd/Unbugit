@@ -25,6 +25,8 @@ namespace Unbugit.Controllers
         private readonly UserManager<BTUser> _userManager;
         private readonly IBTProjectService _projectService;
         private readonly IBTHistoryService _historyService;
+        private readonly IBTNotificationService _notificationService;
+
 
         public TicketsController(ApplicationDbContext context,
             IBTTicketService ticketService,
@@ -33,7 +35,8 @@ namespace Unbugit.Controllers
             RoleManager<IdentityRole> roleManager,
             UserManager<BTUser> userManager,
             IBTProjectService projectService,
-            IBTHistoryService historyService)
+            IBTHistoryService historyService,
+            IBTNotificationService notificationService)
         {
             _context = context;
             _ticketService = ticketService;
@@ -43,6 +46,7 @@ namespace Unbugit.Controllers
             _userManager = userManager;
             _projectService = projectService;
             _historyService = historyService;
+            _notificationService = notificationService;
         }
 
         // GET: Tickets
@@ -94,7 +98,7 @@ namespace Unbugit.Controllers
 
             model.Ticket = (await _ticketService.GetAllTicketsByCompanyAsync(companyId)).FirstOrDefault(t => t.Id == ticketId);
             //await _context.Ticket.FirstOrDefaultAsync(t => t.Id == ticketId);
-                //
+            //
             model.Developers = new SelectList(await _projectService.DevelopersOnProjectAsync(model.Ticket.ProjectId), "Id", "FullName");
 
             return View(model);
@@ -194,6 +198,8 @@ namespace Unbugit.Controllers
         {
             if (ModelState.IsValid)
             {
+                BTUser btUser = await _userManager.GetUserAsync(User);
+
                 ticket.Created = DateTimeOffset.Now;
 
                 string userId = _userManager.GetUserId(User);
@@ -201,8 +207,51 @@ namespace Unbugit.Controllers
 
                 ticket.TicketStatusId = (await _ticketService.LookupTicketStatusIdAsync("New")).Value;
 
-                _context.Add(ticket);
+                await _context.AddAsync(ticket);
                 await _context.SaveChangesAsync();
+
+                #region Add History
+                //Add history
+                Ticket newTicket = await _context.Ticket
+                    .Include(t => t.TicketPriority)
+                    .Include(t => t.TicketStatus)
+                    .Include(t => t.TicketType)
+                    .Include(t => t.Project)
+                    .Include(t => t.DeveloperUser)
+                    .AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
+
+                await _historyService.AddHistoryAsync(null, newTicket, btUser.Id);
+                #endregion
+
+                #region Notification
+                BTUser projectManager = await _projectService.GetProjectManagerAsync(ticket.ProjectId);
+                int companyId = User.Identity.GetCompanyId().Value;
+
+                Notification notification = new()
+                {
+                    TicketId = ticket.Id,
+                    Title = "New Ticket",
+                    Message = $"New Ticket: {ticket?.Title}, created by {btUser?.FullName}",
+                    Created = DateTimeOffset.Now,
+                    SenderId = btUser?.Id,
+                    RecipientId = projectManager?.Id
+                };
+
+                if (projectManager != null)
+                {
+
+                    await _notificationService.SaveNotificationAsync(notification);
+                    await _notificationService.EmailNotificationAsync(notification, "New Ticket Added");
+
+                }
+                else
+                {
+                    //notify Admin
+                    await _notificationService.AdminsNotificationAsync(notification, companyId);
+                }
+
+                #endregion
+
                 return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
             }
             //ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
@@ -248,6 +297,8 @@ namespace Unbugit.Controllers
                 return NotFound();
             }
 
+            Notification notification;
+
             if (ModelState.IsValid)
             {
 
@@ -270,6 +321,42 @@ namespace Unbugit.Controllers
                     ticket.Updated = DateTimeOffset.Now;
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();
+
+                    //create and save a notification
+                    notification = new()
+                    {
+                        TicketId = ticket.Id,
+                        Title = $"Ticket modified on project - {oldTicket.Project.Name}",
+                        Message = $"Ticket: [{ticket.Id}]:{ticket.Title} updated by {currentUser?.FullName}",
+                        Created = DateTimeOffset.Now,
+                        SenderId = currentUser?.Id,
+                        RecipientId = projectManager?.Id
+                    };
+
+                    if (projectManager != null)
+                    {
+                        await _notificationService.SaveNotificationAsync(notification);
+                    }
+                    else
+                    {
+                        //admin notify
+                        await _notificationService.AdminsNotificationAsync(notification, companyId);
+                    }
+
+                    //alert dev is ticket is assigned
+                    if(ticket.DeveloperUserId != null)
+                    {
+                        notification = new()
+                        {
+                            TicketId = ticket.Id,
+                            Title = "A ticket assigned to you has been modified",
+                            Message = $"Ticket: [{ticket.Id}]:{ticket.Title} updated by {currentUser?.FullName}",
+                            Created = DateTimeOffset.Now,
+                            SenderId = currentUser.Id,
+                            RecipientId = ticket.DeveloperUserId
+                        };
+                        await _notificationService.SaveNotificationAsync(notification);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
