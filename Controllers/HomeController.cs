@@ -67,6 +67,7 @@ namespace Unbugit.Controllers
             return View();
         }
 
+        [HttpPost]
         public async Task<JsonResult> PieChartMethod()
         {
             int companyId = User.Identity.GetCompanyId().Value;
@@ -76,9 +77,9 @@ namespace Unbugit.Controllers
             List<object> chartData = new();
             chartData.Add(new object[] { "ProjectName", "TicketCount" });
 
-            foreach (Project project in projects)
+            foreach (Project prj in projects)
             {
-                chartData.Add(new object[] { project.Name, project.Tickets.Count() });
+                chartData.Add(new object[] { prj.Name, prj.Tickets.Count() });
             }
 
             return Json(chartData);
@@ -94,5 +95,7 @@ namespace Unbugit.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }

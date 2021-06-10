@@ -113,6 +113,10 @@ namespace Unbugit.Services
                     };
                     await _context.TicketHistory.AddAsync(history);
                 }
+                if(oldTicket.DeveloperUserId is null || newTicket.DeveloperUserId is null)
+                {
+                    Console.WriteLine("Uh Oh!");
+                }
                 //Check developer
                 if(oldTicket.DeveloperUserId != newTicket.DeveloperUserId)
                 {

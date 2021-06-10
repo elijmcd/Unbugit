@@ -53,7 +53,9 @@ namespace Unbugit.Controllers
                 .Include(p => p.Members)
                 .Include(p => p.Company)
                 .Include(p => p.Tickets)
-                .ThenInclude(t => t.TicketPriority)
+                    .ThenInclude(t => t.TicketPriority)
+                .Include(p=>p.Tickets)
+                    .ThenInclude(t => t.OwnerUser)
                 .Include(p => p.ProjectPriority)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -175,7 +177,7 @@ namespace Unbugit.Controllers
             return View(project);
         }
 
-        //[Authorize(Roles = "Admin,ProjectManager"_]
+        //[Authorize(Roles = "Admin,ProjectManager")]
         [HttpGet]
         public async Task<IActionResult> AssignUsers(int id)
         {

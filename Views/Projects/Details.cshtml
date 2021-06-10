@@ -21,8 +21,7 @@
 <div>
     <hr />
     <div class="row">
-        <div class="col"></div>
-        <dl class="row">
+        <div class="col">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Name)
             </dt>
@@ -57,18 +56,18 @@
                 }
                 else if (Model.ProjectPriorityId == 2)
                 {
-                <span class="btn-outline-warning">@Model.ProjectPriority.Name</span>
+                    <span class="btn-outline-warning">@Model.ProjectPriority.Name</span>
                 }
                 else if (Model.ProjectPriorityId == 3)
                 {
-                <span class="btn-outline-info">@Model.ProjectPriority.Name</span>
+                    <span class="btn-outline-info">@Model.ProjectPriority.Name</span>
                 }
                 else if (Model.ProjectPriorityId == 4)
                 {
-                <span class="btn-outline-primary">@Model.ProjectPriority.Name</span>
+                    <span class="btn-outline-primary">@Model.ProjectPriority.Name</span>
                 }
             </dd>
-        </dl>
+        </div>
     </div>
     @*<dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ImageFileName)
@@ -151,10 +150,10 @@
                             @ticket.Created.ToString("D")
                         </td>
                         <td>
-                            @ticket.OwnerUser.FirstName
+                            @ticket.OwnerUser.FullName
                         </td>
                         <td>
-                            @ticket.DeveloperUser.FirstName
+                            @ticket.DeveloperUser?.FullName
                         </td>
                         <td>
                             @ticket.TicketPriority.Name

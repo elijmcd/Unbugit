@@ -71,7 +71,6 @@ namespace Unbugit.Services
                                                                   .Include(t => t.TicketPriority)
                                                                   .Include(t => t.TicketStatus)
                                                                   .Include(t => t.TicketType)
-                                                                  .Include(t => t.Project)
                                                                   .ToListAsync();
                 return tickets;
             }

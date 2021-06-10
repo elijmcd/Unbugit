@@ -93,6 +93,8 @@ namespace Unbugit.Controllers
             int companyId = User.Identity.GetCompanyId().Value;
 
             model.Ticket = (await _ticketService.GetAllTicketsByCompanyAsync(companyId)).FirstOrDefault(t => t.Id == ticketId);
+            //await _context.Ticket.FirstOrDefaultAsync(t => t.Id == ticketId);
+                //
             model.Developers = new SelectList(await _projectService.DevelopersOnProjectAsync(model.Ticket.ProjectId), "Id", "FullName");
 
             return View(model);
@@ -107,7 +109,7 @@ namespace Unbugit.Controllers
                 int companyId = User.Identity.GetCompanyId().Value;
 
                 BTUser currentUser = await _userManager.GetUserAsync(User);
-                BTUser developer = (await _companyService.GetAllMembersAsync(companyId)).FirstOrDefault(mbox => mbox.Id == viewModel.DeveloperId);
+                BTUser developer = (await _companyService.GetAllMembersAsync(companyId)).FirstOrDefault(m => m.Id == viewModel.DeveloperId);
                 BTUser projectManager = await _projectService.GetProjectManagerAsync(viewModel.Ticket.ProjectId);
 
                 Ticket oldTicket = await _context.Ticket

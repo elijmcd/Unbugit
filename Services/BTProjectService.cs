@@ -329,7 +329,6 @@ namespace Unbugit.Services
         {
             Project project = await _context.Project
                 .Include(p => p.Members)
-                  .ThenInclude(p => p.FullName)
                 .FirstOrDefaultAsync(u => u.Id == projectId);
 
             List<BTUser> developers = new();
