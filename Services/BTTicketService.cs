@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,13 +18,15 @@ namespace Unbugit.Services
         private readonly IBTRoleService _roleService;
         private readonly IBTProjectService _projectService;
         private readonly IBTCompanyInfoService _companyInfoService;
+        private readonly UserManager<BTUser> _userManager;
 
-        public BTTicketService(ApplicationDbContext context, IBTProjectService projectService, IBTCompanyInfoService companyInfoService, IBTRoleService roleService)
+        public BTTicketService(ApplicationDbContext context, IBTProjectService projectService, IBTCompanyInfoService companyInfoService, IBTRoleService roleService, UserManager<BTUser> userManager)
         {
             _context = context;
             _projectService = projectService;
             _companyInfoService = companyInfoService;
             _roleService = roleService;
+            _userManager = userManager;
         }
 
 
@@ -418,5 +421,6 @@ namespace Unbugit.Services
 
 
         }// --
+
     }
 }

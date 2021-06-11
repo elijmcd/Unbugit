@@ -103,6 +103,11 @@
             }
         </ul>
     </div>
+    <br />
+    <div>
+        <a class="btn btn-outline-warning" asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Id">Manage Users on Project</a>
+    </div>
+    <br />
     Tickets:
     <div class="table-responsive">
         <table id="myTable" class="table table-hover">
@@ -140,8 +145,11 @@
                 @foreach (Ticket ticket in Model.Tickets)
                 {
                     <tr>
+
                         <td>
-                            @ticket.Title
+                            <a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">
+                                @ticket.Title
+                            </a>
                         </td>
                         <td>
                             @ticket.Description
@@ -165,6 +173,7 @@
                             @ticket.TicketType
                         </td>
                     </tr>
+
                 }
             </tbody>
         </table>
@@ -174,3 +183,4 @@
         <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
         <a asp-action="Index">Back to List</a>
     </div>
+</div>

@@ -44,7 +44,22 @@
                     <h4>Ticket Details</h4>
                     <p>Created on: @Model.Created</p>
                     <p>Project Deadline: @Model.Project.EndDate</p>
-                    <p>Priority: @Model.TicketPriority.Name</p>
+                        @if (Model.TicketPriorityId == 1)
+                        {
+                            <p class="btn-outline-danger">Priority: @Model.TicketPriority.Name</p>
+                        }
+                        else if (Model.TicketPriorityId == 2)
+                        {
+                            <p class="btn-outline-warning">Priority: @Model.TicketPriority.Name</p>
+                        }
+                        else if (Model.TicketPriorityId == 3)
+                        {
+                            <p class="btn-outline-info">Priority: @Model.TicketPriority.Name</p>
+                        }
+                        else if (Model.TicketPriorityId == 4)
+                        {
+                            <p class="btn-outline-primary">Priority: @Model.TicketPriority.Name</p>
+                        }
                     <p>Type: @Model.TicketType.Name</p>
                     <p>Status: @Model.TicketStatus.Name</p>
                 </div>

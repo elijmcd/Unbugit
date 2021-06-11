@@ -80,10 +80,10 @@ namespace Unbugit.Controllers
         public async Task<IActionResult> CreateAsync()
         {
             //get current user
-            //BTUser btUser = await _userManager.GetUserAsync(User);
+            BTUser btUser = await _userManager.GetUserAsync(User);
 
             // get current user's company Id
-            //int companyId = User.Identity.GetCompanyId().Value;
+            int companyId = User.Identity.GetCompanyId().Value;
 
             if ((User.IsInRole("Admin")) || (User.IsInRole("ProjectManager")))
             {
@@ -230,6 +230,62 @@ namespace Unbugit.Controllers
             }
             return View(model);
         }
+
+        //GET Users/RemoveUsers
+        [HttpGet]
+        public async Task<IActionResult> RemoveUsers(int id)
+        {
+            ProjectMembersViewModel model = new();
+
+            //get companyId
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            Project project = (await _projectService.GetAllProjectsByCompany(companyId))
+                                                    .FirstOrDefault(p => p.Id == id);
+
+            model.Project = project;
+            List<BTUser> developers = await _companyInfoService.GetMembersInRoleAsync(Roles.Developer.ToString(), companyId);
+            List<BTUser> submitters = await _companyInfoService.GetMembersInRoleAsync(Roles.Submitter.ToString(), companyId);
+
+            List<BTUser> users = developers.Concat(submitters).ToList();
+            List<string> members = project.Members.Select(m => m.Id).ToList();
+            model.Users = new MultiSelectList(users, "Id", "FullName", members);
+            return View(model);
+        }
+
+        //POST Users/RemoveUsers
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveUsers(ProjectMembersViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.SelectedUsers != null)
+                {
+                    List<string> memberIds = (await _projectService.GetMembersWithoutPMAsync(model.Project.Id))
+                                                                    .Select(m => m.Id).ToList();
+
+                    //foreach (string id in memberIds)
+                    //{
+                    //    await _projectService.RemoveUserFromProjectAsync(id, model.Project.Id);
+                    //}
+
+                    foreach (string id in model.SelectedUsers)
+                    {
+                        await _projectService.RemoveUserFromProjectAsync(id, model.Project.Id);
+                    }
+
+                    //go to Project 'Details' instead
+                    return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
+                }
+                else
+                {
+                    //send an error message
+                }
+            }
+            return View(model);
+        }
+
 
         // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)

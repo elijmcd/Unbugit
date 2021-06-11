@@ -36,7 +36,5 @@ namespace Unbugit.Services.Interfaces
         Task<int?> LookupTicketStatusIdAsync(string statusName);
 
         Task<int?> LookupTicketTypeIdAsync(string typeName);
-
-
     }
 }
