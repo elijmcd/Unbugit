@@ -55,6 +55,7 @@ namespace Unbugit
             services.AddScoped<IBTHistoryService, BTHistoryService>();
             services.AddScoped<IEmailSender, EmailService>();
             services.AddScoped<IBTNotificationService, BTNotificationService>();
+            services.AddScoped<IBTFileService, BTFileService>();
 
             services.AddMvc();
         }

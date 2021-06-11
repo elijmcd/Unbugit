@@ -58,6 +58,7 @@ namespace Unbugit.Controllers
                                         .Include(t => t.Project)
                                         .Include(t => t.TicketPriority)
                                         .Include(t => t.TicketStatus)
+                                        .Include(t => t.Attachments)
                                         .Include(t => t.TicketType).ToListAsync();
 
             return View(await applicationDbContext);
@@ -156,7 +157,11 @@ namespace Unbugit.Controllers
                 .Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(t => t.Attachments)
+                .Include(t => t.TicketHistory)
+                    .ThenInclude(h => h.User)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
             if (ticket == null)
             {
                 return NotFound();
@@ -244,11 +249,11 @@ namespace Unbugit.Controllers
                     await _notificationService.EmailNotificationAsync(notification, "New Ticket Added");
 
                 }
-                else
-                {
-                    //notify Admin
-                    await _notificationService.AdminsNotificationAsync(notification, companyId);
-                }
+                //else
+                //{
+                //    //notify Admin
+                //    await _notificationService.AdminsNotificationAsync(notification, companyId);
+                //}
 
                 #endregion
 
@@ -344,7 +349,7 @@ namespace Unbugit.Controllers
                     }
 
                     //alert dev is ticket is assigned
-                    if(ticket.DeveloperUserId != null)
+                    if (ticket.DeveloperUserId != null)
                     {
                         notification = new()
                         {

@@ -1,10 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Http;
 @using Unbugit.Services.Interfaces;
+@using Unbugit.Services
 @using Microsoft.AspNetCore.Identity
 @using Unbugit.Models.Enums
 
 @inject UserManager<BTUser> userManager
-@*@inject IBTFileService _fileService*@
+@inject IBTFileService BTFileService
 
 @model Unbugit.Models.Ticket
 
@@ -19,11 +20,13 @@
 <div class="row">
     <div class="col-6">
         <div class="row">
-            <div class="card border shadow-sm my-2 mx-2 w-100">
-                <div class="card-body">
-                    <h4>@Model.Title</h4>
+            <div class="card border shadow-sm my-1 mx-1 w-100">
+                <div class="card-body"  style="border: 1px dashed #22dc0a;">
+                    <h4 style="color:#22dc0a">@Model.Title</h4>
                     <h6>@Model.Description</h6>
-                    <p>Project: @Model.Project.Name</p>
+                    <p><em class="text-success">Created on:</em> @Model.Created.ToString("d")</p>
+                    <p>Type: @Model.TicketType.Name</p>
+                    <p>Status: @Model.TicketStatus.Name</p>
                     <p>
                         Developer:
                         @if (Model.DeveloperUser is not null)
@@ -35,56 +38,85 @@
                             <span>No developer has been assigned.</span>
                         }
                     </p>
+                    <h5 style="color:#22dc0a">Project</h5>
+                    <h6>@Model.Project.Name</h6>
+                    <p><em class="text-danger">Project Deadline:</em> @Model.Project.EndDate</p>
+                    <h5>Ticket Priority</h5>
+                    @if (Model.TicketPriorityId == 1)
+                    {
+                        <p class="bg-danger-gradient text-center text-uppercase text-primary font-weight-bolder">Priority: @Model.TicketPriority.Name</p>
+                    }
+                    else if (Model.TicketPriorityId == 2)
+                    {
+                        <p class="bg-warning-gradient text-center text-uppercase text-primary font-weight-bolder">@Model.TicketPriority.Name</p>
+                    }
+                    else if (Model.TicketPriorityId == 3)
+                    {
+                        <p class="bg-info-gradient text-center text-uppercase text-primary font-weight-bolder">@Model.TicketPriority.Name</p>
+                    }
+                    else if (Model.TicketPriorityId == 4)
+                    {
+                        <p class="bg-primary-gradient text-center text-uppercase text-secondary font-weight-bolder">@Model.TicketPriority.Name</p>
+                    }
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="card border shadow-sm my-2 mx-2 w-100">
-                <div class="card-body">
-                    <h4>Ticket Details</h4>
-                    <p>Created on: @Model.Created</p>
-                    <p>Project Deadline: @Model.Project.EndDate</p>
-                        @if (Model.TicketPriorityId == 1)
-                        {
-                            <p class="btn-outline-danger">Priority: @Model.TicketPriority.Name</p>
-                        }
-                        else if (Model.TicketPriorityId == 2)
-                        {
-                            <p class="btn-outline-warning">Priority: @Model.TicketPriority.Name</p>
-                        }
-                        else if (Model.TicketPriorityId == 3)
-                        {
-                            <p class="btn-outline-info">Priority: @Model.TicketPriority.Name</p>
-                        }
-                        else if (Model.TicketPriorityId == 4)
-                        {
-                            <p class="btn-outline-primary">Priority: @Model.TicketPriority.Name</p>
-                        }
-                    <p>Type: @Model.TicketType.Name</p>
-                    <p>Status: @Model.TicketStatus.Name</p>
+            <div class="col-6">
+                <div class="card shadow my-1 mx-1 w-100">
+                    <div class="card-body">
+                        <div>
+                            <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="@Model.Id" name="TicketId">
+
+
+                                <div class="media-body ml-3">
+                                    <label class="form-label d-block mb-2">Add Attachment</label>
+                                    <label>
+                                        Description
+                                        <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
+                                    </label><br />
+                                    <label class="btn btn-outline-primary btn-sm">
+                                        <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" />
+                                    </label>
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    @foreach (TicketAttachment item in Model.Attachments)
+                    {
+                        <div class="col-6">
+                            <div class="card shadow my-1 p-2">
+                                <div class="file">
+                                    <a href="javascript:void(0);">
+                                        <div class="hover">
+                                            <button type="button" class="btn btn-icon btn-danger">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        <div class="icon">
+                                            <img src="@BTFileService.GetFileIcon(item.FileName)" style="height:60px;width:60px" />
+                                        </div>
+                                        <div class="file-name">
+                                            <p class="m-b-5 text-muted">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
+                                            <small>Size: @BTFileService.FormatFileSize(item.FileData.Length) <span class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</span></small>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-        <div>
-            <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="@Model.Id" name="TicketId">
-
-
-                <div class="media-body ml-3">
-                    <label class="form-label d-block mb-2">Add Attachment</label>
-                    <label>
-                        Description
-                        <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
-                    </label><br />
-                    <label class="btn btn-outline-primary btn-sm">
-                        <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" />
-                    </label>
-                    <button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
-                </div>
-            </form>
-        </div>
     </div>
+
     <div class="col-6">
         <div class="row">
             <div class="card border shadow-sm my-2 w-100">
@@ -143,7 +175,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-        </div>
+    </div>
+    <div class="row">
     </div>
 </div>
