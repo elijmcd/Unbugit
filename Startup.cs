@@ -56,6 +56,8 @@ namespace Unbugit
             services.AddScoped<IEmailSender, EmailService>();
             services.AddScoped<IBTNotificationService, BTNotificationService>();
             services.AddScoped<IBTFileService, BTFileService>();
+            services.AddScoped<IBTInviteService, BTInviteService>();
+
 
             services.AddMvc();
         }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections;
 
 namespace Unbugit.Data
 {
@@ -25,5 +26,6 @@ namespace Unbugit.Data
         public DbSet<Unbugit.Models.TicketPriority> TicketPriority { get; set; }
         public DbSet<Unbugit.Models.TicketStatus> TicketStatus { get; set; }
         public DbSet<Unbugit.Models.TicketType> TicketType { get; set; }
+        public IEnumerable Projects { get; internal set; }
     }
 }

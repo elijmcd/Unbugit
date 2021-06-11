@@ -5,4 +5,15 @@
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
-<p class="text-center">Your email is confirmed. To log in, please click <b><a style="text-decoration:underline" asp-area="Identity" asp-page="/Account/Login">HERE</a></b>.</p>
+<div class="card">
+    <div class="header">
+        <p class="lead">@ViewData["Title"]</p>
+    </div>
+    <div class="body">
+        <p>@Model.StatusMessage</p>
+
+        <a class="btn btn-primary btn-lg btn-block" asp-area="Identity" asp-page="/Account/Login"><i class="fa fa-sign-in"></i><span> SIGN IN</span></a>
+
+    </div>
+</div>
+@*<p class="text-center">Your email is confirmed. To log in, please click <b><a style="text-decoration:underline" asp-area="Identity" asp-page="/Account/Login">HERE</a></b>.</p>*@

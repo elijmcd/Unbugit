@@ -12,6 +12,8 @@ namespace Unbugit.Services.Interfaces
 
         public Task<Invite> GetInviteAsync(int id);
 
+        public Task<bool> AnyInviteAsync(Guid token, string email);
+
         public Task<bool> ValidateInviteCodeAsync(Guid? token);
 
         public Task<bool> AcceptInviteAsync(Guid? token, string userId);
