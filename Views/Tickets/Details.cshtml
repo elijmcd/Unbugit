@@ -65,23 +65,24 @@
                 </div>
             </div>
         </div>
-        <div class="row-cols-1">
-            <div class="card border shadow-sm my-2 w-100">
-                <div class="card-body">
-                    <h5>Ticket Attachments</h5>
-                    <h6>Add Attachment</h6>
-                    <div class="form-group">
-                        <label asp-for="Attachments" class="control-label"></label>
-                        <input asp-for="Attachments" class="form-control" />
-                        <span asp-validation-for="Attachments" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Attachments" class="control-label"></label>
-                        <input type="File" asp-for="Attachments" />
-                        <span asp-validation-for="Attachments" class="text-danger"></span>
-                    </div>
+        <div>
+            <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="@Model.Id" name="TicketId">
+
+
+                <div class="media-body ml-3">
+                    <label class="form-label d-block mb-2">Add Attachment</label>
+                    <label>
+                        Description
+                        <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
+                    </label><br />
+                    <label class="btn btn-outline-primary btn-sm">
+                        <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" />
+                    </label>
+                    <button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
     <div class="col-6">
