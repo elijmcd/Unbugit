@@ -76,6 +76,7 @@ namespace Unbugit.Controllers
 
                 InviteViewModel model = new();
 
+
                 if (User.IsInRole("Admin"))
                 {
                     model.ProjectsList = new SelectList(_context.Project, "Id", "Name");
