@@ -207,8 +207,9 @@ namespace Unbugit.Controllers
 
                 ticket.Created = DateTimeOffset.Now;
 
-                string userId = _userManager.GetUserId(User);
-                ticket.OwnerUserId = userId;
+                //string userId = _userManager.GetUserId(User);
+                //ticket.OwnerUser = btUser;
+                ticket.OwnerUserId = btUser.Id;
 
                 ticket.TicketStatusId = (await _ticketService.LookupTicketStatusIdAsync("New")).Value;
 

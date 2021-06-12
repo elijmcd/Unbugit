@@ -13,8 +13,9 @@
 @{
     int companyId = User.Identity.GetCompanyId().Value;
     BTUser btUser = await UserManager.GetUserAsync(User);
+    List<Project> userProjects = await ProjectService.ListUserProjectsAsync(btUser.Id);
 
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My Projects";
 }
 
 <h2>Projects</h2>
@@ -63,7 +64,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in userProjects)
             {
                 <tr>
                     <td>

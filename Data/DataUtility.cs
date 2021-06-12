@@ -237,10 +237,10 @@ namespace Unbugit.Services
             //Seed Default Admin User
             var defaultUser = new BTUser
             {
-                UserName = "araynor@coderfoundry.com",
-                Email = "araynor@coderfoundry.com",
-                FirstName = "Antonio",
-                LastName = "Raynor",
+                UserName = "eli@dougaldev.net",
+                Email = "eli@dougaldev.net",
+                FirstName = "Eli",
+                LastName = "McDougal",
                 EmailConfirmed = true,
                 CompanyId = company3Id
             };
@@ -266,10 +266,10 @@ namespace Unbugit.Services
             //Seed Default ProjectManager1 User
             defaultUser = new BTUser
             {
-                UserName = "hmccoy@coderfoundry.com",
-                Email = "hmccoy@coderfoundry.com",
-                FirstName = "Henry",
-                LastName = "McCoy",
+                UserName = "bobupm1@mailinator.com",
+                Email = "bobupm1@mailinator.com",
+                FirstName = "Bobu1",
+                LastName = "Tacocat",
                 EmailConfirmed = true,
                 CompanyId = company3Id
             };
@@ -295,10 +295,10 @@ namespace Unbugit.Services
             //Seed Default ProjectManager2 User
             defaultUser = new BTUser
             {
-                UserName = "pquill@coderfoundry.com",
-                Email = "pquill@coderfoundry.com",
-                FirstName = "Peter",
-                LastName = "Quill",
+                UserName = "bobupm2@mailinator.com",
+                Email = "bobupm2@mailinator.com",
+                FirstName = "Bobu2",
+                LastName = "Tacocat",
                 EmailConfirmed = true,
                 CompanyId = company3Id
             };
@@ -324,10 +324,10 @@ namespace Unbugit.Services
             //Seed Default Developer1 User
             defaultUser = new BTUser
             {
-                UserName = "srogers@coderfoundry.com",
-                Email = "srogers@coderfoundry.com",
-                FirstName = "Steve",
-                LastName = "Rogers",
+                UserName = "bobudev1@mailinator.com",
+                Email = "bobudev1@mailinator.com",
+                FirstName = "BobuDev1",
+                LastName = "Tacocat",
                 EmailConfirmed = true,
                 CompanyId = company3Id
             };
@@ -353,10 +353,10 @@ namespace Unbugit.Services
             //Seed Default Developer2 User
             defaultUser = new BTUser
             {
-                UserName = "jhowlett@coderfoundry.com",
-                Email = "jhowlett@coderfoundry.com",
-                FirstName = "James",
-                LastName = "Howlett",
+                UserName = "bobudev2@mailinator.com",
+                Email = "bobudev2@mailinator.com",
+                FirstName = "BobuDev2",
+                LastName = "Tacocat",
                 EmailConfirmed = true,
                 CompanyId = company3Id
             };
@@ -382,10 +382,10 @@ namespace Unbugit.Services
             //Seed Default Developer3 User
             defaultUser = new BTUser
             {
-                UserName = "nromanova@coderfoundry.com",
-                Email = "nromanova@coderfoundry.com",
-                FirstName = "Natasha",
-                LastName = "Romanova",
+                UserName = "bobudev3@mailinator.com",
+                Email = "bobudev3@mailinator.com",
+                FirstName = "BobuDev3",
+                LastName = "Tacocat",
                 EmailConfirmed = true,
                 CompanyId = company3Id
             };
@@ -411,10 +411,10 @@ namespace Unbugit.Services
             //Seed Default Developer4 User
             defaultUser = new BTUser
             {
-                UserName = "cdanvers@coderfoundry.com",
-                Email = "cdanvers@coderfoundry.com",
-                FirstName = "Carol",
-                LastName = "Danvers",
+                UserName = "bobudev4@mailinator.com",
+                Email = "bobudev4@mailinator.com",
+                FirstName = "BobuDev4",
+                LastName = "Tacocat",
                 EmailConfirmed = true,
                 CompanyId = company3Id
             };
@@ -440,10 +440,10 @@ namespace Unbugit.Services
             //Seed Default Developer5 User
             defaultUser = new BTUser
             {
-                UserName = "tstark@coderfoundry.com",
-                Email = "tstark@coderfoundry.com",
-                FirstName = "Tony",
-                LastName = "Stark",
+                UserName = "bobudev5@mailinator.com",
+                Email = "bobudev5@mailinator.com",
+                FirstName = "BobuDev5",
+                LastName = "Tacocat",
                 EmailConfirmed = true,
                 CompanyId = company3Id
             };
@@ -469,10 +469,10 @@ namespace Unbugit.Services
             //Seed Default Submitter1 User
             defaultUser = new BTUser
             {
-                UserName = "ssummers@coderfoundry.com",
-                Email = "ssummers@coderfoundry.com",
-                FirstName = "Scott",
-                LastName = "Summers",
+                UserName = "bobusub1@mailinator.com",
+                Email = "bobusub1@mailinator.com",
+                FirstName = "BobuSub1",
+                LastName = "Tacocat",
                 EmailConfirmed = true,
                 CompanyId = company3Id
             };
@@ -498,10 +498,10 @@ namespace Unbugit.Services
             //Seed Default Submitter2 User
             defaultUser = new BTUser
             {
-                UserName = "sstorm@coderfoundry.com",
-                Email = "sstorm@coderfoundry.com",
-                FirstName = "Sue",
-                LastName = "Storm",
+                UserName = "bobusub2@mailinator.com",
+                Email = "bobusub2@mailinator.com",
+                FirstName = "BobuSub2",
+                LastName = "Tacocat",
                 EmailConfirmed = true,
                 CompanyId = company3Id
             };
@@ -530,10 +530,10 @@ namespace Unbugit.Services
             //Seed Demo Admin User
             var defaultUser = new BTUser
             {
-                UserName = "demoadmin@coderfoundry.com",
-                Email = "demoadmin@coderfoundry.com",
-                FirstName = "Demo",
-                LastName = "Admin",
+                UserName = "demoadmin@mailinator.com",
+                Email = "demoadmin@mailinator.com",
+                FirstName = "Admin",
+                LastName = "Demo",
                 EmailConfirmed = true,
                 CompanyId = company1Id
             };
@@ -561,10 +561,10 @@ namespace Unbugit.Services
             //Seed Demo ProjectManager User
             defaultUser = new BTUser
             {
-                UserName = "demopm@coderfoundry.com",
-                Email = "demopm@coderfoundry.com",
-                FirstName = "Demo",
-                LastName = "ProjectManager",
+                UserName = "demopm@mailinator.com",
+                Email = "demopm@mailinator.com",
+                FirstName = "ProjectManager",
+                LastName = "Demo",
                 EmailConfirmed = true,
                 CompanyId = company2Id
             };
@@ -591,10 +591,10 @@ namespace Unbugit.Services
             //Seed Demo Developer User
             defaultUser = new BTUser
             {
-                UserName = "demodev@coderfoundry.com",
-                Email = "demodev@coderfoundry.com",
-                FirstName = "Demo",
-                LastName = "Developer",
+                UserName = "demodev@mailinator.com",
+                Email = "demodev@mailinator.com",
+                FirstName = "Developer",
+                LastName = "Demo",
                 EmailConfirmed = true,
                 CompanyId = company2Id
             };
@@ -621,10 +621,10 @@ namespace Unbugit.Services
             //Seed Demo Submitter User
             defaultUser = new BTUser
             {
-                UserName = "demosub@coderfoundry.com",
-                Email = "demosub@coderfoundry.com",
-                FirstName = "Demo",
-                LastName = "Submitter",
+                UserName = "demosub@mailinator.com",
+                Email = "demosub@mailinator.com",
+                FirstName = "Submitter",
+                LastName = "Demo",
                 EmailConfirmed = true,
                 CompanyId = company2Id
             };
@@ -651,10 +651,10 @@ namespace Unbugit.Services
             //Seed Demo New User
             defaultUser = new BTUser
             {
-                UserName = "demonew@coderfoundry.com",
-                Email = "demonew@coderfoundry.com",
-                FirstName = "Demo",
-                LastName = "NewUser",
+                UserName = "demonew@mailinator.com",
+                Email = "demonew@mailinator.com",
+                FirstName = "NewUser",
+                LastName = "Demo",
                 EmailConfirmed = true,
                 CompanyId = company2Id
             };

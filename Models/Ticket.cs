@@ -18,7 +18,7 @@ namespace Unbugit.Models
         public string Title { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(300)]
         [DisplayName("Description")]
         public string Description { get; set; }
 

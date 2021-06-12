@@ -144,7 +144,7 @@
                     Status
                 </th>
                 <th>
-                    Owner
+                    Developer
                 </th>
                 <th></th>
             </tr>
@@ -152,57 +152,73 @@
         <tbody>
             @foreach (var item in Model.Where(t => t.OwnerUserId == btUser.Id))
             {
-                <tr>
+            <tr>
+                <td>
+                    <a class="btn btn-outline-info btn-small" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                        @item.Title
+                    </a>
+                </td>
+                @if (item.Updated is null)
+                {
                     <td>
-                        <a class="btn btn-outline-info btn-small" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                            @item.Title
-                        </a>
+                        @item.Created.ToString("D")
                     </td>
-                    @if (item.Updated is null)
-                    {
-                        <td>
-                            @item.Created.ToString("D")
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            @item.Updated?.ToString("D")
-                        </td>
-                    }
-                    @if (!item.Archived)
-                    {
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Archived)
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ArchivedDate)
-                        </td>
-                    }
+                }
+                else
+                {
                     <td>
-                        @item.Project.Name
+                        @item.Updated?.ToString("D")
                     </td>
+                }
+                @if (!item.Archived)
+                {
                     <td>
-                        @item.TicketType.Name
+                        @Html.DisplayFor(modelItem => item.Archived)
                     </td>
+                }
+                else
+                {
                     <td>
-                        @item.TicketPriority.Name
+                        @Html.DisplayFor(modelItem => item.ArchivedDate)
                     </td>
-                    <td>
-                        @item.TicketStatus.Name
-                    </td>
-                    <td>
-                        @item.DeveloperUser?.FullName
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
+                }
+                <td>
+                    @item.Project.Name
+                </td>
+                <td>
+                    @item.TicketType.Name
+                </td>
+                <td>
+                @if (item.TicketPriorityId == 1)
+                {
+                    <span class="text-center text-uppercase text-danger font-weight-bolder">@item.TicketPriority.Name</span>
+                }
+                else if (item.TicketPriorityId == 2)
+                {
+                    <span class="text-center text-uppercase text-warning font-weight-bolder">@item.TicketPriority.Name</span>
+                }
+                else if (item.TicketPriorityId == 3)
+                {
+                    <span class="text-center text-uppercase text-info font-weight-bolder">@item.TicketPriority.Name</span>
+                }
+                else if (item.TicketPriorityId == 4)
+                {
+                    <span class="text-center text-uppercase text-primary font-weight-bolder">@item.TicketPriority.Name</span>
+                }
+                </td>
+
+                <td>
+                    @item.TicketStatus.Name
+                </td>
+                <td>
+                    @item.DeveloperUser?.FullName
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

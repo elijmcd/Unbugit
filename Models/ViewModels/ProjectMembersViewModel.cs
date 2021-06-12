@@ -11,5 +11,6 @@ namespace Unbugit.Models.ViewModels
         public Project Project { get; set; } = new();
         public MultiSelectList Users { get; set; } // populates list box
         public string[] SelectedUsers { get; set; } // receives selected users
+
     }
 }
