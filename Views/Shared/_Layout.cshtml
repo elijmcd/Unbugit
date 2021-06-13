@@ -328,20 +328,33 @@
                     </li>
                     @if (User.IsInRole("Admin"))
                     {
-                        <li class="nav-link-icon">
-                            <a asp-action="Create" asp-controller="Invites">
+                        <li>
+                            <a class="active" href="#">
                                 <span class="nav-link-icon">
-                                    <i data-feather="user-plus"></i>
+                                    <i style="color:#dddd00;" class="fa fa-building-o"></i>
                                 </span>
-                                <span>New Company Invite</span>
+                                <span>Company</span>
                             </a>
+                            <ul>
+                                <li class="nav-link-icon">
+                                    <a asp-action="Create" asp-controller="Invites">
+                                        <span class="nav-link-icon">
+                                            <i style="color:#FFFF00;" data-feather="user-plus"></i>
+                                        </span>
+                                        <span>New Company Invite</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a asp-action="Details" asp-controller="Companies" asp-route-id="@currentUser.CompanyId">Company Details</a>
+                                </li>
+                            </ul>
                         </li>
-                    }
 
+                    }
                     <li>
-                        <a href="#">
+                        <a class="active" href="#">
                             <span class="nav-link-icon">
-                                <i class="fa fa-tags"></i>
+                                <i style="color:#FF00FF;" data-feather="tag"></i>
                             </span>
                             <span>Tickets</span>
                         </a>
@@ -359,16 +372,13 @@
                     </li>
 
                     <li>
-                        <a href="#">
+                        <a class="active" href="#">
                             <span class="nav-link-icon">
-                                <i data-feather="layers"></i>
+                                <i style="color:#00FFFF;" data-feather="layers"></i>
                             </span>
                             <span>Projects</span>
                         </a>
                         <ul>
-                            <li>
-                                <a asp-action="Index" asp-controller="Projects">All Projects</a>
-                            </li>
                             <li>
                                 <a asp-action="MyProjects" asp-controller="Projects">My Projects</a>
                             </li>
@@ -377,23 +387,12 @@
                                 <li>
                                     <a asp-action="Create" asp-controller="Projects">Creat New Project</a>
                                 </li>
+                                <li>
+                                    <a asp-action="Index" asp-controller="Projects">All Projects</a>
+                                </li>
                             }
                         </ul>
 
-                    <li>
-                        <a href="#">Tables</a>
-                        <ul>
-                            <li>
-                                <a href="basic-tables.html">Basic Tables</a>
-                            </li>
-                            <li>
-                                <a href="dataTable.html">Datatable</a>
-                            </li>
-                            <li>
-                                <a href="responsive-tables.html">Responsive Tables</a>
-                            </li>
-                        </ul>
-                    </li>
                     <li>
                         <a href="#">Charts</a>
                         <ul>
@@ -1118,6 +1117,6 @@
     <!-- App scripts -->
     <script src="~/js/app.min.js"></script>
 
-@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

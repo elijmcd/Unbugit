@@ -10,7 +10,7 @@
 @inject UserManager<BTUser> UserManager
 
 @{ int companyId = User.Identity.GetCompanyId().Value;
-    //int numProj = await CompanyInfoService.GetAllProjectsAsync(companyId);
+    List<Project> companyProjects = await CompanyInfoService.GetAllProjectsAsync(companyId);
     BTUser btUser = await UserManager.GetUserAsync(User);
 
     ViewData["Title"] = "Dashboard"; }
@@ -55,9 +55,9 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class="font-weight-bold ml-1 font-size-30 ml-3">@(await ProjectService.GetAllProjectsByCompany(companyId))</div>
+                                            <div class="font-weight-bold ml-1 font-size-30 ml-3">@companyProjects.Count</div>
                                         </div>
-                                        <p class="mb-0"><a href="#" class="link-1">See comments</a> and respond to customers' comments.</p>
+                                        <p class="mb-0"><a asp-action="Details" asp-controller="Companies" asp-route-id="@companyId" class="link-1">See all projects</a> in your company.</p>
                                     </div>
                                 </div>
                             </div>

@@ -5,14 +5,16 @@
 @using Unbugit.Extensions
 
 @inject IBTCompanyInfoService CompanyInfoService
-@inject IBTRoleService RolesService
+@inject IBTRoleService RoleService
 @inject IBTTicketService TicketService
 @inject IBTProjectService ProjectService
 @inject UserManager<BTUser> UserManager
 
 @{
+    List<BTUser> developers = await ProjectService.GetProjectMembersByRoleAsync(Model.Id, "Developer");
+    List<BTUser> submitters = await ProjectService.GetProjectMembersByRoleAsync(Model.Id, "Submitter");
     BTUser projectManager = await ProjectService.GetProjectManagerAsync(Model.Id);
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Project Details";
 }
 
 <h3>@Model.Company.Name</h3>
@@ -68,11 +70,37 @@
                 }
             </dd>
             <dt class="col-sm-2">
-                Members:
+                Project Manager:
             </dt>
             <dd>
                 <ul>
-                    @foreach (BTUser member in Model.Members)
+                    @if (projectManager != null)
+                    {
+                        <li>@projectManager.FullName</li>
+                    }
+                    else
+                    {
+                        <li>No Project Manager assigned</li>
+                    }
+                </ul>
+            </dd>
+            <dt class="col-sm-2">
+                Developers:
+            </dt>
+            <dd>
+                <ul>
+                    @foreach (var member in developers)
+                    {
+                        <li>@member.FullName</li>
+                    }
+                </ul>
+            </dd>
+            <dt class="col-sm-2">
+                Submitters:
+            </dt>
+            <dd>
+                <ul>
+                    @foreach (var member in submitters)
                     {
                         <li>@member.FullName</li>
                     }

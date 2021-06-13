@@ -25,10 +25,10 @@
                     <h4 style="color:#22dc0a">@Model.Title</h4>
                     <h6>@Model.Description</h6>
                     <p><em class="text-success">Created on:</em> @Model.Created.ToString("d")</p>
-                    <p>Type: @Model.TicketType.Name</p>
-                    <p>Status: @Model.TicketStatus.Name</p>
+                    <p><b>Type:</b> @Model.TicketType.Name</p>
+                    <p><b>Status:</b> @Model.TicketStatus.Name</p>
                     <p>
-                        Developer:
+                        <b>Developer:</b>
                         @if (Model.DeveloperUser is not null)
                         {
                             @Model.DeveloperUser.FullName
