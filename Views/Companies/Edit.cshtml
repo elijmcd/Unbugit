@@ -1,7 +1,7 @@
 ﻿@model Unbugit.Models.Company
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Company Details";
 }
 
 <h1>Edit</h1>
@@ -46,7 +46,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Details" asp-controller="Companies" asp-route-id="@Model.Id">Back to Company Details</a>
 </div>
 
 @section Scripts {

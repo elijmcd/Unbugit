@@ -16,18 +16,33 @@
 <h5>@Model.Description</h5>
 
 <div class="row">
-                    @foreach (var project in Model.Projects)
+    @foreach (var project in Model.Projects)
+    {
+        <div class="col-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <a asp-action="Details" asp-controller="Projects" asp-route-id="@project.Id"><h4 style="color:#22dc0a"><i class="fa fa-terminal" style="font-size:2rem"></i>@project.Name</h4></a>
+                    <b>Project Manager:</b>
+                    @if ((await ProjectService.GetProjectManagerAsync(project.Id)) != null)
                     {
-    <div class="col-4">
-        <div class="card shadow h-100">
-            <div class="card-body">
-                        <a asp-action="Details" asp-controller="Projects" asp-route-id="@project.Id"><h4>@project.Name</h4></a>
-                        <b>Project Manager:</b>@await ProjectService.GetProjectManagerAsync(Model.Id)
-                        <br />
+                        @await ProjectService.GetProjectManagerAsync(project.Id)
+                    }
+                    else
+                    {
+                        <p>No Project Manager Assigned</p>
+                    }
+                    <br />
+                    <b>Team Members:</b>
+                    <ul>
+                        @foreach (var member in project.Members)
+                        {
+                            <li>@member.FullName</li>
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-                    }
+    }
 </div>
 @*<div>
         <h4>Company</h4>
