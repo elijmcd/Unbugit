@@ -23,88 +23,101 @@
 <div>
     <hr />
     <div class="row">
-        <dl class="col">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Description)
-            <dd class="col-sm-10">
-                </dt>
-                @Model.Description)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.StartDate)
-            </dt>
-            <dd class="col-sm-10">
-                @Model.StartDate.ToString("d")
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.EndDate)
-            </dt>
-            <dd class="col-sm-10">
-                @Model.EndDate?.ToString("d")
-            </dd>
-            <dt class="col-sm-2">
-                Priority
-            </dt>
-            <dd class="col-sm-10">
-                @if (Model.ProjectPriorityId == 1)
-                {
-                    <span class="btn-outline-danger">@Model.ProjectPriority.Name</span>
-                }
-                else if (Model.ProjectPriorityId == 2)
-                {
-                    <span class="btn-outline-warning">@Model.ProjectPriority.Name</span>
-                }
-                else if (Model.ProjectPriorityId == 3)
-                {
-                    <span class="btn-outline-info">@Model.ProjectPriority.Name</span>
-                }
-                else if (Model.ProjectPriorityId == 4)
-                {
-                    <span class="btn-outline-primary">@Model.ProjectPriority.Name</span>
-                }
-            </dd>
-            <dt class="col-sm-2">
-                Project Manager:
-            </dt>
-            <dd>
-                <ul>
-                    @if (projectManager != null)
-                    {
-                        <li>@projectManager.FullName</li>
-                    }
-                    else
-                    {
-                        <li>No Project Manager assigned</li>
-                        <li class="btn btn-outline-warning" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">Assign Project Manager</li>
-                    }
-                </ul>
-            </dd>
-            <dt class="col-sm-2">
-                Developers:
-            </dt>
-            <dd>
-                <ul>
-                    @foreach (var member in developers)
-                    {
-                        <li>@member.FullName</li>
-                    }
-                </ul>
-            </dd>
-            <dt class="col-sm-2">
-                Submitters:
-            </dt>
-            <dd>
-                <ul>
-                    @foreach (var member in submitters)
-                    {
-                        <li>@member.FullName</li>
-                    }
-                </ul>
-            </dd>
-            <div>
-                <a class="btn btn-outline-warning" asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Id">Manage Users on Project</a>
+        <div class="col-10 offset-1 card shadow bg-dark-gradient border-success p-3">
+            <div class="row">
+                <div class="col">
+                    <dl>
+                        <dd class="col-sm-6">
+                            <em>@Model.Description</em>
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.StartDate)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Model.StartDate.ToString("d")
+                        </dd>
+                        <dt class="col-sm-6">
+                            @Html.DisplayNameFor(model => model.EndDate)
+                        </dt>
+                        <dd class="col-sm-6">
+                            @Model.EndDate?.ToString("d")
+                        </dd>
+                        <dt class="col-sm-6">
+                            Priority
+                        </dt>
+                        <dd class="col-sm-6">
+                            @if (Model.ProjectPriorityId == 1)
+                            {
+                                <span class="text-danger">@Model.ProjectPriority.Name</span>
+                            }
+                            else if (Model.ProjectPriorityId == 2)
+                            {
+                                <span class="text-warning">@Model.ProjectPriority.Name</span>
+                            }
+                            else if (Model.ProjectPriorityId == 3)
+                            {
+                                <span class="text-info">@Model.ProjectPriority.Name</span>
+                            }
+                            else if (Model.ProjectPriorityId == 4)
+                            {
+                                <span class="text-primary">@Model.ProjectPriority.Name</span>
+                            }
+                        </dd>
+                        <dd class="col-10">
+                            Project Manager:
+                            <ul>
+                                @if (projectManager != null)
+                                {
+                                    <li>@projectManager.FullName</li>
+                                }
+                                else
+                                {
+                                    <li class="btn btn-gradient-warning" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">No Project Manager Assigned</li>
+                                }
+                            </ul>
+                        </dd>
+                    </dl>
+                    <br />
+                    <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%;" />
+                    <br />
+                </div>
             </div>
-        </dl>
+            <div class="row">
+                <div class="col-4">
+                    <dl>
+                        <dt class="text-info">
+                            Developers:
+                        </dt>
+                        <dd>
+                            <ul>
+                                @foreach (var member in developers)
+                                {
+                                    <li>@member.FullName</li>
+                                }
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-4">
+                    <dl>
+                        <dt class="text-secondary">
+                            Submitters:
+                        </dt>
+                        <dd>
+                            <ul>
+                                @foreach (var member in submitters)
+                                {
+                                    <li>@member.FullName</li>
+                                }
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-4">
+                    <a class="btn btn-outline-success" asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Id">Manage Users on Project</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <br />
