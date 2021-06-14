@@ -22,16 +22,20 @@ namespace Unbugit.Controllers
         private readonly IBTProjectService _projectService;
         private readonly IBTCompanyInfoService _companyInfoService;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IBTRoleService _roleService;
 
         public ProjectsController(ApplicationDbContext context,
             IBTProjectService projectService,
             IBTCompanyInfoService companyInfoService,
-            UserManager<BTUser> userManager)
+            UserManager<BTUser> userManager,
+            IBTRoleService roleService
+            )
         {
             _context = context;
             _projectService = projectService;
             _companyInfoService = companyInfoService;
             _userManager = userManager;
+            _roleService = roleService;
         }
 
         // GET: Projects
@@ -77,6 +81,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Projects/Create
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAsync()
         {
             //get current user
@@ -101,6 +106,7 @@ namespace Unbugit.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,CompanyId,Description,StartDate,EndDate,ProjectPriorityId")] Project project) //CompanyId,ImageFileName,ImageFileData,ImageContentType,Archived
@@ -123,6 +129,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles = "Admin,ProjectManager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -177,6 +184,7 @@ namespace Unbugit.Controllers
             return View(project);
         }
 
+        //GET Users/Assign
         [Authorize(Roles = "Admin,ProjectManager")]
         [HttpGet]
         public async Task<IActionResult> AssignUsers(int id)
@@ -199,7 +207,8 @@ namespace Unbugit.Controllers
             return View(model);
         }
 
-        //post assigned users
+        //POST Users/Assign
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignUsers(ProjectMembersViewModel model)
@@ -231,7 +240,56 @@ namespace Unbugit.Controllers
             return View(model);
         }
 
+        //GET Users/AssignPM
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> AssignPM(int id)
+        {
+            AssignPMViewModel model = new();
+
+            //get companyId
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            Project project = (await _projectService.GetAllProjectsByCompany(companyId))
+                                                    .FirstOrDefault(p => p.Id == id);
+
+            model.Project = project;
+            List<BTUser> developers = await _companyInfoService.GetMembersInRoleAsync(Roles.Developer.ToString(), companyId);
+            List<BTUser> submitters = await _companyInfoService.GetMembersInRoleAsync(Roles.Submitter.ToString(), companyId);
+
+            List<BTUser> users = developers.Concat(submitters).ToList();
+            List<string> members = project.Members.Select(m => m.Id).ToList();
+            model.Users = new SelectList(users, "Id", "FullName", members);
+            return View(model);
+        }
+
+        //POST Users/AssignPM
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignPM(string userId)
+        {
+            if (ModelState.IsValid)
+            {
+                BTUser btUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                Project project = await _context.Project.FirstOrDefaultAsync(p => p.Members.Contains(btUser));
+
+                await _roleService.AddUserToRoleAsync(btUser, "ProjectManager");
+
+                await _context.SaveChangesAsync();
+                
+                //go to Project 'Details' instead
+                return RedirectToAction("Details", "Projects", new { id = project.Id });
+            }
+            else
+            {
+                //send an error message
+            }
+            return View();
+        }
+
         //GET Users/RemoveUsers
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpGet]
         public async Task<IActionResult> RemoveUsers(int id)
         {
@@ -254,6 +312,7 @@ namespace Unbugit.Controllers
         }
 
         //POST Users/RemoveUsers
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveUsers(ProjectMembersViewModel model)
@@ -286,8 +345,8 @@ namespace Unbugit.Controllers
             return View(model);
         }
 
-
         // GET: Projects/Delete/5
+        [Authorize(Roles = "Admin,ProjectManager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -308,6 +367,7 @@ namespace Unbugit.Controllers
         }
 
         // POST: Projects/Delete/5
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

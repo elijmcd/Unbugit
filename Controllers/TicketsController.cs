@@ -12,6 +12,7 @@ using Unbugit.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Unbugit.Models.Enums;
 using Unbugit.Models.ViewModels;
+using System.IO;
 
 namespace Unbugit.Controllers
 {
@@ -435,6 +436,17 @@ namespace Unbugit.Controllers
         private bool TicketExists(int id)
         {
             return _context.Ticket.Any(e => e.Id == id);
+        }
+
+        public IActionResult ShowFile(int id)
+        {
+            TicketAttachment ticketAttachment = _context.TicketAttachment.Find(id);
+            string fileName = ticketAttachment.FileName;
+            byte[] fileData = ticketAttachment.FileData;
+            string ext = Path.GetExtension(fileName).Replace(".", "");
+
+            Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
+            return File(fileData, $"application/{ext}");
         }
     }
 }

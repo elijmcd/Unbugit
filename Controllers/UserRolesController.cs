@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unbugit.Data;
+using Unbugit.Extensions;
 using Unbugit.Models;
 using Unbugit.Models.Enums;
 using Unbugit.Models.ViewModels;
@@ -19,12 +20,15 @@ namespace Unbugit.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IBTRoleService _roleService;
+        private readonly IBTCompanyInfoService _companyInfoService;
 
         public UserRolesController(ApplicationDbContext context,
-                                   IBTRoleService roleService) 
+                                   IBTRoleService roleService,
+                                   IBTCompanyInfoService companyInfoService) 
         {
             _context = context;
             _roleService = roleService;
+            _companyInfoService = companyInfoService;
         }
 
         [HttpGet]
@@ -32,10 +36,12 @@ namespace Unbugit.Controllers
         {
             List<ManageUserRolesViewModel> model = new();
 
-            //TODO company users ... little more work to do
-            List<BTUser> users = _context.Users.ToList();
+            int companyId = User.Identity.GetCompanyId().Value;
 
-            foreach (var user in users)
+            //TODO company users ... little more work to do
+            List<BTUser> companyMembers = await _companyInfoService.GetAllMembersAsync(companyId);
+
+            foreach (var user in companyMembers)
             {
                 ManageUserRolesViewModel vm = new();
                 vm.BTUser = user;
