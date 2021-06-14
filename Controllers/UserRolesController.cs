@@ -21,14 +21,17 @@ namespace Unbugit.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IBTRoleService _roleService;
         private readonly IBTCompanyInfoService _companyInfoService;
+        private readonly IBTProjectService _projectService;
 
         public UserRolesController(ApplicationDbContext context,
                                    IBTRoleService roleService,
-                                   IBTCompanyInfoService companyInfoService) 
+                                   IBTCompanyInfoService companyInfoService,
+                                   IBTProjectService projectService) 
         {
             _context = context;
             _roleService = roleService;
             _companyInfoService = companyInfoService;
+            _projectService = projectService;
         }
 
         [HttpGet]
@@ -37,9 +40,11 @@ namespace Unbugit.Controllers
             List<ManageUserRolesViewModel> model = new();
 
             int companyId = User.Identity.GetCompanyId().Value;
+            int projectId = await _
 
             //TODO company users ... little more work to do
             List<BTUser> companyMembers = await _companyInfoService.GetAllMembersAsync(companyId);
+            List<BTUser> projectMembers = await _projectService.GetMembersWithoutPMAsync()
 
             foreach (var user in companyMembers)
             {
