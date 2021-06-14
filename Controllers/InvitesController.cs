@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Unbugit.Services.Interfaces;
 using Unbugit.Models.ViewModels;
 using Unbugit.Extensions;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Unbugit.Controllers
 {
@@ -27,15 +28,15 @@ namespace Unbugit.Controllers
         private readonly IBTInviteService _inviteService;
 
         public InvitesController(ApplicationDbContext context,
-                                UserManager<BTUser> userManager,
-                                IDataProtectionProvider dataProtectionProvider,
-                                IBTProjectService projectService,
-                                IEmailSender emailService,
-                                IBTInviteService inviteService)
+                              UserManager<BTUser> userManager,
+                              IDataProtectionProvider dataProtectionProvider,
+                              IBTProjectService projectService,
+                              IEmailSender emailService,
+                              IBTInviteService inviteService)
         {
             _context = context;
             _userManager = userManager;
-            _protector = dataProtectionProvider.CreateProtector("EJM.Unbugit.21");
+            _protector = dataProtectionProvider.CreateProtector("CF.RockwellTracker.21");
             _projectService = projectService;
             _emailService = emailService;
             _inviteService = inviteService;
@@ -71,29 +72,22 @@ namespace Unbugit.Controllers
         }
 
         // GET: Invites/Create
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> Create()
         {
+            InviteViewModel model = new();
 
-                InviteViewModel model = new();
+            if (User.IsInRole("Admin"))
+            {
+                model.ProjectsList = new SelectList(_context.Project, "Id", "Name");
+            }
+            else if (User.IsInRole("ProjectManager"))
+            {
+                string userId = _userManager.GetUserId(User);
+                List<Project> projects = await _projectService.ListUserProjectsAsync(userId);
+                model.ProjectsList = new SelectList(projects, "Id", "Name");
+            }
 
-
-                if (User.IsInRole("Admin"))
-                {
-                    model.ProjectsList = new SelectList(_context.Project, "Id", "Name");
-                }
-                else if (User.IsInRole("ProjectManager"))
-                {
-                    string userId = _userManager.GetUserId(User);
-                    List<Project> projects = await _projectService.ListUserProjectsAsync(userId);
-                    model.ProjectsList = new SelectList(projects, "Id", "Name");
-                }
-
-                return View(model);
-            //ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name");
-            //ViewData["InviteeId"] = new SelectList(_context.Users, "Id", "Id");
-            //ViewData["InvitorId"] = new SelectList(_context.Users, "Id", "Id");
-            //ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "Id", "Name");
-            //return View();
+            return View(model);
         }
 
         // POST: Invites/Create
@@ -101,7 +95,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(InviteViewModel viewModel/*[Bind("Id,InviteDate,CompanyToken,CompanyId,ProjectId,InvitorId,InviteeId,InviteeEmail,InviteeFirstName,InviteeLastName,IsValid")] Invite invite*/)
+        public async Task<ActionResult> Create(InviteViewModel viewModel)
         {
             var companyId = User.Identity.GetCompanyId();
 
@@ -271,7 +265,6 @@ namespace Unbugit.Controllers
             return NotFound();
         }
 
-        //POST Invite/ProcessInvite
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ProcessInvite(Invite invite)

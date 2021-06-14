@@ -254,12 +254,10 @@ namespace Unbugit.Controllers
                                                     .FirstOrDefault(p => p.Id == id);
 
             model.Project = project;
-            List<BTUser> developers = await _companyInfoService.GetMembersInRoleAsync(Roles.Developer.ToString(), companyId);
-            List<BTUser> submitters = await _companyInfoService.GetMembersInRoleAsync(Roles.Submitter.ToString(), companyId);
+            List<BTUser> projectManagers = await _companyInfoService.GetMembersInRoleAsync(Roles.ProjectManager.ToString(), companyId);
 
-            List<BTUser> users = developers.Concat(submitters).ToList();
-            List<string> members = project.Members.Select(m => m.Id).ToList();
-            model.Users = new SelectList(users, "Id", "FullName", members);
+            model.Users = new SelectList(projectManagers, "Id", "FullName");
+
             return View(model);
         }
 
@@ -267,19 +265,15 @@ namespace Unbugit.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AssignPM(string userId)
+        public async Task<IActionResult> AssignPM(AssignPMViewModel model)
         {
             if (ModelState.IsValid)
             {
-                BTUser btUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-                Project project = await _context.Project.FirstOrDefaultAsync(p => p.Members.Contains(btUser));
 
-                await _roleService.AddUserToRoleAsync(btUser, "ProjectManager");
-
-                await _context.SaveChangesAsync();
+                await _projectService.AddProjectManagerAsync(model.PMId, model.Project.Id);
                 
                 //go to Project 'Details' instead
-                return RedirectToAction("Details", "Projects", new { id = project.Id });
+                return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
             }
             else
             {

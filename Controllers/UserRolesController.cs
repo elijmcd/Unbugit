@@ -40,11 +40,9 @@ namespace Unbugit.Controllers
             List<ManageUserRolesViewModel> model = new();
 
             int companyId = User.Identity.GetCompanyId().Value;
-            int projectId = await _
 
             //TODO company users ... little more work to do
             List<BTUser> companyMembers = await _companyInfoService.GetAllMembersAsync(companyId);
-            List<BTUser> projectMembers = await _projectService.GetMembersWithoutPMAsync()
 
             foreach (var user in companyMembers)
             {

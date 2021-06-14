@@ -31,6 +31,10 @@
     <!-- App css -->
     <link rel="stylesheet" href="~/css/app.min.css" type="text/css">
 
+    <!-- select2 multiselect -->
+    <link rel="stylesheet" href="~/vendors/select2/css/select2.min.css" type="text/css">
+
+
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -348,7 +352,7 @@
                                     <a asp-action="Details" asp-controller="Companies" asp-route-id="@currentUser.CompanyId">Company Details</a>
                                 </li>
                                 <li>
-                                    <a asp-action="ManageUserRoles" asp-controller="UserRoles">Manage User Roles</a>
+                                    <a asp-action="ManageUserRoles" asp-controller="UserRoles">Manage Team Roles</a>
                                 </li>
                             </ul>
                         </li>
@@ -384,7 +388,7 @@
                             <li>
                                 <a asp-action="MyProjects" asp-controller="Projects">My Projects</a>
                             </li>
-                            @if (User.IsInRole("Admin"))
+                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
                             {
                                 <li>
                                     <a asp-action="Create" asp-controller="Projects">Creat New Project</a>
@@ -835,6 +839,15 @@
 
     <!-- App scripts -->
     <script src="~/js/app.min.js"></script>
+
+    <!-- Select2 multiselect -->
+    <script src="~/vendors/select2/js/select2.min.js"></script>
+    <script>
+        $('.select2-example').select2({
+            placeholder: 'Select'
+        });
+    </script>
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

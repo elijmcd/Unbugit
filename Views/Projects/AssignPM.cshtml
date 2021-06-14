@@ -16,7 +16,7 @@
                 <span>@Model.Project.Name</span>
             </p>
 
-            <form asp-action="AssignPM" asp-controller="UserRoles" method="post">
+            <form asp-action="AssignPM" asp-controller="Projects" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="@Model.Project.Id">
                 <input type="hidden" asp-for="@Model.Project.Name">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
-                        <input type="submit" class="btn btn-success" value="Assign PM" />
+                        <input type="submit" class="btn btn-success" value="AssignPM" />
                     </div>
                 </div>
             </form>

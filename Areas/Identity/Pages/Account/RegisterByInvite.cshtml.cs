@@ -18,6 +18,7 @@ using Unbugit.Services.Interfaces;
 
 namespace Unbugit.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class RegisterByInviteModel : PageModel
     {
         private readonly SignInManager<BTUser> _signInManager;
@@ -43,9 +44,9 @@ namespace Unbugit.Areas.Identity.Pages.Account
             _emailSender = emailSender;
         }
 
-
         [BindProperty]
         public InputModel Input { get; set; } = new InputModel();
+
 
         public class InputModel
         {
@@ -127,7 +128,7 @@ namespace Unbugit.Areas.Identity.Pages.Account
 
                     _logger.LogInformation("User created a new account with password.");
 
-                    // -- Add new registrant a role of "NewUser" -- //
+                    // -- Add new registrant a role of "Submitter" -- //
                     await _userManager.AddToRoleAsync(user, Roles.Submitter.ToString());
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

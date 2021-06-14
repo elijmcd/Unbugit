@@ -53,10 +53,7 @@ namespace Unbugit.Services
 
             try
             {
-                BTUser newPM = await _userManager.FindByIdAsync(userId);
-                await _roleService.AddUserToRoleAsync(newPM, "ProjectManager");
-
-                await _context.SaveChangesAsync();
+                await AddUserToProjectAsync(userId, projectId);
 
                 return true;
             }

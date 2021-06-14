@@ -66,13 +66,19 @@
                         <dd class="col-10">
                             Project Manager:
                             <ul>
-                                @if (projectManager != null)
+                                @if ((projectManager != null) && (User.IsInRole("Admin")))
                                 {
-                                    <li>@projectManager.FullName</li>
+                                    <a class="btn btn-outline-warning" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">
+                                        <li>@projectManager.FullName</li>
+                                    </a>
+                                }
+                                else if (User.IsInRole("Admin"))
+                                {
+                                    <a class="btn btn-outline-warning" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">No Project Manager Assigned</a>
                                 }
                                 else
                                 {
-                                    <li class="btn btn-gradient-warning" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">No Project Manager Assigned</li>
+                                    <li>No Project Manager Assigned</li>
                                 }
                             </ul>
                         </dd>
@@ -213,11 +219,11 @@
                         }
                         else if (ticket.TicketPriorityId == 3)
                         {
-                            <span class="badge bg-secondary-bright text-secondary">@ticket.TicketPriority.Name</span>
+                            <span class="badge bg-primary-bright text-primary">@ticket.TicketPriority.Name</span>
                         }
                         else if (ticket.TicketPriorityId == 4)
                         {
-                            <span class="badge bg-primary-bright text-primary">@ticket.TicketPriority.Name</span>
+                            <span class="badge bg-success-bright text-success">@ticket.TicketPriority.Name</span>
                         }
                     </td>
                     <td>
