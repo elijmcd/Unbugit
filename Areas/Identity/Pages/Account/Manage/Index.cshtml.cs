@@ -7,6 +7,8 @@ using Unbugit.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Http;
+using Unbugit.Services.Interfaces;
 
 namespace Unbugit.Areas.Identity.Pages.Account.Manage
 {
@@ -14,16 +16,20 @@ namespace Unbugit.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<BTUser> _userManager;
         private readonly SignInManager<BTUser> _signInManager;
+        private readonly IBTFileService _fileService;
 
         public IndexModel(
             UserManager<BTUser> userManager,
-            SignInManager<BTUser> signInManager)
+            SignInManager<BTUser> signInManager,
+            IBTFileService fileService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _fileService = fileService;
         }
 
         public string Username { get; set; }
+        public string CurrentImage { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -36,6 +42,7 @@ namespace Unbugit.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+            public IFormFile NewImage { get; set; }
         }
 
         private async Task LoadAsync(BTUser user)
@@ -44,6 +51,7 @@ namespace Unbugit.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
+            CurrentImage = _fileService.ConvertByteArrayToFile(user.AvatarFileData, user.AvatarContentType);
 
             Input = new InputModel
             {
@@ -65,6 +73,7 @@ namespace Unbugit.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -86,6 +95,20 @@ namespace Unbugit.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            var hasChanged = false;
+
+            if(Input.NewImage is not null)
+            {
+                user.AvatarFileData = await _fileService.ConvertFileToByteArrayAsync(Input.NewImage);
+                user.AvatarContentType = _fileService.ContentType(Input.NewImage);
+                hasChanged = true;
+            }
+
+            if(hasChanged == true)
+            {
+                await _userManager.UpdateAsync(user);
             }
 
             await _signInManager.RefreshSignInAsync(user);

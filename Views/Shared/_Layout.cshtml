@@ -1,7 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Unbugit.Services.Interfaces 
 
 @inject SignInManager<BTUser> SignInManager
 @inject UserManager<BTUser> UserManager
+@inject IBTFileService FileService  
 
 @{ BTUser currentUser = await UserManager.GetUserAsync(User);
 }
@@ -423,6 +425,7 @@
                     </div>
                 </div>
 
+                @*/*TOP NAV-BAR*/*@
                 <div class="header-body">
                     <div class="header-body-left">
                         <ul class="navbar-nav">
@@ -519,6 +522,7 @@
                                     <a href="#" class="dropdown-item">Customers</a>
                                 </div>
                             </li>
+                            @*/*LOGIN PARTIAL*/*@
                             <li class="nav-item d-none d-md-block">
                                 <div style="padding:0 5px 5px 5px;">
                                     <partial name="_LoginPartial" />
@@ -536,6 +540,7 @@
                                 </a>
                             </li>
 
+                            @*/*FULLSCREEN*/*@
                             <li class="nav-item dropdown d-none d-md-block">
                                 <a href="#" class="nav-link" title="Fullscreen" data-toggle="fullscreen">
                                     <i class="maximize" data-feather="maximize"></i>
@@ -543,6 +548,7 @@
                                 </a>
                             </li>
 
+                            @*/*MSG + NOTIFICATIONS*@
                             <li class="nav-item dropdown">
                                 <a href="#" class="nav-link nav-link-notify" title="Chats" data-sidebar-target="#chat-list">
                                     <i data-feather="message-circle"></i>
@@ -762,14 +768,14 @@
                             <li class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" title="User menu" data-toggle="dropdown">
                                     <figure class="avatar avatar-sm">
-                                        <img src="~/media/image/user/man_avatar3.jpg" class="rounded-circle" alt="avatar">
+                                        <img src="@FileService.ConvertByteArrayToFile(currentUser.AvatarFileData, currentUser.AvatarContentType)" alt="@currentUser.FullName" class="rounded-circle" />
                                     </figure>
                                     <span class="ml-2 d-sm-inline d-none">@currentUser.FullName</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-big">
                                     <div class="text-center py-4">
                                         <figure class="avatar avatar-lg mb-3 border-0">
-                                            <img src="~/media/image/user/man_avatar3.jpg" class="rounded-circle" alt="image">
+                                            <img src="@FileService.ConvertByteArrayToFile(currentUser.AvatarFileData, currentUser.AvatarContentType)" alt="@currentUser.FullName" class="rounded-circle" />
                                         </figure>
                                         <h5 class="text-center">@currentUser.FullName</h5>
                                         <div class="mb-3 small text-center text-muted">@currentUser.UserName</div>
@@ -779,7 +785,7 @@
                                             <button type="submit" class="btn btn-outline-secondary btn-rounded center">Logout</button>
                                         </form>
                                         @*<a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Landing", "Home", new { area = "" })" class="btn btn-outline-secondary btn-rounded" style="margin-top:10px" padding-left:10px">*@
-                                            @*Logout*@
+                                        @*Logout*@
                                         @*</a>*@
                                     </div>
                                     @*<a href="javascript:document.getElementById('logoutForm').submit();" class="list-group-item text-danger">Sign Out</a>*@
@@ -842,13 +848,6 @@
     <!-- App scripts -->
     <script src="~/js/app.min.js"></script>
 
-    <!-- Select2 multiselect -->
-    <script src="~/vendors/select2/js/select2.min.js"></script>
-    <script>
-        $('.select2-example').select2({
-            placeholder: 'Select'
-        });
-    </script>
 
 
     @await RenderSectionAsync("Scripts", required: false)

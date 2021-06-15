@@ -12,6 +12,11 @@ namespace Unbugit.Services
     {
         private readonly string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
 
+        public string ContentType(IFormFile file)
+        {
+            return file?.ContentType.Split('/')[1];
+        }
+
         public string ConvertByteArrayToFile(byte[] fileData, string extension)
         {
             if (fileData is null || extension is null) return null;
@@ -32,6 +37,11 @@ namespace Unbugit.Services
 
             return byteFile;
         }//
+        public async Task<byte[]> ConvertFileToByteArrayAsync(string fileName)
+        {
+            var file = $"{Directory.GetCurrentDirectory()}/wwwroot/img/{fileName}";
+            return await File.ReadAllBytesAsync(file);
+        }
 
         public string FormatFileSize(long bytes)
         {

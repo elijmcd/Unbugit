@@ -38,7 +38,6 @@ namespace Unbugit.Controllers
         public async Task<IActionResult> ManageUserRoles()
         {
             List<ManageUserRolesViewModel> model = new();
-
             int companyId = User.Identity.GetCompanyId().Value;
 
             //TODO company users ... little more work to do
@@ -65,7 +64,6 @@ namespace Unbugit.Controllers
             IEnumerable<string> roles = await _roleService.ListUserRolesAsync(user);
 
             await _roleService.RemoveUserFromRolesAsync(user, roles);
-
             string userRole = member.SelectedRoles.FirstOrDefault();
 
             if(Enum.TryParse(userRole, out Roles roleValue))

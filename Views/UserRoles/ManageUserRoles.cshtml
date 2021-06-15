@@ -26,12 +26,12 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label asp-for="@member.Roles" class="control-label">Roles for @member.BTUser.FullName</label>
-                        <select class="select2-example" multiple>
+                        <select class="select2-example" multiple="multiple" asp-for="@member.SelectedRoles" asp-items="@member.Roles">
                             <option>Select</option>
                             @foreach (var role in member.Roles)
                             {
-                                <option value="@role">@role.Text</option>
-                            }
+            <option value="@role">@role.Text</option>
+}
                         </select>
                     </div>
                 </div>
@@ -46,3 +46,13 @@
         </div>
     </div>
 </div>}
+
+@section Scripts{
+    <!-- Select2 multiselect -->
+    <script src="~/vendors/select2/js/select2.min.js"></script>
+    <script>
+        $('.select2-example').select2({
+            placeholder: 'Select'
+        });
+    </script>
+}
