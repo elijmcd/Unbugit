@@ -1,19 +1,18 @@
 ﻿@page
 @model ConfirmEmailModel
 @{
+    Layout = "_LoginLayout";
     ViewData["Title"] = "Email Confirmed";
 }
-
-<h1 class="text-center">@ViewData["Title"]</h1>
-<div class="card">
-    <div class="header">
-        <p class="lead">@ViewData["Title"]</p>
-    </div>
-    <div class="body">
-        <p>@Model.StatusMessage</p>
-
-        <a class="btn btn-primary btn-lg btn-block" asp-area="Identity" asp-page="/Account/Login"><i class="fa fa-sign-in"></i><span> SIGN IN</span></a>
-
+<div class="row">
+    <div class="col">
+        <div class="card p-3">
+            <h1 class="text-center">@ViewData["Title"]</h1>
+            <div class="center text-center">
+                <p>@Model.StatusMessage</p>
+                <a class="btn btn-lg btn-block btn-gradient-info" asp-area="Identity" asp-page="/Account/Login"><i class="fa fa-sign-in"></i><span> SIGN IN</span></a>
+            </div>
+        </div>
     </div>
 </div>
 @*<p class="text-center">Your email is confirmed. To log in, please click <b><a style="text-decoration:underline" asp-area="Identity" asp-page="/Account/Login">HERE</a></b>.</p>*@

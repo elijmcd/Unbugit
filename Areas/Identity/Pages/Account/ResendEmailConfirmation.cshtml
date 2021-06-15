@@ -1,22 +1,25 @@
 ﻿@page
 @model ResendEmailConfirmationModel
 @{
-    ViewData["Title"] = "Resend email confirmation";
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "Resend Confirmation";
 }
 
-<h1>@ViewData["Title"]</h1>
-<h4>Enter your email.</h4>
-<hr />
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col text-center text-info">
+        <h3>@ViewData["Title"]</h3>
+        <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:100%; opacity:.8;" />
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
+                @*<label asp-for="Input.Email"></label>*@
+                <input asp-for="Input.Email" placeholder="Email Address..."class="form-control" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Resend</button>
+            <button type="submit" class="btn btn-gradient-primary">Send</button>
+            <br /><br />
+            <a class="text-secondary" asp-area="Identity" asp-page="/Account/Login">Return to Login</a>
         </form>
     </div>
 </div>

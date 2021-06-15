@@ -418,7 +418,7 @@
 
                     <div class="header-logo">
                         <a href=index.html>
-                            <img class="logo" style="padding-top:15px; margin-left:-10px; z-index:-1;" src="~/img/unbugit-logo.png" alt="logo">
+                            <img class="logo" style="padding-top:15px; margin-left:-10px; z-index:-1;" src="~/media/image/unbugit-logo-sm-2.png" alt="logo">
                         </a>
                     </div>
                 </div>
@@ -773,18 +773,20 @@
                                         </figure>
                                         <h5 class="text-center">@currentUser.FullName</h5>
                                         <div class="mb-3 small text-center text-muted">@currentUser.UserName</div>
-                                        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-outline-secondary btn-rounded">Manage Your Account</a>
-                                    </div>
-                                    <div class="list-group">
-                                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Landing", "Home", new { area = "" })">
-                                            <button type="submit" class="list-group-item text-danger" style="border:none;">Logout</button>
+                                        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-outline-info btn-rounded" style="margin-bottom:10px;">Manage Your Account</a>
+                                        <br />
+                                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                            <button type="submit" class="btn btn-outline-secondary btn-rounded center">Logout</button>
                                         </form>
-                                        @*<a href="javascript:document.getElementById('logoutForm').submit();" class="list-group-item text-danger">Sign Out</a>*@
+                                        @*<a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Landing", "Home", new { area = "" })" class="btn btn-outline-secondary btn-rounded" style="margin-top:10px" padding-left:10px">*@
+                                            @*Logout*@
+                                        @*</a>*@
                                     </div>
+                                    @*<a href="javascript:document.getElementById('logoutForm').submit();" class="list-group-item text-danger">Sign Out</a>*@
                                     <div class="p-4">
                                         <div class="mb-4">
                                             <h6 class="d-flex justify-content-between">
-                                                Storage
+                                                Tickets Complete
                                                 <span>%25</span>
                                             </h6>
                                             <div class="progress" style="height: 5px;">
