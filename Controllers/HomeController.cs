@@ -12,6 +12,7 @@ using Unbugit.Services.Interfaces;
 using Unbugit.Data;
 using Microsoft.AspNetCore.Authorization;
 using Unbugit.Extensions;
+using System.Drawing;
 
 namespace Unbugit.Controllers
 {
@@ -96,6 +97,44 @@ namespace Unbugit.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        // CHART/DONUT
+        [HttpPost]
+        public async Task<JsonResult> DonutMethod()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+            Random rnd = new();
+
+            List<Project> projects = (await _projectService.GetAllProjectsByCompany(companyId)).OrderBy(p => p.Id).ToList();
+
+            DonutViewModel chartData = new();
+            chartData.labels = projects.Select(p => p.Name).ToArray();
+
+            List<SubData> dsArray = new();
+            List<int> tickets = new();
+            List<string> colors = new();
+
+            foreach (Project prj in projects)
+            {
+                tickets.Add(prj.Tickets.Count());
+
+                // This code will randomly select a color for each element of the data 
+                Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                string colorHex = string.Format("#{0:X6}", randomColor.ToArgb() & 0X00FFFFFF);
+
+                colors.Add(colorHex);
+            }
+
+            SubData temp = new()
+            {
+                data = tickets.ToArray(),
+                backgroundColor = colors.ToArray()
+            };
+            dsArray.Add(temp);
+
+            chartData.datasets = dsArray.ToArray();
+
+            return Json(chartData);
+        }
 
     }
 }

@@ -273,6 +273,8 @@ namespace Unbugit.Controllers
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            int companyId = User.Identity.GetCompanyId().Value;
+
             if (id == null)
             {
                 return NotFound();
@@ -283,8 +285,8 @@ namespace Unbugit.Controllers
             {
                 return NotFound();
             }
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
+            ViewData["DeveloperUserId"] = new SelectList (await _projectService.DevelopersOnProjectAsync(ticket.ProjectId), "Id", "FullName", ticket.DeveloperUserId);
+            //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
             ViewData["ProjectId"] = new SelectList(_context.Project, "Id", "Name", ticket.ProjectId);
             ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Id", ticket.TicketPriorityId);
             ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id", ticket.TicketStatusId);
@@ -334,14 +336,15 @@ namespace Unbugit.Controllers
                     {
                         TicketId = ticket.Id,
                         Title = $"Ticket modified on project - {oldTicket.Project.Name}",
-                        Message = $"Ticket: [{ticket.Id}]:{ticket.Title} updated by {currentUser?.FullName}",
+                        Message = $"Ticket [{ticket.Id}]:{ticket.Title} updated by {currentUser?.FullName}",
                         Created = DateTimeOffset.Now,
                         SenderId = currentUser?.Id,
                         RecipientId = projectManager?.Id
                     };
 
                     if (projectManager != null)
-                    {
+                    {   
+                        //PM notify
                         await _notificationService.SaveNotificationAsync(notification);
                     }
                     else
@@ -357,7 +360,7 @@ namespace Unbugit.Controllers
                         {
                             TicketId = ticket.Id,
                             Title = "A ticket assigned to you has been modified",
-                            Message = $"Ticket: [{ticket.Id}]:{ticket.Title} updated by {currentUser?.FullName}",
+                            Message = $"Ticket [{ticket.Id}]:{ticket.Title} updated by {currentUser?.FullName}",
                             Created = DateTimeOffset.Now,
                             SenderId = currentUser.Id,
                             RecipientId = ticket.DeveloperUserId
@@ -387,7 +390,7 @@ namespace Unbugit.Controllers
 
                 await _historyService.AddHistoryAsync(oldTicket, newTicket, currentUser.Id);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("MyTickets", "Tickets");
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
             ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);

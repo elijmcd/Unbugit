@@ -12,98 +12,110 @@
 
 @{
     BTUser btUser = await UserManager.GetUserAsync(User);
-    ViewData["Title"] = "Index";
+    Company company = btUser.Company;
+    List<Project> companyProjects = await ProjectService.GetAllProjectsByCompany((btUser.CompanyId).Value);
+
+    ViewData["Title"] = "Company Projects";
 }
 
-<h1>Index</h1>
+<h2>All Projects for @company</h2>
 
 @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
 {
     <p>
-        <a asp-action="Create">Create New</a>
+        <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
     </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.StartDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EndDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageFileName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageFileData)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageContentType)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Archived)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Company)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProjectPriority)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="table-responsive">
+        <table id="myTable" class="table table-hover">
+            <caption>All Projects for @company</caption>
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EndDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ImageFileName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ImageFileData)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ImageContentType)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Archived)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Company.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProjectPriority.Id)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
+                    <th>
+                        Project
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Start Date
+                    </th>
+                    <th>
+                        End Date
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.ImageFileName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ImageFileData)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ImageContentType)
+                    </th>*@
+                    <th>
+                        @Html.DisplayNameFor(model => model.Archived)
+                    </th>
+                    @*<th>
+                        @Html.DisplayNameFor(model => model.Company)
+                    </th>*@
+                    <th>
+                        Priority
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
+            </thead>
+            <tbody>
+                @foreach (var item in companyProjects)
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td>
+                            @item.StartDate.ToString("d")
+                        </td>
+                        <td>
+                            @item.EndDate?.ToString("d")
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.ImageFileName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ImageFileData)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ImageContentType)
+                        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Archived)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.Company.Name)
+                        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProjectPriority.Id)
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
     <h3>Sorry, you do not have access to this resource.</h3>
     <a asp-action="Dashboard" asp-controller="Home" asp-route-id="@btUser.Id"><p>Return Home</p></a>
+}
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
 }

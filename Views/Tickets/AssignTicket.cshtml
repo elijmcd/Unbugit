@@ -1,6 +1,13 @@
 ﻿@model Unbugit.Models.ViewModels.AssignDeveloperViewModel
+@using Unbugit.Services.Interfaces 
+@using Microsoft.AspNetCore.Mvc.Rendering
 
-
+@inject  IBTCompanyInfoService CompanyInfoService;
+ 
+@{
+    int companyId = Model.Ticket.Project.CompanyId;
+    List<BTUser> devs = await CompanyInfoService.GetMembersInRoleAsync("Developer", companyId);
+}
 
 <div class="row">
     <div class="col">

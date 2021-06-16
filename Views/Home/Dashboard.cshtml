@@ -43,15 +43,15 @@
                 <div class="row">
                     <div class="col">
                         <div class="row">
-                            <div class="col">
-                                <div class="card">
+                            <div class="col-md-6 col-lg-3 h-100">
+                                <div class="card shadow">
                                     <div class="card-body">
                                         <h6 class="card-title">Company Projects</h6>
                                         <div class="d-flex align-items-center mb-3">
                                             <div>
                                                 <div class="avatar">
                                                     <span class="avatar-title bg-primary-bright text-primary rounded-pill">
-                                                        <i class="fa fa-ticket"></i>
+                                                        <i class="fa fa- fa-tasks"></i>
                                                     </span>
                                                 </div>
                                             </div>
@@ -61,10 +61,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-lg-3 h-100">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h6 class="card-title">Bounce Rate</h6>
+                                        <h6 class="card-title">Open Tickets</h6>
                                         <div class="d-flex align-items-center mb-3">
                                             <div>
                                                 <div class="avatar">
@@ -127,6 +127,26 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- DONT CHART -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+                                <!-- DONUT CHART -->
+                                <div class="card card-danger">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Company Ticket Distribution</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="donutChart">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <div class="row clearfix">
                     <div class="col-lg-4 col-md-6">
@@ -1040,4 +1060,39 @@
             });
         }
     </script>
+
+    <script type="text/javascript">
+        $.ajax({
+            type: "POST",
+            url: "/Home/DonutMethod",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                //Donut
+                var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+                var donutData = result
+
+                var donutOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                new Chart(donutChartCanvas, {
+                    type: 'doughnut',
+                    data: donutData,
+                    options: donutOptions
+                })
+            },
+            failure: function (result) {
+                alert(result.d);
+            },
+            error: function (result) {
+                alert(result.d);
+            }
+        });
+
+    </script>
+
 }

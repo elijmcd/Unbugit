@@ -109,7 +109,7 @@ namespace Unbugit.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,CompanyId,Description,StartDate,EndDate,ProjectPriorityId")] Project project) //CompanyId,ImageFileName,ImageFileData,ImageContentType,Archived
+        public async Task<IActionResult> Create([Bind("Id,Name,CompanyId,Description,StartDate,EndDate,ProjectPriority,ProjectPriorityId")] Project project) //CompanyId,ImageFileName,ImageFileData,ImageContentType,Archived
         {
             BTUser btUser = await _userManager.GetUserAsync(User);
 
@@ -143,7 +143,7 @@ namespace Unbugit.Controllers
                 return NotFound();
             }
             ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name", project.CompanyId);
-            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id", project.ProjectPriorityId);
+            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Name", project.ProjectPriorityId);
             return View(project);
         }
 
@@ -152,7 +152,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,Description,StartDate,EndDate,ProjectPriorityId,ImageFileName,ImageFileData,ImageContentType,Archived")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,Description,StartDate,EndDate,ProjectPriority,ProjectPriorityId,ImageFileName,ImageFileData,ImageContentType,Archived")] Project project)
         {
             if (id != project.Id)
             {
@@ -177,10 +177,10 @@ namespace Unbugit.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("MyProjects");
             }
             ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name", project.CompanyId);
-            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id", project.ProjectPriorityId);
+            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Name", project.ProjectPriorityId);
             return View(project);
         }
 

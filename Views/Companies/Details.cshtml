@@ -12,24 +12,28 @@
     ViewData["Title"] = "Company Details";
 }
 
-<h1>Current Projects for @Model.Name</h1>
-<h5>@Model.Description</h5>
+<h2>Current Projects for @Model.Name</h2>
+<em>@Model.Description</em>
 
 <div class="row">
     @foreach (var project in Model.Projects)
     {
         <div class="col-4">
             <div class="card shadow h-100">
+                <div class="card-header">
+                    <a asp-action="Details" asp-controller="Projects" asp-route-id="@project.Id"><h5 style="color:#22dc0a">@project.Name</h5></a>
+                </div>
                 <div class="card-body">
-                    <a asp-action="Details" asp-controller="Projects" asp-route-id="@project.Id"><h4 style="color:#22dc0a"><i class="fa fa-terminal" style="font-size:2rem"></i>@project.Name</h4></a>
                     <b>Project Manager:</b>
                     @if ((await ProjectService.GetProjectManagerAsync(project.Id)) != null)
                     {
-                        @await ProjectService.GetProjectManagerAsync(project.Id)
+                        <a class="badge badge-success text-dark" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@project.Id">
+                            @((await (ProjectService.GetProjectManagerAsync(project.Id))).FullName)
+                        </a>
                     }
                     else
                     {
-                        <p>No Project Manager Assigned</p>
+                        <a class="badge badge-warning text-danger" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@project.Id">No Project Manager Assigned</a>
                     }
                     <br />
                     <b>Team Members:</b>
@@ -40,6 +44,7 @@
                         }
                     </ul>
                 </div>
+
             </div>
         </div>
     }

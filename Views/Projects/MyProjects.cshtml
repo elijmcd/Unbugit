@@ -34,7 +34,7 @@
                     Project Name
                 </th>
                 <th>
-                    Role
+                    Description
                 </th>
                 <th>
                     Start Date
@@ -68,18 +68,18 @@
             {
                 <tr>
                     <td>
-                        @item.Name
+                        <a class="btn btn-outline-info" asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a>
                     </td>
                     <td>
                         @item.Description
                     </td>
                     <td>
-                        @item.StartDate.ToString("D")
+                        @item.StartDate.ToString("d")
                     </td>
                     <td>
                         @if (item.EndDate is not null)
                         {
-                            @item.EndDate
+                            @item.EndDate?.ToString("d")
                         }
                         else
                         {
@@ -102,28 +102,32 @@
                             @Html.DisplayFor(modelItem => item.Company.Name)
                         </td>*@
                     <td>
-                        @if (item.ProjectPriority is not null)
+                        @if (item.ProjectPriorityId is not null)
                         {
                             @item.ProjectPriority.Name
                         }
                         else
                         {
-                            <span>No priority set</span>
+                            <span class="text-danger">No priority set</span>
                         }
                     </td>
                     <td>
                         @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
                         {
-                            <a class="btn btn-gradient-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-gradient-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a class="btn btn-sm btn-gradient-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                         }
-                        <a class="btn btn-gradient-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="btn btn-sm btn-gradient-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+
 @section Scripts{
     <script>
         $(document).ready(function () {

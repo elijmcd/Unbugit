@@ -26,9 +26,9 @@
                 <th>
                     Created / Updated
                 </th>
-                <th>
+                @*<th>
                     Archive
-                </th>
+                </th>*@
                 <th>
                     Project
                 </th>
@@ -69,7 +69,7 @@
                             @item.Updated?.ToString("D")
                         </td>
                     }
-                    @if (!item.Archived)
+                    @*@if (!item.Archived)
                     {
                         <td>
                             @Html.DisplayFor(modelItem => item.Archived)
@@ -80,7 +80,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.ArchivedDate)
                         </td>
-                    }
+                    }*@
                     <td>
                         @item.Project.Name
                     </td>
@@ -107,7 +107,7 @@
     </table>
 </div>
 <br />
-<hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%;" />
+<hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
 <br />
 <div class="table-responsive">
     <h3>@btUser.FirstName's Submitted Tickets</h3>
@@ -128,9 +128,9 @@
                 <th>
                     Created / Updated
                 </th>
-                <th>
+                @*<th>
                     Archive
-                </th>
+                </th>*@
                 <th>
                     Project
                 </th>
@@ -170,7 +170,7 @@
                         @item.Updated?.ToString("D")
                     </td>
                 }
-                @if (!item.Archived)
+                @*@if (!item.Archived)
                 {
                     <td>
                         @Html.DisplayFor(modelItem => item.Archived)
@@ -181,7 +181,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ArchivedDate)
                     </td>
-                }
+                }*@
                 <td>
                     @item.Project.Name
                 </td>
@@ -191,28 +191,35 @@
                 <td>
                 @if (item.TicketPriorityId == 1)
                 {
-                    <span class="text-center text-uppercase text-danger font-weight-bolder">@item.TicketPriority.Name</span>
+                    <span class="badge badge-danger">@item.TicketPriority.Name</span>
                 }
                 else if (item.TicketPriorityId == 2)
                 {
-                    <span class="text-center text-uppercase text-warning font-weight-bolder">@item.TicketPriority.Name</span>
+                    <span class="badge badge-warning">@item.TicketPriority.Name</span>
                 }
                 else if (item.TicketPriorityId == 3)
                 {
-                    <span class="text-center text-uppercase text-info font-weight-bolder">@item.TicketPriority.Name</span>
+                    <span class="badge badge-info">@item.TicketPriority.Name</span>
                 }
                 else if (item.TicketPriorityId == 4)
                 {
-                    <span class="text-center text-uppercase text-primary font-weight-bolder">@item.TicketPriority.Name</span>
+                    <span class="badge badge-primary">@item.TicketPriority.Name</span>
                 }
                 </td>
-
                 <td>
                     @item.TicketStatus.Name
                 </td>
                 <td>
+                @if(item.DeveloperUser is not null)
+                {
                     @item.DeveloperUser?.FullName
+                }
+                else
+                {
+                    <a class="text-center text-danger" asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@item.Id">Not Assigned</a>
+                }
                 </td>
+
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
