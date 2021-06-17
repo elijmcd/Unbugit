@@ -26,13 +26,15 @@ namespace Unbugit.Controllers
         private readonly IBTProjectService _projectService;
         private readonly IEmailSender _emailService;
         private readonly IBTInviteService _inviteService;
+        private readonly IBTCompanyInfoService _companyInfoService;
 
         public InvitesController(ApplicationDbContext context,
                               UserManager<BTUser> userManager,
                               IDataProtectionProvider dataProtectionProvider,
                               IBTProjectService projectService,
                               IEmailSender emailService,
-                              IBTInviteService inviteService)
+                              IBTInviteService inviteService,
+                              IBTCompanyInfoService companyInfoService)
         {
             _context = context;
             _userManager = userManager;
@@ -40,6 +42,7 @@ namespace Unbugit.Controllers
             _projectService = projectService;
             _emailService = emailService;
             _inviteService = inviteService;
+            _companyInfoService = companyInfoService;
         }
 
         // GET: Invites
@@ -76,9 +79,12 @@ namespace Unbugit.Controllers
         {
             InviteViewModel model = new();
 
+            int companyId = User.Identity.GetCompanyId().Value;
+
             if (User.IsInRole("Admin"))
             {
-                model.ProjectsList = new SelectList(_context.Project, "Id", "Name");
+                List<Project> adminProjects = await _companyInfoService.GetAllProjectsAsync(companyId);
+                model.ProjectsList = new SelectList(adminProjects, "Id", "Name");
             }
             else if (User.IsInRole("ProjectManager"))
             {

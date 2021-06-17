@@ -51,6 +51,7 @@
         <span>Loading...</span>
     </div>
     <!-- ./ Preloader -->
+
     <!-- Sidebar group -->
     <div class="sidebar-group">
 
@@ -311,7 +312,9 @@
 
     </div>
     <!-- ./ Sidebar group -->
+
     <!-- Layout wrapper -->
+
     <!-- Content wrapper -->
     <div class="content-wrapper">
         <!-- begin::navigation -->
@@ -422,7 +425,7 @@
                     </div>
 
                     <div class="header-logo">
-                        <a href=index.html>
+                        <a asp-action="Dashboard" asp-controller="Home">
                             <img class="logo" style="padding-top:15px; margin-left:-10px; z-index:-1;" src="~/media/image/unbugit-logo-sm-2.png" alt="logo">
                         </a>
                     </div>
@@ -541,6 +544,28 @@
                                 <a href="#" class="nav-link mobile-header-search-btn" title="Search">
                                     <i data-feather="search"></i>
                                 </a>
+                            </li>
+
+                            @*/*ROLE DISPLAY*/*@
+                            <li>
+                                <div id="dashboard-daterangepicker" class="btn btn-sm btn-outline-light" style="padding-top:-15px;">
+                                    @if (User.IsInRole("Admin"))
+                                {
+                                    <span class="btn btn-outline-light text-info">Admin</span>
+                                }
+                                else if (User.IsInRole("Developer"))
+                                {
+                                    <span class="btn btn-outline-light text-info">Developer</span>
+                                }
+                                else if (User.IsInRole("Submitter"))
+                                {
+                                    <span class="btn btne-sm btn-outline-light">Submitter</span>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-outline-light text-info">User</span>
+                                }
+                                </div>
                             </li>
 
                             @*/*FULLSCREEN*/*@

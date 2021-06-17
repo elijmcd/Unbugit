@@ -18,6 +18,8 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using Unbugit.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Unbugit.Models.Enums;
+using Unbugit.Data;
 
 namespace Unbugit.Areas.Identity.Pages.Account
 {
@@ -30,6 +32,8 @@ namespace Unbugit.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IConfiguration _configuration;
         private readonly IBTFileService _fileService;
+        private readonly ApplicationDbContext _context;
+
 
         public RegisterModel(
             UserManager<BTUser> userManager,
@@ -37,7 +41,8 @@ namespace Unbugit.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IConfiguration configuration,
-            IBTFileService fileService)
+            IBTFileService fileService,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -45,6 +50,7 @@ namespace Unbugit.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _configuration = configuration;
             _fileService = fileService;
+            _context = context;
         }
 
         [BindProperty]
@@ -53,6 +59,7 @@ namespace Unbugit.Areas.Identity.Pages.Account
         public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        public ApplicationDbContext Context { get; }
 
         public class InputModel
         {
@@ -70,6 +77,13 @@ namespace Unbugit.Areas.Identity.Pages.Account
             [StringLength(33, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
+
+            [Required]
+            [Display(Name = "Company Name")]
+            public string CompanyName { get; set; }
+
+            [Display(Name ="Company Description")]
+            public string CompanyDescription { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -110,6 +124,24 @@ namespace Unbugit.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    //New User is assigned role of Admin for new Company
+                    await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+
+                    //Create company based on user input
+                    Company company = new()
+                    {
+                        Name = Input.CompanyName,
+                        Description = Input.CompanyDescription
+                    };
+
+                    _context.Add(company);
+                    await _context.SaveChangesAsync();
+
+                    // Update new user CompanyId
+                    user.CompanyId = company.Id;
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

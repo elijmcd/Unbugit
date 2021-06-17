@@ -40,6 +40,7 @@ namespace Unbugit.Services.Interfaces
 
         //public Task<List<BTUser>> SubmittersOnProjectAsync(int projectId);
 
+        public Task<string> LookupProjectPriorityName(int priorityId);
         public Task<int> LookupProjectPriorityId(string priorityName);
 
 

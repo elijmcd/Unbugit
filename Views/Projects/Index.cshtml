@@ -107,9 +107,12 @@
             </tbody>
         </table>
     </div>
-    <h3>Sorry, you do not have access to this resource.</h3>
-    <a asp-action="Dashboard" asp-controller="Home" asp-route-id="@btUser.Id"><p>Return Home</p></a>
 }
+else
+{
+    <h3>Sorry, you do not have access to this resource.</h3>
+}
+    <a asp-action="Dashboard" asp-controller="Home" asp-route-id="@btUser.Id"><p>Return Home</p></a>
 
 
 @section Scripts{
