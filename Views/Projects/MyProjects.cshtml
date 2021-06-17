@@ -17,8 +17,7 @@
 
     ViewData["Title"] = "My Projects";
 }
-
-<h2>Projects</h2>
+<h2>Projects for @btUser.FirstName</h2>
 @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
 {
     <p>
@@ -26,13 +25,15 @@
     </p>
 }
 
-<div class="row">
-    @foreach (var item in userProjects)
-    {
-        <div class="col-4">
+@foreach (var item in userProjects)
+{
+    <div class="row">
+        <div class="col">
             <div class="card shadow p-4">
-                <a class="btn btn-outline-info" asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a>
-                <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8; position:center;"/>
+                <a class="btn btn-outline-info text-light" asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a>
+                <div class="align-content-center">
+                    <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8; position:center;" />
+                </div>
                 <dl>
                     <dd><span class="text-info">Description:</span> @item.Description</dd>
                     <dd><span class="text-info">Start Date</span>: @item.StartDate.ToString("d")</dd>
@@ -57,8 +58,8 @@
                 </dl>
             </div>
         </div>
-    }
-</div>
+    </div>
+}
 
 <div class="table-responsive">
     <table id="myTable" class="table table-hover">

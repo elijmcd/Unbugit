@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<Unbugit.Models.Ticket>
+
 @using Microsoft.AspNetCore.Identity
+
 @inject UserManager<BTUser> btUserManager
 
 @{
@@ -7,15 +9,16 @@
     BTUser btUser = await btUserManager.GetUserAsync(User);
 }
 
-
-<div class="table-responsive">
-    <h3>@btUser.FirstName's Developer Tickets</h3>
-@*@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+@if (User.IsInRole("Developer"))
 {
-    <p>
-        <a class="btn btn-gradient-primary" asp-action="Create">Create New</a>
-    </p>
-}*@
+<div class="table-responsive">
+    <h3>Tickets you are assigned to</h3>
+    @*@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+        {
+            <p>
+                <a class="btn btn-gradient-primary" asp-action="Create">Create New</a>
+            </p>
+        }*@
 
     <table id="myTable" class="table table-hover">
         <caption>Developer tickets for @btUser.FullName</caption>
@@ -28,8 +31,8 @@
                     Created / Updated
                 </th>
                 @*<th>
-                    Archive
-                </th>*@
+                        Archive
+                    </th>*@
                 <th>
                     Project
                 </th>
@@ -53,7 +56,7 @@
             {
                 <tr>
                     <td>
-                        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                        <a class="btn btn-outline-info btn-small" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
                             @item.Title
                         </a>
 
@@ -71,17 +74,17 @@
                         </td>
                     }
                     @*@if (!item.Archived)
-                    {
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Archived)
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ArchivedDate)
-                        </td>
-                    }*@
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Archived)
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ArchivedDate)
+                            </td>
+                        }*@
                     <td>
                         @item.Project.Name
                     </td>
@@ -89,7 +92,22 @@
                         @item.TicketType.Name
                     </td>
                     <td>
-                        @item.TicketPriority.Name
+                        @if (item.TicketPriorityId == 1)
+                        {
+                            <span class="badge badge-danger">@item.TicketPriority.Name</span>
+                        }
+                        else if (item.TicketPriorityId == 2)
+                        {
+                            <span class="badge badge-warning">@item.TicketPriority.Name</span>
+                        }
+                        else if (item.TicketPriorityId == 3)
+                        {
+                            <span class="badge badge-info">@item.TicketPriority.Name</span>
+                        }
+                        else if (item.TicketPriorityId == 4)
+                        {
+                            <span class="badge badge-primary">@item.TicketPriority.Name</span>
+                        }
                     </td>
                     <td>
                         @item.TicketStatus.Name
@@ -100,13 +118,13 @@
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+}
 <br />
 <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
 <br />
@@ -130,8 +148,8 @@
                     Created / Updated
                 </th>
                 @*<th>
-                    Archive
-                </th>*@
+                        Archive
+                    </th>*@
                 <th>
                     Project
                 </th>
@@ -153,80 +171,80 @@
         <tbody>
             @foreach (var item in Model.Where(t => t.OwnerUserId == btUser.Id))
             {
-            <tr>
-                <td>
-                    <a class="btn btn-outline-info btn-small" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                        @item.Title
-                    </a>
-                </td>
-                @if (item.Updated is null)
-                {
+                <tr>
                     <td>
-                        @item.Created.ToString("D")
+                        <a class="btn btn-outline-info btn-small" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                            @item.Title
+                        </a>
                     </td>
-                }
-                else
-                {
+                    @if (item.Updated is null)
+                    {
+                        <td>
+                            @item.Created.ToString("D")
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @item.Updated?.ToString("D")
+                        </td>
+                    }
+                    @*@if (!item.Archived)
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Archived)
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ArchivedDate)
+                            </td>
+                        }*@
                     <td>
-                        @item.Updated?.ToString("D")
+                        @item.Project.Name
                     </td>
-                }
-                @*@if (!item.Archived)
-                {
                     <td>
-                        @Html.DisplayFor(modelItem => item.Archived)
+                        @item.TicketType.Name
                     </td>
-                }
-                else
-                {
                     <td>
-                        @Html.DisplayFor(modelItem => item.ArchivedDate)
+                        @if (item.TicketPriorityId == 1)
+                        {
+                            <span class="badge badge-danger">@item.TicketPriority.Name</span>
+                        }
+                        else if (item.TicketPriorityId == 2)
+                        {
+                            <span class="badge badge-warning">@item.TicketPriority.Name</span>
+                        }
+                        else if (item.TicketPriorityId == 3)
+                        {
+                            <span class="badge badge-info">@item.TicketPriority.Name</span>
+                        }
+                        else if (item.TicketPriorityId == 4)
+                        {
+                            <span class="badge badge-primary">@item.TicketPriority.Name</span>
+                        }
                     </td>
-                }*@
-                <td>
-                    @item.Project.Name
-                </td>
-                <td>
-                    @item.TicketType.Name
-                </td>
-                <td>
-                @if (item.TicketPriorityId == 1)
-                {
-                    <span class="badge badge-danger">@item.TicketPriority.Name</span>
-                }
-                else if (item.TicketPriorityId == 2)
-                {
-                    <span class="badge badge-warning">@item.TicketPriority.Name</span>
-                }
-                else if (item.TicketPriorityId == 3)
-                {
-                    <span class="badge badge-info">@item.TicketPriority.Name</span>
-                }
-                else if (item.TicketPriorityId == 4)
-                {
-                    <span class="badge badge-primary">@item.TicketPriority.Name</span>
-                }
-                </td>
-                <td>
-                    @item.TicketStatus.Name
-                </td>
-                <td>
-                @if(item.DeveloperUser is not null)
-                {
-                    @item.DeveloperUser?.FullName
-                }
-                else
-                {
-                    <a class="text-center text-danger" asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@item.Id">Not Assigned</a>
-                }
-                </td>
+                    <td>
+                        @item.TicketStatus.Name
+                    </td>
+                    <td>
+                        @if (item.DeveloperUser is not null)
+                        {
+                            @item.DeveloperUser?.FullName
+                        }
+                        else
+                        {
+                            <a class="text-center text-danger" asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@item.Id">Not Assigned</a>
+                        }
+                    </td>
 
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

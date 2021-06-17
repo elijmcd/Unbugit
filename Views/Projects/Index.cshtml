@@ -10,6 +10,7 @@
 @inject IBTProjectService ProjectService
 @inject UserManager<BTUser> UserManager
 
+
 @{
     BTUser btUser = await UserManager.GetUserAsync(User);
     Company company = btUser.Company;
@@ -18,23 +19,62 @@
     ViewData["Title"] = "Company Projects";
 }
 
-<h2>All Projects for @company</h2>
+<h3 class="center">@company.Name : All Projects</h3>
 
 @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
 {
     <p>
-        <a class="btn btn-outline-primary" asp-action="Create">Create New</a>
+        <a class="btn btn-outline-secondary" asp-action="Create">Add New Project</a>
     </p>
+
+    @foreach (var item in companyProjects)
+    {
+        <div class="row">
+            <div class="col">
+                <div class="card shadow p-3">
+                    <a class="btn btn-outline-info text-light" asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a>
+                    <div class="align-content-center">
+                        <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8; position:center;" />
+                    </div>
+                    <dl>
+                        <dd><span class="text-info">Description</span>: @item.Description</dd>
+                        <dd><span class="text-info">Start Date</span>: @item.StartDate.ToString("d")</dd>
+                        @if (item.EndDate is not null)
+                        {
+                            <dd><span class="text-info">End Date</span>: @item.EndDate?.ToString("d")</dd>
+                        }
+                        else
+                        {
+                            <dd><span class="text-info">No end date set</span></dd>
+                        }
+                        <dd><span class="text-info">Priority</span>: @item.ProjectPriority.Name</dd>
+                        <br />
+                        <dd>
+                            <a class="btn btn-outline-success mx-1" asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (await ProjectService.GetProjectManagerAsync(item.Id)) == btUser)
+                            {
+                                <a class="btn btn-sm btn-danger pull-right mx-1 fa fa-trash-o" asp-action="Delete" asp-route-id="@item.Id"></a>
+                                <a class="btn btn-sm btn-warning pull-right mx-1 fa fa-edit" asp-action="Edit" asp-route-id="@item.Id"></a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-sm btn-outline-danger disabled pull-right mx-1 fa fa-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
+                                <a class="btn btn-sm btn-outline-warning disabled pull-right mx-1 fa fa-edit" asp-action="Edit" asp-route-id="@item.Id"></a>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    }
     <div class="table-responsive">
         <table id="myTable" class="table table-hover">
-            <caption>All Projects for @company</caption>
+            <caption>All Projects for @company.Name</caption>
             <thead>
                 <tr>
                     <th>
                         Project
-                    </th>
-                    <th>
-                        Description
                     </th>
                     <th>
                         Start Date
@@ -42,21 +82,20 @@
                     <th>
                         End Date
                     </th>
+                    @*@Html.DisplayNameFor(model => model.ImageFileName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ImageFileData)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ImageContentType)
+                        </th>*@
                     <th>
-                        @*@Html.DisplayNameFor(model => model.ImageFileName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ImageFileData)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ImageContentType)
-                    </th>*@
-                    <th>
-                        @Html.DisplayNameFor(model => model.Archived)
+                        Archived
                     </th>
                     @*<th>
-                        @Html.DisplayNameFor(model => model.Company)
-                    </th>*@
+                            @Html.DisplayNameFor(model => model.Company)
+                        </th>*@
                     <th>
                         Priority
                     </th>
@@ -68,10 +107,16 @@
                 {
                     <tr>
                         <td>
-                            @item.Name
-                        </td>
-                        <td>
-                            @item.Description
+                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (await ProjectService.GetProjectManagerAsync(item.Id)) == btUser)
+                            {
+                                <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@item.Id">
+                                    @item.Name
+                                </a>
+                            }
+                            else
+                            {
+                                @item.Name
+                            }
                         </td>
                         <td>
                             @item.StartDate.ToString("d")
@@ -80,27 +125,35 @@
                             @item.EndDate?.ToString("d")
                         </td>
                         @*<td>
-                            @Html.DisplayFor(modelItem => item.ImageFileName)
-                        </td>
+                                @Html.DisplayFor(modelItem => item.ImageFileName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ImageFileData)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ImageContentType)
+                            </td>*@
                         <td>
-                            @Html.DisplayFor(modelItem => item.ImageFileData)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ImageContentType)
-                        </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Archived)
+                            @item.Archived
                         </td>
                         @*<td>
-                            @Html.DisplayFor(modelItem => item.Company.Name)
-                        </td>*@
+                                @Html.DisplayFor(modelItem => item.Company.Name)
+                            </td>*@
                         <td>
-                            @Html.DisplayFor(modelItem => item.ProjectPriority.Id)
+                            @item.ProjectPriority.Name
                         </td>
                         <td>
-                            <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                            <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (await ProjectService.GetProjectManagerAsync(item.Id)) == btUser)
+                            {
+                                <a class="btn btn-outline-danger pull-right fa fa-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
+                                <a class="btn btn-outline-warning pull-right fa fa-edit" asp-action="Edit" asp-route-id="@item.Id"></a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-danger disabled pull-right fa fa-trash-o" asp-action="Delete" asp-route-id="@item.Id"></a>
+                                <a class="btn btn-outline-warning disabled pull-right fa fa-edit" asp-action="Edit" asp-route-id="@item.Id"></a>
+                            }
+                            <a class="btn btn-outline-success pull-right" asp-action="Details" asp-route-id="@item.Id">Details</a>
                         </td>
                     </tr>
                 }
@@ -112,7 +165,7 @@ else
 {
     <h3>Sorry, you do not have access to this resource.</h3>
 }
-    <a asp-action="Dashboard" asp-controller="Home" asp-route-id="@btUser.Id"><p>Return Home</p></a>
+<a asp-action="Dashboard" asp-controller="Home" asp-route-id="@btUser.Id"><p>Return Home</p></a>
 
 
 @section Scripts{

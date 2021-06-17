@@ -354,7 +354,9 @@
                                     <a asp-action="Details" asp-controller="Companies" asp-route-id="@currentUser.CompanyId">Company Details</a>
                                 </li>
                                 <li>
-                                    <a asp-action="ManageUserRoles" asp-controller="UserRoles">Manage Team Roles</a>
+                                    <a asp-action="ManageUserRoles" asp-controller="UserRoles">
+                                        <i class="fa fa-users"></i><span>Manage Team Roles</span>
+                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -387,6 +389,12 @@
                             <span>Projects</span>
                         </a>
                         <ul>
+                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                            {
+                                <li>
+                                    <a asp-action="Index" asp-controller="Projects">Company Projects</a>
+                                </li>
+                            }
                             @if (User.IsInRole("Submitter") || User.IsInRole("Developer") || User.IsInRole("ProjectManager"))
                             {
                                 <li>
@@ -397,9 +405,6 @@
                             {
                                 <li>
                                     <a asp-action="Create" asp-controller="Projects">Creat New Project</a>
-                                </li>
-                                <li>
-                                    <a asp-action="Index" asp-controller="Projects">All Projects</a>
                                 </li>
                             }
                         </ul>
