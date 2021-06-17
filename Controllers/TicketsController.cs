@@ -200,7 +200,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,ProjectId,TicketTypeId,TicketPriorityId")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Id,Title,OwnerUser,OwnerUserId,Description,ProjectId,TicketTypeId,TicketPriorityId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
@@ -208,8 +208,7 @@ namespace Unbugit.Controllers
 
                 ticket.Created = DateTimeOffset.Now;
 
-                //string userId = _userManager.GetUserId(User);
-                //ticket.OwnerUser = btUser;
+                ticket.OwnerUser = btUser;
                 ticket.OwnerUserId = btUser.Id;
 
                 ticket.TicketStatusId = (await _ticketService.LookupTicketStatusIdAsync("New")).Value;
@@ -327,6 +326,12 @@ namespace Unbugit.Controllers
 
                 try
                 {
+                    if (ticket.Archived == true)
+                    {
+                        ticket.ArchivedDate = DateTimeOffset.Now;
+                        ticket.TicketStatusId = 1; 
+                    }
+
                     ticket.Updated = DateTimeOffset.Now;
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();

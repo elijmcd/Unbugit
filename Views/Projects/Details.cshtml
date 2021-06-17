@@ -192,7 +192,7 @@
                 <tr>
 
                     <td>
-                        <a class="text-primary" asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">
+                        <a class="btn btn-sm btn-outline-success text-success" asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">
                             @ticket.Title
                         </a>
                     </td>
@@ -219,18 +219,18 @@
                         }
                         else if (ticket.TicketPriorityId == 3)
                         {
-                            <span class="badge bg-primary-bright text-primary">@ticket.TicketPriority.Name</span>
+                            <span class="badge bg-info-bright text-info">@ticket.TicketPriority.Name</span>
                         }
                         else if (ticket.TicketPriorityId == 4)
                         {
-                            <span class="badge bg-success-bright text-success">@ticket.TicketPriority.Name</span>
+                            <span class="badge bg-primary-bright text-primary">@ticket.TicketPriority.Name</span>
                         }
                     </td>
                     <td>
-                        @ticket.TicketStatus
+                        @ticket.TicketStatus.Name
                     </td>
                     <td>
-                        @ticket.TicketType
+                        @ticket.TicketType.Name
                     </td>
                     <td></td>
                 </tr>

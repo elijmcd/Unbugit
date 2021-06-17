@@ -58,7 +58,7 @@ namespace Unbugit.Services
             string message = notification.Message;
             try
             {
-                await _emailSender.SendEmailAsync(emailSubject, emailSubject, message);
+                await _emailSender.SendEmailAsync(btUserEmail, emailSubject, message);
             }
             catch
             {

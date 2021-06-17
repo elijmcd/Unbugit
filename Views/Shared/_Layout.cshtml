@@ -51,7 +51,6 @@
         <span>Loading...</span>
     </div>
     <!-- ./ Preloader -->
-
     <!-- Sidebar group -->
     <div class="sidebar-group">
 
@@ -312,9 +311,7 @@
 
     </div>
     <!-- ./ Sidebar group -->
-
     <!-- Layout wrapper -->
-
     <!-- Content wrapper -->
     <div class="content-wrapper">
         <!-- begin::navigation -->
@@ -550,21 +547,25 @@
                             <li>
                                 <div id="dashboard-daterangepicker" class="btn btn-sm btn-outline-light" style="padding-top:-15px;">
                                     @if (User.IsInRole("Admin"))
-                                {
-                                    <span class="btn btn-outline-light text-info">Admin</span>
-                                }
-                                else if (User.IsInRole("Developer"))
-                                {
-                                    <span class="btn btn-outline-light text-info">Developer</span>
-                                }
-                                else if (User.IsInRole("Submitter"))
-                                {
-                                    <span class="btn btne-sm btn-outline-light">Submitter</span>
-                                }
-                                else
-                                {
-                                    <span class="btn btn-outline-light text-info">User</span>
-                                }
+                                    {
+                                        <span class="btn btn-sm btn-outline-light">Admin</span>
+                                    }
+                                    else if (User.IsInRole("ProjectManager"))
+                                    {
+                                        <span class="btn btn-sm btn-outline-light">Project Manager</span>
+                                    }
+                                    else if (User.IsInRole("Developer"))
+                                    {
+                                        <span class="btn btn-sm btn-outline-light">Developer</span>
+                                    }
+                                    else if (User.IsInRole("Submitter"))
+                                    {
+                                        <span class="btn btn-sm btn-outline-light">Submitter</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="btn btn-sm btn-outline-light">User</span>
+                                    }
                                 </div>
                             </li>
 

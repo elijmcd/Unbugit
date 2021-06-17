@@ -47,7 +47,26 @@ namespace Unbugit.Services
                     throw;
                 }
             }
-        }//--
+        }
+        public async Task CloseTicketAsync(int ticketId, string userId)
+        {
+            Ticket ticket = await _context.Ticket.FirstOrDefaultAsync(t => t.Id == ticketId);
+
+            if (ticket != null)
+            {
+                try
+                {
+                    ticket.TicketStatusId = (await LookupTicketStatusIdAsync("Resolved")).Value;
+                    ticket.DeveloperUserId = null;
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+        }
+        //--
         public async Task<BTUser> GetTicketDeveloperAsync(int ticketId)
         {
             BTUser developer = new();

@@ -13,16 +13,22 @@
     ViewData["Title"] = "Ticket Details";
 }
 
-<h1>Ticket Details: @Model.Id</h1>
+<h2>Ticket Details: @Model.Id</h2>
+
 <div class="row">
     <p><a asp-action="Index" asp-controller="Projects" asp-route-id="@Model.Id">Return to Project</a></p>
 </div>
 <div class="row">
     <div class="col-6">
         <div class="row">
-            <div class="card border shadow-sm my-1 mx-1 w-100">
-                <div class="card-body rounded shadow" style="border: 1px dashed #22dc0a;">
-                    <h4 style="color:#22dc0a">@Model.Title</h4>
+            <div class="card border shadow my-1 mx-1 w-100">
+                <div class="card-body rounded shadow-sm" style="border: 1px dashed #22dc0a;">
+                    <h4 style="color:#22dc0a;">
+                        <a asp-action="Edit" asp-route-id="@Model.Id">
+                            <span><i class="fa fa-edit"></i></span>
+                        </a>
+                        @Model.Title
+                    </h4>
                     <h6>@Model.Description</h6>
                     <p><em class="text-success">Created on:</em> @Model.Created.ToString("d")</p>
                     <p><b>Type:</b> @Model.TicketType.Name</p>
@@ -31,11 +37,15 @@
                         <b>Developer:</b>
                         @if (Model.DeveloperUser is not null)
                         {
-                            @Model.DeveloperUser.FullName
+                            <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id">
+                                @Model.DeveloperUser.FullName
+                            </a>
                         }
                         else
                         {
-                            <span>No developer has been assigned.</span>
+                            <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id">
+                                <span>No developer has been assigned.</span>
+                            </a>
                         }
                     </p>
                     <h5 style="color:#22dc0a">Project</h5>
@@ -44,19 +54,19 @@
                     <h5>Ticket Priority</h5>
                     @if (Model.TicketPriorityId == 1)
                     {
-                        <p class="bg-danger-gradient text-center text-uppercase text-primary font-weight-bolder">Priority: @Model.TicketPriority.Name</p>
+                        <p class="bg-danger-gradient text-center text-uppercase text-light font-weight-bolder">Priority: @Model.TicketPriority.Name</p>
                     }
                     else if (Model.TicketPriorityId == 2)
                     {
-                        <p class="bg-warning-gradient text-center text-uppercase text-primary font-weight-bolder">@Model.TicketPriority.Name</p>
+                        <p class="bg-warning-gradient text-center text-uppercase text-light font-weight-bolder">@Model.TicketPriority.Name</p>
                     }
                     else if (Model.TicketPriorityId == 3)
                     {
-                        <p class="bg-info-gradient text-center text-uppercase text-primary font-weight-bolder">@Model.TicketPriority.Name</p>
+                        <p class="bg-info-gradient text-center text-uppercase text-light font-weight-bolder">@Model.TicketPriority.Name</p>
                     }
                     else if (Model.TicketPriorityId == 4)
                     {
-                        <p class="bg-primary-gradient text-center text-uppercase text-secondary font-weight-bolder">@Model.TicketPriority.Name</p>
+                        <p class="bg-primary-gradient text-center text-uppercase text-light font-weight-bolder">@Model.TicketPriority.Name</p>
                     }
                 </div>
             </div>
