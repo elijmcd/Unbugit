@@ -193,6 +193,8 @@ namespace Unbugit.Services
                     .Include(u => u.Projects)
                         .ThenInclude(p => p.Members)
                     .Include(u => u.Projects)
+                        .ThenInclude(p => p.ProjectPriority)
+                    .Include(u => u.Projects)
                         .ThenInclude(p => p.Tickets)
                     .Include(u => u.Projects)
                         .ThenInclude(p => p.Tickets)
@@ -303,10 +305,6 @@ namespace Unbugit.Services
             throw new NotImplementedException();
         }//
 
-        public async Task<string> LookupProjectPriorityName(int priorityId)
-        {
-            return (await _context.ProjectPriority.Include(p=>p.Name).FirstOrDefaultAsync(p => p.Id == priorityId)).ToString();
-        }
         public async Task<int> LookupProjectPriorityId(string priorityName)
         {
             return (await _context.ProjectPriority.FirstOrDefaultAsync(p => p.Name == priorityName)).Id;

@@ -25,6 +25,41 @@
         <a asp-action="Create">Create New</a>
     </p>
 }
+
+<div class="row">
+    @foreach (var item in userProjects)
+    {
+        <div class="col-4">
+            <div class="card shadow p-4">
+                <a class="btn btn-outline-info" asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a>
+                <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8; position:center;"/>
+                <dl>
+                    <dd><span class="text-info">Description:</span> @item.Description</dd>
+                    <dd><span class="text-info">Start Date</span>: @item.StartDate.ToString("d")</dd>
+                    @if (item.EndDate is not null)
+                    {
+                        <dd><span class="text-info">End Date:</span> @item.EndDate?.ToString("d")</dd>
+                    }
+                    else
+                    {
+                        <dd><span class="text-info">No end date set</span></dd>
+                    }
+                    <dd><span class="text-info">Priority</span>: @item.ProjectPriority.Name</dd>
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    {
+                        <dd><a class="btn btn-sm btn-gradient-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a></dd>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <dd><a class="btn btn-sm btn-gradient-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></dd>
+                    }
+
+                </dl>
+            </div>
+        </div>
+    }
+</div>
+
 <div class="table-responsive">
     <table id="myTable" class="table table-hover">
         <caption>Projects for @btUser.FullName</caption>
@@ -102,14 +137,7 @@
                             @Html.DisplayFor(modelItem => item.Company.Name)
                         </td>*@
                     <td>
-                        @if (item.ProjectPriorityId is not null)
-                        {
-                            @item.ProjectPriority.Name
-                        }
-                        else
-                        {
-                            <span class="text-danger">No priority set</span>
-                        }
+                        @item.ProjectPriority.Name
                     </td>
                     <td>
                         @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))

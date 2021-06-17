@@ -334,5 +334,5 @@ ASALocalRun/
 .localhistory/
 
 # Leaving out appSettings.json
-appSettings.json
-appSettings.Development.json
+appsettings.json
+appsettings.Development.json

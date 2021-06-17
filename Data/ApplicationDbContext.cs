@@ -5,15 +5,27 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
+using Microsoft.Extensions.Configuration;
+using Unbugit.Services;
 
 namespace Unbugit.Data
 {
     public class ApplicationDbContext : IdentityDbContext<BTUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private readonly IConfiguration Configuration;
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
             : base(options)
         {
+            Configuration = configuration;
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseNpgsql(
+                    DataUtility.GetConnectionString(Configuration),
+            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+        }
+
         public DbSet<Unbugit.Models.Company> Company { get; set; }
         public DbSet<Unbugit.Models.Invite> Invite { get; set; }
         public DbSet<Unbugit.Models.Notification> Notification { get; set; }

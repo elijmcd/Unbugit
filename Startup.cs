@@ -35,11 +35,11 @@ namespace Unbugit
             var connection = new Connection();
 
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(DataUtility.GetConnectionString(Configuration)));
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
                     
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(DataUtility.GetConnectionString(Configuration)));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
