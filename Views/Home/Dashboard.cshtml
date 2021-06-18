@@ -50,7 +50,7 @@
                                 </div>
                                 @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
                                 {
-                                    <p class="mb-0"><a asp-action="Details" asp-controller="Companies" asp-route-id="@companyId" class="link-1">See all projects</a> in your company.</p>
+                                    <p class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="link-1">See all projects</a> in your company.</p>
                                 }
                                 else
                                 {

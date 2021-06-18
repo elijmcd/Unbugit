@@ -68,6 +68,7 @@ namespace Unbugit.Controllers
             {
                 // created datetime
                 ticketComment.UserId = _userManager.GetUserId(User);
+                ticketComment.Created = DateTimeOffset.Now;
 
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();

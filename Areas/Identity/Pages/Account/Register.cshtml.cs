@@ -63,6 +63,10 @@ namespace Unbugit.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Display(Name = "Avatar Image")]
+            public IFormFile ImageFile { get; set; }
+
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -117,7 +121,12 @@ namespace Unbugit.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
-                    AvatarFileData = await _fileService.ConvertFileToByteArrayAsync(_configuration["DefaultUserImage"]),
+                    AvatarFileData = (await _fileService.ConvertFileToByteArrayAsync(Input.ImageFile)) ?? 
+                                await _fileService.ConvertFileToByteArrayAsync(_configuration["DefaultUserImage"]),
+
+                    AvatarContentType = Input.ImageFile is null ? 
+                                        _configuration["DefaultUserImage"].Split('.')[1] :
+                                        _fileService.ContentType(Input.ImageFile)
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col text-center text-info">
-        <h1>@ViewData["Title"]</h1>
+        <h1 class="text-light">@ViewData["Title"]</h1>
         <section>
             <form id="account" method="post">
                 <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:100%; opacity:.8;" />
@@ -59,17 +59,16 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col">
-                            <button type="submit" class="btn btn-gradient-secondary btn-block" name="demoEmail" value="DemoAdminEmail">Admin</button>
-                            <button type="submit" class="btn btn-gradient-secondary btn-block" name="demoEmail" value="DemoPMEmail">Project Manager</button>
-                            <button type="submit" class="btn btn-gradient-secondary btn-block" name="demoEmail" value="DemoDevEmail">Developer</button>
-                            <button type="submit" class="btn btn-gradient-secondary btn-block" name="demoEmail" value="DemoSubEmail">Submitter</button>
+                            <button type="submit" class="btn btn-outline-secondary text-info btn-block" name="demoEmail" value="DemoAdminEmail">Admin</button>
+                            <button type="submit" class="btn btn-outline-secondary text-info btn-block" name="demoEmail" value="DemoPMEmail">Project Manager</button>
+                            <button type="submit" class="btn btn-outline-secondary text-info btn-block" name="demoEmail" value="DemoDevEmail">Developer</button>
+                            <button type="submit" class="btn btn-outline-secondary text-info btn-block" name="demoEmail" value="DemoSubEmail">Submitter</button>
                         </div>
                     </div>
                 </div>
             </form>
         </section>
     </div>
-
 </div>
 
 @section Scripts {

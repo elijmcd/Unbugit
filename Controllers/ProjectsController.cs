@@ -85,7 +85,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Projects/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> CreateAsync()
         {
             //get current user
@@ -110,7 +110,7 @@ namespace Unbugit.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,CompanyId,Description,StartDate,EndDate,ProjectPriority,ProjectPriorityId")] Project project) //CompanyId,ImageFileName,ImageFileData,ImageContentType,Archived
@@ -133,7 +133,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Projects/Edit/5
-        [Authorize(Roles = "Admin,ProjectManager")]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -154,6 +154,7 @@ namespace Unbugit.Controllers
         // POST: Projects/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,Description,StartDate,EndDate,ProjectPriority,ProjectPriorityId,ImageFileName,ImageFileData,ImageContentType,Archived")] Project project)
@@ -189,7 +190,7 @@ namespace Unbugit.Controllers
         }
 
         //GET Users/Assign
-        [Authorize(Roles = "Admin,ProjectManager")]
+        [Authorize(Roles = "Admin, ProjectManager")]
         [HttpGet]
         public async Task<IActionResult> AssignUsers(int id)
         {
@@ -212,7 +213,7 @@ namespace Unbugit.Controllers
         }
 
         //POST Users/Assign
-        [Authorize(Roles = "Admin,ProjectManager")]
+        [Authorize(Roles = "Admin, ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignUsers(ProjectMembersViewModel model)

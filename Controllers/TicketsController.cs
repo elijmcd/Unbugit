@@ -159,6 +159,7 @@ namespace Unbugit.Controllers
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
                 .Include(t => t.Attachments)
+                .Include(t => t.Notifications)
                 .Include(t => t.TicketHistory)
                     .ThenInclude(h => h.User)
                 .FirstOrDefaultAsync(t => t.Id == id);
@@ -284,12 +285,12 @@ namespace Unbugit.Controllers
             {
                 return NotFound();
             }
-            ViewData["DeveloperUserId"] = new SelectList (await _projectService.DevelopersOnProjectAsync(ticket.ProjectId), "Id", "FullName", ticket.DeveloperUserId);
+            ViewData["DeveloperUserId"] = new SelectList(await _projectService.DevelopersOnProjectAsync(ticket.ProjectId), "Id", "FullName", ticket.DeveloperUserId);
             //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
             ViewData["ProjectId"] = new SelectList(_context.Project, "Id", "Name", ticket.ProjectId);
-            ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Id", ticket.TicketPriorityId);
-            ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id", ticket.TicketStatusId);
-            ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Id", ticket.TicketTypeId);
+            ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Name", ticket.TicketPriorityId);
+            ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Name", ticket.TicketStatusId);
+            ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Namae", ticket.TicketTypeId);
             return View(ticket);
         }
 
@@ -329,7 +330,7 @@ namespace Unbugit.Controllers
                     if (ticket.Archived == true)
                     {
                         ticket.ArchivedDate = DateTimeOffset.Now;
-                        ticket.TicketStatusId = 1; 
+                        ticket.TicketStatusId = 1;
                     }
 
                     ticket.Updated = DateTimeOffset.Now;
@@ -348,7 +349,7 @@ namespace Unbugit.Controllers
                     };
 
                     if (projectManager != null)
-                    {   
+                    {
                         //PM notify
                         await _notificationService.SaveNotificationAsync(notification);
                     }
