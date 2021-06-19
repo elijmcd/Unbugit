@@ -113,6 +113,7 @@ namespace Unbugit.Controllers
             if (!string.IsNullOrEmpty(viewModel.DeveloperId))
             {
                 int companyId = User.Identity.GetCompanyId().Value;
+                Notification notification = new();
 
                 BTUser currentUser = await _userManager.GetUserAsync(User);
                 BTUser developer = (await _companyService.GetAllMembersAsync(companyId)).FirstOrDefault(m => m.Id == viewModel.DeveloperId);
@@ -135,6 +136,18 @@ namespace Unbugit.Controllers
                     .Include(t => t.Project)
                     .Include(t => t.DeveloperUser)
                     .AsNoTracking().FirstOrDefaultAsync(t => t.Id == viewModel.Ticket.Id);
+
+                notification = new()
+                {
+                    TicketId = newTicket.Id,
+                    Title = "New Developer Ticket",
+                    Message = $"You have a new ticket: {newTicket?.Title}, was created by {currentUser?.FullName}",
+                    Created = DateTimeOffset.Now,
+                    SenderId = currentUser.Id,
+                    RecipientId = newTicket.DeveloperUserId
+                };
+
+                await _notificationService.SaveNotificationAsync(notification);
 
                 await _historyService.AddHistoryAsync(oldTicket, newTicket, currentUser.Id);
             }
@@ -310,7 +323,6 @@ namespace Unbugit.Controllers
 
             if (ModelState.IsValid)
             {
-
                 //companyId
                 int companyId = User.Identity.GetCompanyId().Value;
                 //currentUser
@@ -321,6 +333,7 @@ namespace Unbugit.Controllers
                 Ticket oldTicket = await _context.Ticket.Include(t => t.TicketPriority)
                                                         .Include(t => t.TicketStatus)
                                                         .Include(t => t.TicketType)
+                                                        .Include(t => t.Attachments)
                                                         .Include(t => t.Project)
                                                         .Include(t => t.DeveloperUser)
                                                         .AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
