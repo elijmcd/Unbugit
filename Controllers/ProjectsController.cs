@@ -182,7 +182,7 @@ namespace Unbugit.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("MyProjects");
+                return RedirectToAction("Details", new { id = project.Id });
             }
             ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name", project.CompanyId);
             ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Name", project.ProjectPriorityId);

@@ -8,153 +8,158 @@
 @inject IBTRoleService RoleService
 @inject IBTTicketService TicketService
 @inject IBTProjectService ProjectService
+@inject IBTFileService FileService
 @inject UserManager<BTUser> UserManager
 
 @{
     List<BTUser> developers = await ProjectService.GetProjectMembersByRoleAsync(Model.Id, "Developer");
     List<BTUser> submitters = await ProjectService.GetProjectMembersByRoleAsync(Model.Id, "Submitter");
     BTUser projectManager = await ProjectService.GetProjectManagerAsync(Model.Id);
+    BTUser currentUser = await UserManager.GetUserAsync(User);
     ViewData["Title"] = "Project Details";
 }
+<div class="row">
+    <div class="col text-center">
+        <h1>@Model.Company.Name</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col text-center">
+        <h4>@Model.Name</h4>
+    </div>
+</div>
+<hr style="border:3px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+<div class="row">
+    <div class="col-10 offset-1 card shadow bg-dark-gradient border-success p-3">
+        <div class="row">
+            <div class="col">
+                <span>
+                    <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-warning fa fa-edit fa-pull-left" style="font-size:1.5rem"></a><em style="font-size:1.2rem">@Model.Description</em>
+                </span>
+                <dl>
+                    <br />
+                    @if (Model.Archived)
+                    {
+                        <div class="btn btn-block btn-outline-light bg-danger-bright">
+                            <span class="text-danger">Archived</span>
+                        </div>
+                    }
 
-<h3>@Model.Company.Name</h3>
-<hr />
-<h4>@Model.Name</h4>
-<div>
-    <hr />
-    <div class="row">
-        <div class="col-10 offset-1 card shadow bg-dark-gradient border-success p-3">
-            <div class="row">
-                <div class="col">
-                    <dl>
-                        <dd class="col-sm-6">
-                            <em>@Model.Description</em>
-                        </dd>
-                        <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.StartDate)
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Model.StartDate.ToString("d")
-                        </dd>
-                        <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.EndDate)
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Model.EndDate?.ToString("d")
-                        </dd>
-                        <dt class="col-sm-6">
-                            Priority
-                        </dt>
-                        <dd class="col-sm-6">
-                            @if (Model.ProjectPriorityId == 1)
-                            {
+                    <dt class="col-sm-6 text-light">
+                        Start
+                    </dt>
+                    <dd class="col-sm-6 text-success">
+                        @Model.StartDate.ToString("d")
+                    </dd>
+                    <dt class="col-sm-6 text-light">
+                        End
+                    </dt>
+                    <dd class="col-sm-6 text-danger">
+                        @Model.EndDate?.ToString("d")
+                    </dd>
+                    <dt class="col-sm-6 text-light">
+                        Priority
+                    </dt>
+                    <dd class="col-sm-6">
+                        @if (Model.ProjectPriorityId == 1)
+                        {
+                            <span class="btn btn-sm btn-outline-danger bg-danger-bright">
                                 <span class="text-danger">@Model.ProjectPriority.Name</span>
-                            }
-                            else if (Model.ProjectPriorityId == 2)
-                            {
+                            </span>
+                        }
+                        else if (Model.ProjectPriorityId == 2)
+                        {
+                            <span class="btn btn-sm btn-outline-warning bg-warning-bright">
                                 <span class="text-warning">@Model.ProjectPriority.Name</span>
-                            }
-                            else if (Model.ProjectPriorityId == 3)
-                            {
+                            </span>
+                        }
+                        else if (Model.ProjectPriorityId == 3)
+                        {
+                            <span class="btn btn-sm btn-outline-info bg-info-bright">
                                 <span class="text-info">@Model.ProjectPriority.Name</span>
-                            }
-                            else if (Model.ProjectPriorityId == 4)
-                            {
+                            </span>
+                        }
+                        else if (Model.ProjectPriorityId == 4)
+                        {
+                            <span class="btn btn-sm btn-outline-primary bg-primary-bright">
                                 <span class="text-primary">@Model.ProjectPriority.Name</span>
+                            </span>
+                        }
+                    </dd>
+                    <dd class="col-10">
+                        <span class="text-light">Project Manager:</span>
+                        <ul>
+                            @if ((projectManager != null) && (User.IsInRole("Admin")))
+                            {
+                                <a class="btn btn-outline-primary bg-primary-bright" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">
+                                    <li>
+                                        <figure class="avatar" title="@projectManager.FullName">
+                                            <img src="@FileService.ConvertByteArrayToFile(projectManager.AvatarFileData, projectManager.AvatarContentType)" class="rounded-circle" alt="@projectManager.FullName">
+                                        </figure>
+                                        <span>@projectManager.FullName</span>
+                                    </li>
+                                </a>
                             }
-                        </dd>
-                        <dd class="col-10">
-                            Project Manager:
-                            <ul>
-                                @if ((projectManager != null) && (User.IsInRole("Admin")))
-                                {
-                                    <a class="btn btn-outline-warning" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">
-                                        <li>@projectManager.FullName</li>
-                                    </a>
-                                }
-                                else if (User.IsInRole("Admin"))
-                                {
-                                    <a class="btn btn-outline-warning" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">No Project Manager Assigned</a>
-                                }
-                                else
-                                {
-                                    <li>No Project Manager Assigned</li>
-                                }
-                            </ul>
-                        </dd>
-                    </dl>
-                    <br />
-                    <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-                    <br />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4">
-                    <dl>
-                        <dt class="text-info">
-                            Developers:
-                        </dt>
-                        <dd>
-                            <ul>
-                                @foreach (var member in developers)
-                                {
-                                    <li>@member.FullName</li>
-                                }
-                            </ul>
-                        </dd>
-                    </dl>
-                </div>
-                <div class="col-4">
-                    <dl>
-                        <dt class="text-secondary">
-                            Submitters:
-                        </dt>
-                        <dd>
-                            <ul>
-                                @foreach (var member in submitters)
-                                {
-                                    <li>@member.FullName</li>
-                                }
-                            </ul>
-                        </dd>
-                    </dl>
-                </div>
-                <div class="col-4">
+                            else if (User.IsInRole("Admin"))
+                            {
+                                <a class="btn btn-outline-warning" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">No Project Manager Assigned</a>
+                            }
+                            else
+                            {
+                                <li>No Project Manager Assigned</li>
+                            }
+                        </ul>
+                    </dd>
+                </dl>
+                <br />
+                <div>
                     <a class="btn btn-outline-success" asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Id">Manage Users on Project</a>
                 </div>
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <dl>
+                    @*@member.FullName*@
+                    <dt class="text-info">
+                        Developers:
+                    </dt>
+                    <div class="avatar-group">
+                        @foreach (var member in developers)
+                        {
+                            <figure class="avatar" title="@member.FullName">
+                                <img src="@FileService.ConvertByteArrayToFile(member.AvatarFileData, member.AvatarContentType)" class="rounded-circle" alt="@member.FullName">
+                            </figure>
+                        }
+                    </div>
+                </dl>
+            </div>
+            <div class="col-4">
+                <dl>
+                    <dt class="text-secondary">
+                        Submitters:
+                    </dt>
+                    <div class="avatar-group">
+                        @foreach (var member in submitters)
+                        {
+                            <figure class="avatar" title="@member.FullName">
+                                <img src="@FileService.ConvertByteArrayToFile(member.AvatarFileData, member.AvatarContentType)" class="rounded-circle" alt="@member.FullName">
+                            </figure>
+                        }
+                    </div>
+                </dl>
             </div>
         </div>
     </div>
 </div>
-<br />
 
-@*<dt class = "col-sm-2">
-        @Html.DisplayNameFor(model => model.ImageFileName)
-    </dt>
-    <dd class = "col-sm-10">
-        @Html.DisplayFor(model => model.ImageFileName)
-    </dd>
-    <dt class = "col-sm-2">
-        @Html.DisplayNameFor(model => model.ImageFileData)
-    </dt>
-    <dd class = "col-sm-10">
-        @Html.DisplayFor(model => model.ImageFileData)
-    </dd>
-    <dt class = "col-sm-2">
-        @Html.DisplayNameFor(model => model.ImageContentType)
-    </dt>
-    <dd class = "col-sm-10">
-        @Html.DisplayFor(model => model.ImageContentType)
-    </dd>
-    <dt class = "col-sm-2">
-        @Html.DisplayNameFor(model => model.Archived)
-    </dt>
-    <dd class = "col-sm-10">
-        @Html.DisplayFor(model => model.Archived)
-    </dd>*@
+<hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
 
+<dive class="text-center">
+    <h3>Tickets for @Model.Name</h3>
+</dive>
 <div class="table-responsive">
-    <h3>Project Tickets:</h3>
     <table id="myTable" class="table table-hover">
         <caption>Tickets for @Model.Name</caption>
         <thead>
@@ -183,7 +188,6 @@
                 <th>
                     Type
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -232,17 +236,22 @@
                     <td>
                         @ticket.TicketType.Name
                     </td>
-                    <td></td>
                 </tr>
             }
         </tbody>
     </table>
     @*<a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">@ticket.Title</a>*@
 </div>
-<div>
-    <a asp-action="Create" asp-controller=Tickets asp-route-id="@Model.Id">Create New Ticket</a> |
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to Project List</a>
+<div class="d-block">
+    @if (User.IsInRole("Admin") ||
+    (User.IsInRole("ProjectManager") && projectManager.Id == currentUser.Id) ||
+    (User.IsInRole("Developer") && developers.Contains(currentUser)) ||
+    (User.IsInRole("Submitter") && submitters.Contains(currentUser)))
+    {
+        <a asp-action="Create" asp-controller=Tickets asp-route-id="@Model.Id"><span class="btn btn-block btn-outline-secondary">Create New Ticket</span></a>
+        <br />
+        <a asp-action="Index"><button class="btn btn-block btn-outline-light text-light">Back to Project List</button></a>
+    }
 </div>
 
 @section Scripts{
