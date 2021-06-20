@@ -8,8 +8,8 @@
 
 @{ BTUser currentUser = await UserManager.GetUserAsync(User);
     var notes = await NotificationService.GetReceivedNotificationsAsync(currentUser.Id);
-};
 }
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -441,7 +441,7 @@
                     <div class="header-body-left">
                         <ul class="navbar-nav">
                             @*/*SEARCH*/*@
-                            <li class="nav-item pt-4 mr-3">
+                            <li class="nav-item pt-2 mr-3">
                                 <div class="header-search-form">
                                     <form>
                                         <div class="input-group">

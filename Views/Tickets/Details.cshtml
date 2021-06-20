@@ -7,6 +7,7 @@
 @inject UserManager<BTUser> userManager
 @inject IBTFileService BTFileService
 @inject IBTHistoryService HistoryService
+@inject IBTRoleService RoleService
 
 @model Unbugit.Models.Ticket
 
@@ -188,7 +189,6 @@
                                         (User.IsInRole("Submitter") && (Model.OwnerUser == currentUser)) 
                                     )
                                 {
-
                                     <form asp-action="Create" asp-controller="TicketComments" method="post">
                                         <input type="hidden" name="TicketId" value="@Model.Id" />
                                         <textarea name="Comment" rows="4" class="form-control"></textarea>
