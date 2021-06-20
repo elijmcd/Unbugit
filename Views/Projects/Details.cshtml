@@ -20,21 +20,21 @@
 }
 <div class="row">
     <div class="col text-center">
-        <h1>@Model.Company.Name</h1>
+        <h2>@Model.Company.Name</h2>
     </div>
 </div>
+<hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
 <div class="row">
     <div class="col text-center">
-        <h4>@Model.Name</h4>
+        <h1>@Model.Name</h1>
     </div>
 </div>
-<hr style="border:3px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
 <div class="row">
     <div class="col-10 offset-1 card shadow bg-dark-gradient border-success p-3">
         <div class="row">
             <div class="col">
                 <span>
-                    <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-warning fa fa-edit fa-pull-left" style="font-size:1.5rem"></a><em style="font-size:1.2rem">@Model.Description</em>
+                    <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-warning fa fa-edit fa-pull-right p-3" style="font-size:1.2rem"></a><em style="font-size:1.3rem">@Model.Description</em>
                 </span>
                 <dl>
                     <br />
@@ -157,7 +157,7 @@
 <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
 
 <dive class="text-center">
-    <h3>Tickets for @Model.Name</h3>
+    <h5>Tickets for @Model.Name</h5>
 </dive>
 <div class="table-responsive">
     <table id="myTable" class="table table-hover">
@@ -244,9 +244,9 @@
 </div>
 <div class="d-block">
     @if (User.IsInRole("Admin") ||
-    (User.IsInRole("ProjectManager") && projectManager.Id == currentUser.Id) ||
-    (User.IsInRole("Developer") && developers.Contains(currentUser)) ||
-    (User.IsInRole("Submitter") && submitters.Contains(currentUser)))
+   (User.IsInRole("ProjectManager") && projectManager.Id == currentUser.Id) ||
+   (User.IsInRole("Developer") && developers.Contains(currentUser)) ||
+   (User.IsInRole("Submitter") && submitters.Contains(currentUser)))
     {
         <a asp-action="Create" asp-controller=Tickets asp-route-id="@Model.Id"><span class="btn btn-block btn-outline-secondary">Create New Ticket</span></a>
         <br />

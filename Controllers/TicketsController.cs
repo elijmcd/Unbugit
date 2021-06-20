@@ -354,7 +354,7 @@ namespace Unbugit.Controllers
                     notification = new()
                     {
                         TicketId = ticket.Id,
-                        Title = $"Ticket modified on project - {oldTicket.Project.Name}",
+                        Title = $"Ticket modified in {oldTicket.Project.Name}",
                         Message = $"Ticket [{ticket.Id}]:{ticket.Title} updated by {currentUser?.FullName}",
                         Created = DateTimeOffset.Now,
                         SenderId = currentUser?.Id,

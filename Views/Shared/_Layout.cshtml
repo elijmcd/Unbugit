@@ -4,8 +4,11 @@
 @inject SignInManager<BTUser> SignInManager
 @inject UserManager<BTUser> UserManager
 @inject IBTFileService FileService
+@inject IBTNotificationService NotificationService
 
 @{ BTUser currentUser = await UserManager.GetUserAsync(User);
+    var notes = await NotificationService.GetReceivedNotificationsAsync(currentUser.Id);
+};
 }
 <!doctype html>
 <html lang="en">
@@ -42,7 +45,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="dark" style="background-color:#080e18;">
+<body class="dark" style="background-color:#001101;">
     <partial name="_LogoutPartial" />
 
     <!-- Preloader -->
@@ -315,7 +318,7 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
         <!-- begin::navigation -->
-        <div class="navigation" style="background-color:#080e18;">
+        <div class="navigation" style="background-color:#001101;">
             <div class="navigation-header">
                 <span>Navigation</span>
                 <a href="#">
@@ -438,7 +441,7 @@
                     <div class="header-body-left">
                         <ul class="navbar-nav">
                             @*/*SEARCH*/*@
-                            <li class="nav-item mr-3">
+                            <li class="nav-item pt-4 mr-3">
                                 <div class="header-search-form">
                                     <form>
                                         <div class="input-group">
@@ -563,31 +566,50 @@
                                     <i data-feather="bell"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-big">
-                                    <div class="border-bottom px-4 py-3 text-center d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0">Notifications</h5>
-                                        <small class="opacity-7">2   unread notifications</small>
+                                    <div class="border-bottom px-4 py-2 d-flex justify-content-between align-items-center text-center">
+                                        <h6 class="opacity-7">@(notes.Count) notifications</h6>
                                     </div>
                                     <div class="dropdown-scroll">
                                         <ul class="list-group list-group-flush">
-                                            <li class="px-4 py-2 text-center small text-muted bg-light">Today</li>
-                                            <li class="px-4 py-3 list-group-item">
-                                                <a href="#" class="d-flex align-items-center hide-show-toggler">
-                                                    <div class="flex-shrink-0">
-                                                        <figure class="avatar mr-3">
-                                                            <span class="avatar-title bg-info-bright text-info rounded-circle">
-                                                                <i class="ti-lock"></i>
-                                                            </span>
-                                                        </figure>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <p class="mb-0 line-height-20 d-flex justify-content-between">
-                                                            2 steps verification
-                                                            <i title="Mark as read" data-toggle="tooltip" class="hide-show-toggler-item fa fa-circle-o font-size-11"></i>
-                                                        </p>
-                                                        <span class="text-muted small">20 min ago</span>
-                                                    </div>
-                                                </a>
-                                            </li>
+                                            @foreach (var item in notes.Where(n => n.Viewed == false).OrderByDescending(n => n.Created))
+                                            {
+                                                <li class="px-4 py-2 list-group-item">
+                                                    <a href="#" class="d-flex align-items-center hide-show-toggler">
+                                                        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Ticket.Id">
+                                                            <div class="flex-shrink-0">
+                                                                <figure class="avatar mr-3">
+                                                                    @if (item.Title == "New Ticket")
+                                                                    {
+                                                                        <span class="avatar-title bg-secondary-bright text-success rounded-circle">
+                                                                            <i class="ti-receipt"></i>
+                                                                        </span>
+                                                                    }
+                                                                    else if (item.Title == $"Ticket modified in {item.Ticket.Project.Name}")
+                                                                    {
+                                                                        <span class="avatar-title bg-warning-bright text-warning rounded-circle">
+                                                                            <i class="ti-pulse"></i>
+                                                                        </span>
+                                                                    }
+                                                                    else if (item.Title == "A ticket assigned to you has been modified")
+                                                                    {
+                                                                        <span class="avatar-title bg-warning-bright text-info rounded-circle">
+                                                                            <i class="ti-agenda"></i>
+                                                                        </span>
+                                                                    }
+                                                                </figure>
+                                                            </div>
+                                                        </a>
+                                                        <div class="flex-grow-1">
+                                                            <span class="text-muted small">@item.Created.ToString("M/dd/yyyy, h:mm tt")</span>
+                                                            <p class="mb-0 line-height-20 d-flex justify-content-between">
+                                                                <small>@item.Title</small>
+                                                                <i title="Mark as read" data-toggle="tooltip" class="hide-show-toggler-item fa fa-circle-o font-size-10"></i>
+                                                            </p>
+                                                            <text class="text-light" style="font-style:italic">@item.Ticket.Title</text>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            }
                                             <li class="px-4 py-3 list-group-item">
                                                 <a href="#" class="d-flex align-items-center hide-show-toggler">
                                                     <div class="flex-shrink-0">

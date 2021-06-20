@@ -10,22 +10,22 @@
 @inject UserManager<BTUser> UserManager
 
 @{ int companyId = User.Identity.GetCompanyId().Value;
+    int companyTickets = (CompanyInfoService.GetAllTicketsAsync(companyId)).Result.Count;
     List<Project> companyProjects = await CompanyInfoService.GetAllProjectsAsync(companyId);
     BTUser btUser = await UserManager.GetUserAsync(User);
+
 
     ViewData["Title"] = "Dashboard"; }
 
 <div class="text-center">
     <!-- Content wrapper -->
     <div class="content-wrapper">
-        <!-- begin::navigation -->
-        <!-- end::navigation -->
         <!-- Content body -->
         <div class="content-body">
             <!-- Content -->
             <div>
-                <div class="page-header d-md-flex justify-content-between">
-                    <h3 style="vertical-align:center;">Welcome back, @btUser.FirstName.</h3>
+                <div class="page-header d-md-flex justify-content-between ">
+                    <h3 style="text-align:center;">Welcome back, @btUser.FirstName.</h3>
                     @*<a href="#" class="btn btn-gradient-dark ml-0 ml-md-2 mt-2 mt-md-0 dropdown-toggle" data-toggle="dropdown">Actions</a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" asp-controller="Projects" asp-action="MyProjects" asp-route-id="@btUser.Id">My Projects</a>
@@ -33,50 +33,66 @@
                         </div>*@
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 col-lg-3 h-100">
-                        <div class="card shadow">
+                <div class="row m-2">
+                    <div class="col-md-6 col-lg-3 my-2">
+                        <div class="card shadow border h-100">
                             <div class="card-body">
                                 <h6 class="card-title">Company Projects</h6>
                                 <div class="d-flex align-items-center mb-3">
                                     <div>
                                         <div class="avatar">
-                                            <span class="avatar-title bg-primary-bright text-primary rounded-pill">
-                                                <i class="fa fa- fa-tasks"></i>
-                                            </span>
+                                            <a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId">
+                                                <span class="avatar-title bg-primary-bright rounded-pill text-primary">
+                                                    <i class="fa fa- fa-tasks border-success"></i>
+                                                </span>
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="font-weight-bold ml-1 font-size-30 ml-3">@companyProjects.Count</div>
+
                                 </div>
-                                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                                @if (User.IsInRole("Admin"))
                                 {
-                                    <p class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="link-1">See all projects</a> in your company.</p>
+                                    <p class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary">See all projects</a> in your company.</p>
+
                                 }
-                                else
+                                @if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
                                 {
-                                    <p class=" mb-0"><a asp-action="MyProjects" asp-controller="Projects" asp-route-id="@btUser.Id" class="link-1">View My Projects</a></p>
+                                    <p class="mb-0"><a asp-action="MyProjects" asp-controller="Projects" asp-route-id="@btUser.Id" class="badge badge-primary"> My Projects</a></p>
+                                    <p class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">See all projects</a> in your company.</p>
+
                                 }
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-3 h-100">
-                        <div class="card">
+                    <div class="col-md-6 col-lg-3 my-2">
+                        <div class="card shadow border h-100 ">
                             <div class="card-body">
                                 <h6 class="card-title">Open Tickets</h6>
                                 <div class="d-flex align-items-center mb-3">
                                     <div>
                                         <div class="avatar">
-                                            <span class="avatar-title bg-info-bright text-info rounded-pill">
-                                                <i class="ti-map"></i>
-                                            </span>
+                                            <a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId">
+                                                <span class="avatar-title bg-secondary-bright text-secondary rounded-pill">
+                                                    <i class="ti-map"></i>
+                                                </span>
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="font-weight-bold ml-1 font-size-30 ml-3">12.87%</div>
+                                    <div class="font-weight-bold ml-1 font-size-30 ml-3">@companyTickets</div>
                                 </div>
-                                <p class="mb-0">
-                                    <a class="link-1" href="#">See visits</a> that had a higher than expected
-                                    bounce rate.
-                                </p>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="link-1">See All Tickets in your company.</a></p>
+
+                                }
+                                else if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
+                                {
+                                    <p class="mb-0"><a asp-action="MyTickets" asp-controller="Tickets" asp-route-id="@btUser.Id" class="badge badge-secondary">My Tickets</a></p>
+                                    <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-secondary-bright">See All Tickets</a> in your company.</p>
+
+                                }
+
                             </div>
                         </div>
                     </div>
@@ -130,11 +146,11 @@
                 <section class="content">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-6 col-md-12">
                                 <!-- DONUT CHART -->
-                                <div class="card card-danger">
+                                <div class="card shadow border">
                                     <div class="card-header">
-                                        <h3 class="card-title">Company Ticket Distribution</h3>
+                                        <h3 class="card-title pt-1">Company Ticket Distribution</h3>
                                     </div>
                                     <div class="card-body">
                                         <canvas id="donutChart">

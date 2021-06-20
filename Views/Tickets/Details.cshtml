@@ -11,6 +11,7 @@
 @model Unbugit.Models.Ticket
 
 @{
+    BTUser currentUser = await userManager.GetUserAsync(User);
     ViewData["Title"] = "Ticket Details";
 }
 
@@ -174,24 +175,28 @@
                                 </div>
                             </div>
                         }
-                        <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-                        @if (!User.Identity.IsAuthenticated)
-                        {
-                            <a id="loginToComment" class="btn-sm btn-block registerButton" style="text-align:center;" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details", "Tickets")">Login to Comment</a>
-                        }
-                        else
-                        {
-                            //Once logged in, user is presented with a form to add a comment
-                            <div class="row">
-                                <div class="col-lg-8 offset-lg-2">
+
+                        <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2">
+
+                                @if ( 
+                                        (User.IsInRole("Admin")) ||
+                                        (User.IsInRole("ProjectManager") && Model.Project.Members.Contains(currentUser)) ||
+                                        (User.IsInRole("Developer") && (Model.DeveloperUser == currentUser)) ||
+                                        (User.IsInRole("Submitter") && (Model.OwnerUser == currentUser)) 
+                                    )
+                                {
+
                                     <form asp-action="Create" asp-controller="TicketComments" method="post">
                                         <input type="hidden" name="TicketId" value="@Model.Id" />
                                         <textarea name="Comment" rows="4" class="form-control"></textarea>
-                                        <button class="btn-sm btn-block registerButton" type="submit">Submit</button>
+                                        <button class="btn-sm btn-block btn-outline-success bt-dark" type="submit">Submit</button>
                                     </form>
-                                </div>
+                                }
                             </div>
-                        }
+                        </div>
 
                         <div>
                             @if (User.IsInRole("Administrator"))
@@ -205,6 +210,9 @@
         </div>
         <div class="row">
             <div class="col">
+                <br />
+                <h6 class="text-center">Ticket History</h6>
+                <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
                 <div class="card border shadow rounded">
                     <div class="card-body" style="overflow-y: auto; height:220px;">
                         <div class="timeline">
@@ -226,7 +234,7 @@
                                             <span class="text-muted font-weight-normal">@item.Created.ToString("d")</span>
                                         </h6>
                                         <div class="row no-gutters border card flex-row border-radius-1 p-2">
-                                                <p>@item.Description</p>
+                                            <p>@item.Description</p>
                                             @*<div class="col-xl-2 col-lg-12">
                                                     <img src="../../assets/media/image/photo6.jpg" class="w-100"
                                                          alt="image">
