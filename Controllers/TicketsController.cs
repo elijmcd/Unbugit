@@ -19,22 +19,22 @@ namespace Unbugit.Controllers
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<BTUser> _userManager;
         private readonly IBTTicketService _ticketService;
         private readonly IBTCompanyInfoService _companyService;
         private readonly IBTRoleService _roleService;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<BTUser> _userManager;
         private readonly IBTProjectService _projectService;
         private readonly IBTHistoryService _historyService;
         private readonly IBTNotificationService _notificationService;
 
 
         public TicketsController(ApplicationDbContext context,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<BTUser> userManager,
             IBTTicketService ticketService,
             IBTCompanyInfoService companyService,
             IBTRoleService roleService,
-            RoleManager<IdentityRole> roleManager,
-            UserManager<BTUser> userManager,
             IBTProjectService projectService,
             IBTHistoryService historyService,
             IBTNotificationService notificationService)

@@ -19,15 +19,15 @@ namespace Unbugit.Controllers
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BTUser> _userManager;
         private readonly IBTProjectService _projectService;
         private readonly IBTCompanyInfoService _companyInfoService;
-        private readonly UserManager<BTUser> _userManager;
         private readonly IBTRoleService _roleService;
 
         public ProjectsController(ApplicationDbContext context,
+            UserManager<BTUser> userManager,
             IBTProjectService projectService,
             IBTCompanyInfoService companyInfoService,
-            UserManager<BTUser> userManager,
             IBTRoleService roleService
             )
         {
