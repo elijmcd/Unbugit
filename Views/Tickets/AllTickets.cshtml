@@ -26,12 +26,13 @@
                 <dl class="text-center bg-success-bright text-success">
                     @item.Project.Name
                 </dl>
-                @if ((item.OwnerUserId == btUser.Id) ||
+                @if (User.IsInRole("Admin") ||
+                    (item.OwnerUserId == btUser.Id) ||
                     (item.DeveloperUserId == btUser.Id) ||
                     (await ProjectService.GetProjectManagerAsync(item.ProjectId) == btUser))
                 {
                     <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                        <h5 class="text-center bg-secondary-bright text-secondary py-3">@item.Title</h5>
+                        <button class="btn btn-block bg-hover text-center bg-secondary-bright text-secondary py-3">@item.Title</button>
                     </a>
                 }
                 else

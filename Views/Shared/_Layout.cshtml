@@ -1,13 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using System.Linq
 @using Unbugit.Services.Interfaces
+
 
 @inject SignInManager<BTUser> SignInManager
 @inject UserManager<BTUser> UserManager
 @inject IBTFileService FileService
 @inject IBTNotificationService NotificationService
+@inject IBTCompanyInfoService CompanyInfoService 
 
 @{ BTUser currentUser = await UserManager.GetUserAsync(User);
+    var companyId = currentUser.CompanyId;
     var notes = await NotificationService.GetReceivedNotificationsAsync(currentUser.Id);
+    //var totalTickets = (await CompanyInfoService.GetAllTicketsAsync(companyId)).ToList();
+    //var closedTickets = totalTickets.Where(t => t.TicketStatusId == 2).ToList();
 }
 
 <!doctype html>
@@ -754,7 +760,8 @@
                                         <div class="mb-4">
                                             <h6 class="d-flex justify-content-between">
                                                 Tickets Complete
-                                                <span>%25</span>
+                                                <span>25%</span>
+                                                @*<span>@(closedTickets?.Count/totalTickets.Count)</span>*@
                                             </h6>
                                             <div class="progress" style="height: 5px;">
                                                 <div class="progress-bar bg-success-gradient" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
