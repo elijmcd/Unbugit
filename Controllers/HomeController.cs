@@ -47,7 +47,7 @@ namespace Unbugit.Controllers
             DashboardViewModel dashboard = new();
 
             BTUser currentUser = await _userManager.GetUserAsync(User);
-            int companyId = currentUser.CompanyId.Value;
+            int companyId = currentUser.CompanyId;
             if (User.IsInRole("Admin"))
             {
                 dashboard.Projects = await _projectService.GetAllProjectsByCompany(companyId);

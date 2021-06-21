@@ -121,7 +121,7 @@ namespace Unbugit.Controllers
             {
                 project.StartDate = DateTimeOffset.Now;
                 project.Company = btUser.Company;
-                project.CompanyId = (btUser.CompanyId).Value;
+                project.CompanyId = (btUser.CompanyId);
 
                 _context.Add(project);
                 await _context.SaveChangesAsync();
