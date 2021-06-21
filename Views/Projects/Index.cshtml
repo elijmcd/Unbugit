@@ -14,7 +14,7 @@
 @{
     BTUser btUser = await UserManager.GetUserAsync(User);
     Company company = btUser.Company;
-    List<Project> companyProjects = await ProjectService.GetAllProjectsByCompany((btUser.CompanyId).Value);
+    List<Project> companyProjects = await ProjectService.GetAllProjectsByCompany(btUser.CompanyId);
 
     ViewData["Title"] = "Company Projects";
 }
