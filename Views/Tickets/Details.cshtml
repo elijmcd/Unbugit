@@ -8,11 +8,15 @@
 @inject IBTFileService BTFileService
 @inject IBTHistoryService HistoryService
 @inject IBTRoleService RoleService
+@inject IBTProjectService ProjectService
+@inject IBTTicketService TicketService
 
 @model Unbugit.Models.Ticket
 
 @{
     BTUser currentUser = await userManager.GetUserAsync(User);
+    BTUser developerUser = await TicketService.GetTicketDeveloperAsync(Model.Id);
+    BTUser ticketPM = await ProjectService.GetProjectManagerAsync(Model.Project.Id);
     ViewData["Title"] = "Ticket Details";
 }
 
@@ -25,13 +29,30 @@
     <div class="col-6">
         <div class="row">
             <div class="card border shadow my-1 mx-1 w-100">
-                <div class="card-body border rounded shadow">
-                    <h4 style="color:#22dc0a;">
-                        <a asp-action="Edit" asp-route-id="@Model.Id">
-                            <span><i class="fa fa-edit"></i></span>
-                        </a>
-                        @Model.Title
-                    </h4>
+                <div class="card-body rounded shadow" style="border: 1px solid #DD44A7">
+                    <h6 class="text-center bg-success-bright text-success py-2">
+                        @Model.Project.Name
+                    </h6>
+                    @if (
+                (User.IsInRole("Admin")) ||
+                (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+                (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
+                (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+                (Model.OwnerUser == currentUser)
+                )
+                    {
+                        <h5 class="text-center bg-secondary-bright text-secondary py-3">
+                            @Model.Title
+                            <a asp-action="Edit" asp-route-id="@Model.Id">
+                                <span class="fa fa-edit pull-right text-warning mr-2"></span>
+                            </a>
+                        </h5>
+                    }
+                    else
+                    {
+                        <h5 class="text-center text-muted py-3" style="border: 1px solid #DD44A7">@Model.Title</h5>
+                    }
+
                     <h6 class="text-light">@Model.Description</h6>
                     <p class="text-light"><em class="text-success">Created on:</em> @Model.Created.ToString("d")</p>
 
@@ -42,7 +63,7 @@
                         @if (Model.OwnerUser is not null)
                         {
                             <figure class="avatar avatar-sm mr-3 bring-forward">
-                                <img src="@BTFileService.ConvertByteArrayToFile(Model.OwnerUser.AvatarFileData, Model.OwnerUser.AvatarContentType)" alt="@Model.OwnerUser.FullName" class="rounded-circle">
+                                <img src="@BTFileService.ConvertByteArrayToFile(Model.OwnerUser.AvatarFileData, Model.OwnerUser.AvatarContentType)" title="@Model.OwnerUser.FullName" alt="@Model.OwnerUser.FullName" class="rounded-circle">
                             </figure>
                             @Model.OwnerUser.FullName
                         }
@@ -59,7 +80,7 @@
                         {
                             <a class="text-light" asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id">
                                 <figure class="avatar avatar-sm mr-3 bring-forward">
-                                    <img src="@BTFileService.ConvertByteArrayToFile(Model.DeveloperUser.AvatarFileData, Model.DeveloperUser.AvatarContentType)" alt="@Model.DeveloperUser.FullName" class="rounded-circle">
+                                    <img src="@BTFileService.ConvertByteArrayToFile(Model.DeveloperUser.AvatarFileData, Model.DeveloperUser.AvatarContentType)" title="@Model.DeveloperUser.FullName" alt="@Model.DeveloperUser.FullName" class="rounded-circle">
                                 </figure>
                                 <span class="badge badge-primary text-light">@Model.DeveloperUser.FullName</span>
                             </a>
@@ -181,19 +202,19 @@
 
                         <div class="row">
                             <div class="col-lg-8 offset-lg-2">
-
-                                @if ( 
-                                        (User.IsInRole("Admin")) ||
-                                        (User.IsInRole("ProjectManager") && Model.Project.Members.Contains(currentUser)) ||
-                                        (User.IsInRole("Developer") && (Model.DeveloperUser == currentUser)) ||
-                                        (User.IsInRole("Submitter") && (Model.OwnerUser == currentUser)) 
+                                @if (
+                                      (User.IsInRole("Admin")) ||
+                                      (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+                                      (User.IsInRole("Developer") && developerUser == currentUser) ||
+                                      (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+                                      (Model.OwnerUser == currentUser)
                                     )
                                 {
-                                    <form asp-action="Create" asp-controller="TicketComments" method="post">
-                                        <input type="hidden" name="TicketId" value="@Model.Id" />
-                                        <textarea name="Comment" rows="4" class="form-control"></textarea>
-                                        <button class="btn-sm btn-block btn-outline-success bt-dark" type="submit">Submit</button>
-                                    </form>
+                                 <form asp-action="Create" asp-controller="TicketComments" method="post">
+                                    <input type="hidden" name="TicketId" value="@Model.Id" />
+                                    <textarea name="Comment" rows="4" class="form-control"></textarea>
+                                    <button class="btn-sm btn-block btn-outline-success bt-dark" type="submit">Submit</button>
+                                 </form>
                                 }
                             </div>
                         </div>

@@ -156,108 +156,108 @@
 
 <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
 
-<dive class="text-center">
+<div class="text-center">
     <h5>Tickets for @Model.Name</h5>
-</dive>
-<div class="table-responsive">
-    <table id="myTable" class="table table-hover">
-        <caption>Tickets for @Model.Name</caption>
-        <thead>
-            <tr>
-                <th>
-                    Title
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Created
-                </th>
-                <th>
-                    Submitter
-                </th>
-                <th>
-                    Developer
-                </th>
-                <th>
-                    Priority
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    Type
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Ticket ticket in Model.Tickets)
-            {
-                <tr>
-
-                    <td>
-                        <a class="btn btn-sm btn-outline-success text-success" asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">
-                            @ticket.Title
-                        </a>
-                    </td>
-                    <td>
-                        @ticket.Description
-                    </td>
-                    <td>
-                        @ticket.Created.ToString("D")
-                    </td>
-                    <td>
-                        @ticket.OwnerUser?.FullName
-                    </td>
-                    <td>
-                        @ticket.DeveloperUser?.FullName
-                    </td>
-                    <td>
-                        @if (ticket.TicketPriorityId == 1)
-                        {
-                            <span class="badge bg-danger-bright text-danger">@ticket.TicketPriority.Name</span>
-                        }
-                        else if (ticket.TicketPriorityId == 2)
-                        {
-                            <span class="badge bg-warning-bright text-warning">@ticket.TicketPriority.Name</span>
-                        }
-                        else if (ticket.TicketPriorityId == 3)
-                        {
-                            <span class="badge bg-info-bright text-info">@ticket.TicketPriority.Name</span>
-                        }
-                        else if (ticket.TicketPriorityId == 4)
-                        {
-                            <span class="badge bg-primary-bright text-primary">@ticket.TicketPriority.Name</span>
-                        }
-                    </td>
-                    <td>
-                        @ticket.TicketStatus.Name
-                    </td>
-                    <td>
-                        @ticket.TicketType.Name
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    @*<a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">@ticket.Title</a>*@
 </div>
-<div class="d-block">
-    @if (User.IsInRole("Admin") ||
-   (User.IsInRole("ProjectManager") && projectManager.Id == currentUser.Id) ||
-   (User.IsInRole("Developer") && developers.Contains(currentUser)) ||
-   (User.IsInRole("Submitter") && submitters.Contains(currentUser)))
-    {
-        <a asp-action="Create" asp-controller=Tickets asp-route-id="@Model.Id"><span class="btn btn-block btn-outline-secondary">Create New Ticket</span></a>
-        <br />
-        <a asp-action="Index"><button class="btn btn-block btn-outline-light text-light">Back to Project List</button></a>
-    }
-</div>
-
-@section Scripts{
-    <script>
-        $(document).ready(function () {
-            $('#myTable').DataTable();
-        });
-    </script>
+@if (User.IsInRole("Admin") ||
+(User.IsInRole("ProjectManager") && projectManager.Id == currentUser.Id) ||
+(User.IsInRole("Developer") && developers.Contains(currentUser)) ||
+(User.IsInRole("Submitter") && submitters.Contains(currentUser)))
+{
+    <a asp-action="Create" asp-controller=Tickets asp-route-id="@Model.Id"><span class="btn btn-block btn-outline-secondary">Create New Ticket</span></a>
 }
+    <div class="table-responsive">
+        <table id="myTable" class="table table-hover">
+            <caption>Tickets for @Model.Name</caption>
+            <thead>
+                <tr>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Created
+                    </th>
+                    <th>
+                        Submitter
+                    </th>
+                    <th>
+                        Developer
+                    </th>
+                    <th>
+                        Priority
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Type
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Ticket ticket in Model.Tickets)
+                {
+                    <tr>
+
+                        <td>
+                            <a class="btn btn-sm btn-outline-success text-success" asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">
+                                @ticket.Title
+                            </a>
+                        </td>
+                        <td>
+                            @ticket.Description
+                        </td>
+                        <td>
+                            @ticket.Created.ToString("D")
+                        </td>
+                        <td>
+                            @ticket.OwnerUser?.FullName
+                        </td>
+                        <td>
+                            @ticket.DeveloperUser?.FullName
+                        </td>
+                        <td>
+                            @if (ticket.TicketPriorityId == 1)
+                            {
+                                <span class="badge bg-danger-bright text-danger">@ticket.TicketPriority.Name</span>
+                            }
+                            else if (ticket.TicketPriorityId == 2)
+                            {
+                                <span class="badge bg-warning-bright text-warning">@ticket.TicketPriority.Name</span>
+                            }
+                            else if (ticket.TicketPriorityId == 3)
+                            {
+                                <span class="badge bg-info-bright text-info">@ticket.TicketPriority.Name</span>
+                            }
+                            else if (ticket.TicketPriorityId == 4)
+                            {
+                                <span class="badge bg-primary-bright text-primary">@ticket.TicketPriority.Name</span>
+                            }
+                        </td>
+                        <td>
+                            @ticket.TicketStatus.Name
+                        </td>
+                        <td>
+                            @ticket.TicketType.Name
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @*<a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">@ticket.Title</a>*@
+    </div>
+    <div class="d-block">
+        <br />
+        <a asp-action="Index"><button class="btn btn-block btn-outline-light text-light">Back to Company Projects List</button></a>
+    </div>
+
+    @section Scripts{
+        <script>
+            $(document).ready(function () {
+                $('#myTable').DataTable();
+            });
+        </script>
+    }

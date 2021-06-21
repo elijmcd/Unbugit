@@ -372,7 +372,7 @@ namespace Unbugit.Controllers
                         await _notificationService.AdminsNotificationAsync(notification, companyId);
                     }
 
-                    //alert dev is ticket is assigned
+                    //alert dev if ticket is assigned
                     if (ticket.DeveloperUserId != null)
                     {
                         notification = new()

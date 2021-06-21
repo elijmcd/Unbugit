@@ -20,21 +20,28 @@
 <div class="row sort">
     @foreach (var item in Model)
     {
-        <div class="col-3 my-1">
+        <div class="col-lg-3 col-md-6 col-sm-12 my-1">
 
             <div class="card shadow p-2" style="border: 1px solid #DD44A7">
-                @if ((item.OwnerUserId == btUser.Id) || (item.DeveloperUserId == btUser.Id) || (await ProjectService.GetProjectManagerAsync(item.ProjectId) == btUser))
+                <dl class="text-center bg-success-bright text-success">
+                    @item.Project.Name
+                </dl>
+                @if ((item.OwnerUserId == btUser.Id) ||
+                    (item.DeveloperUserId == btUser.Id) ||
+                    (await ProjectService.GetProjectManagerAsync(item.ProjectId) == btUser))
                 {
-                    <a asp-action="Details" asp-controller="Tickets">
-                        <h5 class="text-center bg-secondary-bright text-info py-3">@item.Title</h5>
+                    <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                        <h5 class="text-center bg-secondary-bright text-secondary py-3">@item.Title</h5>
                     </a>
                 }
                 else
                 {
-                    <h5 class="text-center text-secondary py-4" style="border: 1px solid #DD44A7">@item.Title</h5>
+                    <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                        <h5 class="text-center text-muted py-3" style="border: 1px solid #DD44A7">@item.Title</h5>
+                    </a>
                 }
-                <dl>
-                    Priority
+                <dl class="text-light">
+                    Ticket Priority
                 </dl>
                 <dd>
                     @if (item.TicketPriorityId == 1)
@@ -54,13 +61,13 @@
                         <span class="badge badge-primary text-primary bg-primary-bright">@item.TicketPriority.Name</span>
                     }
                 </dd>
-                <dl>
+                <dl class="text-light">
                     Created
                 </dl>
                 <dd>
                     @item.Created.ToString("d")
                 </dd>
-                <dl>
+                <dl class="text-light">
                     Owner
                 </dl>
                 <dd>
@@ -69,7 +76,7 @@
                     </figure>
                     @item.OwnerUser.FullName
                 </dd>
-                <dl>
+                <dl class="text-light">
                     Developer
                 </dl>
                 <dd>

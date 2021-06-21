@@ -11,6 +11,7 @@
 
 @{ int companyId = User.Identity.GetCompanyId().Value;
     int companyTickets = (CompanyInfoService.GetAllTicketsAsync(companyId)).Result.Count;
+    var company = (CompanyInfoService.GetCompanyInfoByIdAsync(companyId)).Result.Name;
     List<Project> companyProjects = await CompanyInfoService.GetAllProjectsAsync(companyId);
     BTUser btUser = await UserManager.GetUserAsync(User);
 
@@ -37,7 +38,7 @@
                     <div class="col-md-6 col-lg-3 my-2">
                         <div class="card shadow border h-100">
                             <div class="card-body">
-                                <h6 class="card-title">Company Projects</h6>
+                                <h6 class="card-title">@company Projects</h6>
                                 <div class="d-flex align-items-center mb-3">
                                     <div>
                                         <div class="avatar">

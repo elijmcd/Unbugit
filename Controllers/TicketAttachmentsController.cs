@@ -54,8 +54,8 @@ namespace Unbugit.Controllers
         // GET: TicketAttachments/Create
         public IActionResult Create()
         {
-            ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Title");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name");
             return View();
         }
 
