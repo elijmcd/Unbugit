@@ -84,7 +84,7 @@
                                 </div>
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="link-1">See All Tickets in your company.</a></p>
+                                    <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary">See All Tickets</a> in your company.</p>
 
                                 }
                                 else if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
@@ -97,10 +97,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-3 h-100">
-                        <div class="card">
+                    <div class="col-md-6 col-lg-3 my-2">
+                        <div class="card shadow border h-100">
                             <div class="card-body">
-                                <h6 class="card-title">Active Referrals</h6>
+                                <h6 class="card-title">Tickets by Type</h6>
                                 <div class="d-flex align-items-center mb-3">
                                     <div>
                                         <div class="avatar">
@@ -118,10 +118,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-3 h-100">
-                        <div class="card">
+                    <div class="col-md-6 col-lg-3 my-2">
+                        <div class="card shadow border h-100">
                             <div class="card-body">
-                                <h6 class="card-title">Opened Invites</h6>
+                                <h6 class="card-title">Tickets by Status</h6>
                                 <div class="d-flex align-items-center mb-3">
                                     <div>
                                         <div class="avatar">
