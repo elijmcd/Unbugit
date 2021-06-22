@@ -7,7 +7,7 @@
 @inject UserManager<BTUser> UserManager
 @inject IBTFileService FileService
 @inject IBTNotificationService NotificationService
-@inject IBTCompanyInfoService CompanyInfoService 
+@inject IBTCompanyInfoService CompanyInfoService
 
 @{ BTUser currentUser = await UserManager.GetUserAsync(User);
     var companyId = currentUser.CompanyId;
@@ -352,19 +352,27 @@
                             </a>
                             <ul>
                                 <li class="nav-link-icon">
-                                    <a asp-action="Create" asp-controller="Invites">
+                                    <a asp-action="Details" asp-controller="Companies" asp-route-id="@currentUser.CompanyId">
                                         <span class="nav-link-icon">
-                                            <i style="color:#FFFF00;" data-feather="user-plus"></i>
+                                            <i style="color:#00FFFF;" data-feather="layout"></i>
                                         </span>
-                                        <span>New Company Invite</span>
+                                        <span>Company Details</span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a asp-action="Details" asp-controller="Companies" asp-route-id="@currentUser.CompanyId">Company Details</a>
-                                </li>
-                                <li>
+                                <li class="nav-link-icon">
                                     <a asp-action="ManageUserRoles" asp-controller="UserRoles">
-                                        <i class="fa fa-users"></i><span>Manage Team Roles</span>
+                                        <span class="nav-link-icon">
+                                            <i style="color:#00FFFF;" data-feather="users"></i>
+                                        </span>
+                                        <span>Manage Team Roles</span>
+                                    </a>
+                                </li>
+                                <li class="nav-link-icon">
+                                    <a asp-action="Create" asp-controller="Invites">
+                                        <span class="nav-link-icon">
+                                            <i style="color:#FFFF00" data-feather="user-plus"></i>
+                                        </span>
+                                        <span>New Company Invite</span>
                                     </a>
                                 </li>
                             </ul>
@@ -378,14 +386,29 @@
                             <span>Tickets</span>
                         </a>
                         <ul>
-                            <li>
-                                <a asp-action="AllTickets" asp-controller="Tickets">Company Tickets</a>
+                            <li class="nav-link-icon">
+                                <a asp-action="AllTickets" asp-controller="Tickets">
+                                    <span class="nav-link-icon">
+                                        <i style="color:#FF00FF;" data-feather="layers"></i>
+                                    </span>
+                                    <span>Company Tickets</span>
+                                </a>
                             </li>
-                            <li>
-                                <a asp-action="MyTickets" asp-controller="Tickets">My Tickets</a>
+                            <li class="nav-link-icon">
+                                <a asp-action="MyTickets" asp-controller="Tickets">
+                                    <span class="nav-link-icon">
+                                        <i style="color:#FF00FF;" data-feather="user"></i>
+                                    </span>
+                                    <span>My Tickets</span>
+                                </a>
                             </li>
-                            <li>
-                                <a asp-action="Create" asp-controller="Tickets">Add New Ticket</a>
+                            <li class="nav-link-icon">
+                                <a asp-action="Create" asp-controller="Tickets">
+                                    <span class="nav-link-icon">
+                                        <i style="color:#FF00FF;" data-feather="plus-square"></i>
+                                    </span>
+                                    <span>Add New Ticket</span>
+                                </a>
                             </li>
                         </ul>
                     </li>

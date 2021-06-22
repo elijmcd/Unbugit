@@ -12,6 +12,7 @@
 
 @{
     BTUser btUser = await UserManager.GetUserAsync(User);
+    Company company = await CompanyInfoService.GetCompanyInfoByIdAsync(btUser.CompanyId);
     ViewData["Title"] = "All Tickets";
 }
 
@@ -27,9 +28,9 @@
                     @item.Project.Name
                 </dl>
                 @if (User.IsInRole("Admin") ||
-                    (item.OwnerUserId == btUser.Id) ||
-                    (item.DeveloperUserId == btUser.Id) ||
-                    (await ProjectService.GetProjectManagerAsync(item.ProjectId) == btUser))
+              (item.OwnerUserId == btUser.Id) ||
+              (item.DeveloperUserId == btUser.Id) ||
+              (await ProjectService.GetProjectManagerAsync(item.ProjectId) == btUser))
                 {
                     <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
                         <button class="btn btn-block bg-hover text-center bg-secondary-bright text-secondary py-3">@item.Title</button>
@@ -98,10 +99,12 @@
     }
 </div>
 
-@*<p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="dataTable">
+<div class="table-responsive">
+    <div class="text-center">
+        <h3>All Tickets for @company.Name</h3>
+    </div>
+    <table id="myTable" class="table table-hover">
+        <caption>All Tickets for @btUser.Company.Name</caption>
         <thead>
             <tr>
                 <th>
@@ -115,9 +118,6 @@
                 </th>
                 <th>
                     Updated
-                </th>
-                <th>
-                    Archived
                 </th>
                 <th>
                     Project
@@ -145,28 +145,22 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Title)
+                        @item.Title
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Description)
+                        @item.Description
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Created)
+                        @item.Created.ToString("d")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Updated)
+                        @item.Updated?.ToString("d")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ArchivedDate)
+                        @item.Project.Name
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Archived)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Project.Name)
-                    </td>
-                    <td>
-                        @item.TicketType.Id
+                        @item.TicketType.Name
                     </td>
                     <td>
                         @item.TicketPriority.Name
@@ -181,17 +175,31 @@
                         @item.DeveloperUser?.FullName
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="badge bg-danger-bright" asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
+                        }
+                        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (item.Project.Members.Contains(btUser)) || (User.IsInRole("Developer") && (item.Project.Members.Contains(btUser))))
+                        {
+                            <a class="badge bg-warning-bright" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
+                        }
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-    }*@
-@*else
-    {
-        <h3>Sorry, you do not have access to this resource.</h3>
-        <a asp-action="Dashboard" asp-controller="Home" asp-route-id="@btUser.Id"><p>Return Home</p></a>
-    }*@
+    <a asp-action="Dashboard" asp-controller="Home" asp-route-id="@btUser.Id"><p>Return to Dashboard</p></a>
+
+    @section Scripts{
+        <script>
+            $(document).ready(function () {
+                $('#myTable').DataTable();
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#myTable2').DataTable();
+            });
+        </script>
+    }
