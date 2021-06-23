@@ -77,7 +77,12 @@ namespace Unbugit.Controllers
                 {
                     Notification notification = new()
                     {
-                        TicketId = ticketComment.TicketId
+                        TicketId = ticketComment.TicketId,
+                        Title = "New Comment",
+                        Message = "",
+                        Created = DateTimeOffset.Now,
+                        SenderId = "",
+                        RecipientId = ""
 
                     };
                 }

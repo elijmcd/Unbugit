@@ -97,7 +97,7 @@ namespace Unbugit.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        // CHART/DONUT
+        // ORIGINAL CHART/DONUT(PIE)
         [HttpPost]
         public async Task<JsonResult> DonutMethod()
         {
@@ -135,6 +135,128 @@ namespace Unbugit.Controllers
 
             return Json(chartData);
         }
+        // CHART/DONUT PRIORITY
+        [HttpPost]
+        //public async Task<JsonResult> DonutMethodPriority()
+        //{
+        //    int companyId = User.Identity.GetCompanyId().Value;
+        //    Random rnd = new();
+
+        //    List<List<Ticket>> priorities = new();
+        //    List<Ticket> priority1 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Urgent")).OrderBy(p => p.Id).ToList();
+        //    List<Ticket> priority2 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "High")).OrderBy(p => p.Id).ToList();
+        //    List<Ticket> priority3 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Medium")).OrderBy(p => p.Id).ToList();
+        //    List<Ticket> priority4 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Low")).OrderBy(p => p.Id).ToList();
+        //    priorities.Add(priority1);
+        //    priorities.Add(priority2);
+        //    priorities.Add(priority3);
+        //    priorities.Add(priority4);
+
+        //    DonutViewModel chartData = new();
+        //    chartData.labels = priorities.Select(p => p.Name).ToArray();
+
+        //    List<SubData> dsArray = new();
+        //    List<int> tickets = new();
+        //    List<string> colors = new();
+
+        //    foreach (Project prj in priorities)
+        //    {
+        //        tickets.Add(prj.Tickets.Count());
+
+        //        // This code will randomly select a color for each element of the data 
+        //        Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+        //        string colorHex = string.Format("#{0:X6}", randomColor.ToArgb() & 0X00FFFFFF);
+
+        //        colors.Add(colorHex);
+        //    }
+
+        //    SubData temp = new()
+        //    {
+        //        data = tickets.ToArray(),
+        //        backgroundColor = colors.ToArray()
+        //    };
+        //    dsArray.Add(temp);
+
+        //    chartData.datasets = dsArray.ToArray();
+
+        //    return Json(chartData);
+        //}
+        // CHART/DONUT STATUS
+        [HttpPost]
+        //public async Task<JsonResult> DonutMethodStatus()
+        //{
+        //    int companyId = User.Identity.GetCompanyId().Value;
+        //    Random rnd = new();
+
+        //    List<Project> projects = (await _projectService.GetAllProjectsByCompany(companyId)).OrderBy(p => p.Id).ToList();
+
+        //    DonutViewModel chartData = new();
+        //    chartData.labels = projects.Select(p => p.Name).ToArray();
+
+        //    List<SubData> dsArray = new();
+        //    List<int> tickets = new();
+        //    List<string> colors = new();
+
+        //    foreach (Project prj in projects)
+        //    {
+        //        tickets.Add(prj.Tickets.Count());
+
+        //        // This code will randomly select a color for each element of the data 
+        //        Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+        //        string colorHex = string.Format("#{0:X6}", randomColor.ToArgb() & 0X00FFFFFF);
+
+        //        colors.Add(colorHex);
+        //    }
+
+        //    SubData temp = new()
+        //    {
+        //        data = tickets.ToArray(),
+        //        backgroundColor = colors.ToArray()
+        //    };
+        //    dsArray.Add(temp);
+
+        //    chartData.datasets = dsArray.ToArray();
+
+        //    return Json(chartData);
+        //}
+        // CHART/DONUT TYPE
+        [HttpPost]
+        //public async Task<JsonResult> DonutMethodType()
+        //{
+        //    int companyId = User.Identity.GetCompanyId().Value;
+        //    Random rnd = new();
+
+        //    List<Project> projects = (await _projectService.GetAllProjectsByCompany(companyId)).OrderBy(p => p.Id).ToList();
+
+        //    DonutViewModel chartData = new();
+        //    chartData.labels = projects.Select(p => p.Name).ToArray();
+
+        //    List<SubData> dsArray = new();
+        //    List<int> tickets = new();
+        //    List<string> colors = new();
+
+        //    foreach (Project prj in projects)
+        //    {
+        //        tickets.Add(prj.Tickets.Count());
+
+        //        // This code will randomly select a color for each element of the data 
+        //        Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+        //        string colorHex = string.Format("#{0:X6}", randomColor.ToArgb() & 0X00FFFFFF);
+
+        //        colors.Add(colorHex);
+        //    }
+
+        //    SubData temp = new()
+        //    {
+        //        data = tickets.ToArray(),
+        //        backgroundColor = colors.ToArray()
+        //    };
+        //    dsArray.Add(temp);
+
+        //    chartData.datasets = dsArray.ToArray();
+
+        //    return Json(chartData);
+        //}
 
     }
 }

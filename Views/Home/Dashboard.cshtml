@@ -14,6 +14,7 @@
     var company = (CompanyInfoService.GetCompanyInfoByIdAsync(companyId)).Result.Name;
     List<Project> companyProjects = await CompanyInfoService.GetAllProjectsAsync(companyId);
     BTUser btUser = await UserManager.GetUserAsync(User);
+    int archivedTickets = TicketService.GetArchivedTicketsByCompanyAsync(companyId).Result.Count;
 
 
     ViewData["Title"] = "Dashboard"; }
@@ -36,7 +37,7 @@
 
                 <div class="row m-2">
                     <div class="col-md-6 col-lg-3 my-2">
-                        <div class="card shadow border h-100">
+                        <div class="card shadow border">
                             <div class="card-body">
                                 <h6 class="card-title">@company Projects</h6>
                                 <div class="d-flex align-items-center mb-3">
@@ -66,7 +67,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3 my-2">
-                        <div class="card shadow border h-100 ">
+                        <div class="card shadow border">
                             <div class="card-body">
                                 <h6 class="card-title">Open Tickets</h6>
                                 <div class="d-flex align-items-center mb-3">
@@ -113,29 +114,37 @@
                         </div>
                     </section>-->
                     <div class="col-md-6 col-lg-3 my-2">
-                        <div class="card shadow border h-100">
+                        <div class="card shadow border">
+                            <div class="card-header">
+                                <h4 class="card-title pt-1">Tickets by Priority</h4>
+                            </div>
                             <div class="card-body">
-                                <h6 class="card-title">Tickets by Status</h6>
+                                <canvas id="donutChartPriority">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 my-2">
+                        <div class="card shadow border">
+                            <div class="card-body">
+                                <h6 class="card-title">Archived Tickets</h6>
                                 <div class="d-flex align-items-center mb-3">
                                     <div>
                                         <div class="avatar">
-                                            <span class="avatar-title bg-warning-bright text-warning rounded-pill">
-                                                <i class="ti-dashboard"></i>
+                                            <span class="avatar-title bg-danger-bright text-danger rounded-pill">
+                                                <i class="ti-archive"></i>
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="font-weight-bold ml-1 font-size-30 ml-3">12.87%</div>
+                                    <div class="font-weight-bold ml-1 font-size-30 ml-3">@archivedTickets</div>
                                 </div>
                                 <p class="mb-0">
-                                    <a class="link-1" href="#">See clients</a> that accepted your invitation to
-                                    connect.
+                                    <a class="link-1 text-danger" href="#">View Archived Tickets</a>
                                 </p>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
 
                 <!-- DONUT CHART -->
                 <section class="content">
@@ -153,6 +162,31 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-3 col-md-6">
+                                <!-- DONUT CHART -->
+                                <div class="card shadow border">
+                                    <div class="card-header">
+                                        <h5 class="card-title pt-1">Tickets by Status</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="donutChartStatus">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <!-- DONUT CHART -->
+                                <div class="card shadow border">
+                                    <div class="card-header">
+                                        <h5 class="card-title pt-1">Tickets by Type</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="donutChartType">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </section>
@@ -186,9 +220,9 @@
                                 <th>
                                     Status
                                 </th>
-                                <th>
-                                    Owner
-                                </th>
+                                @*<th>
+                                        Owner
+                                    </th>*@
                                 <th>
                                     Developer
                                 </th>
@@ -200,7 +234,9 @@
                             {
                                 <tr>
                                     <td>
-                                        @item.Title
+                                        <a class="text-secondary" asp-action="Details" asp-controller="Tickets">
+                                            @item.Title
+                                        </a>
                                     </td>
                                     <td>
                                         @item.Description
@@ -227,9 +263,9 @@
                                     <td>
                                         @item.TicketStatus.Name
                                     </td>
-                                    <td>
-                                        @item.OwnerUser?.FullName
-                                    </td>
+                                    @*<td>
+                                            @item.OwnerUser?.FullName
+                                        </td>*@
                                     <td>
                                         @item.DeveloperUser?.FullName
                                     </td>
@@ -1173,6 +1209,105 @@
                 success: function (result) {
                     //Donut
                     var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+                    var donutData = result
+
+                    var donutOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(donutChartCanvas, {
+                        type: 'pie',
+                        data: donutData,
+                        options: donutOptions
+                    })
+                },
+                failure: function (result) {
+                    alert(result.d);
+                },
+                error: function (result) {
+                    alert(result.d);
+                }
+            });
+
+        </script>
+        <script type="text/javascript">
+            $.ajax({
+                type: "POST",
+                url: "/Home/DonutMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    //Donut
+                    var donutChartCanvas = $('#donutChartStatus').get(0).getContext('2d')
+                    var donutData = result
+
+                    var donutOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(donutChartCanvas, {
+                        type: 'doughnut',
+                        data: donutData,
+                        options: donutOptions
+                    })
+                },
+                failure: function (result) {
+                    alert(result.d);
+                },
+                error: function (result) {
+                    alert(result.d);
+                }
+            });
+
+        </script>
+        <script type="text/javascript">
+            $.ajax({
+                type: "POST",
+                url: "/Home/DonutMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    //Donut
+                    var donutChartCanvas = $('#donutChartType').get(0).getContext('2d')
+                    var donutData = result
+
+                    var donutOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(donutChartCanvas, {
+                        type: 'doughnut',
+                        data: donutData,
+                        options: donutOptions
+                    })
+                },
+                failure: function (result) {
+                    alert(result.d);
+                },
+                error: function (result) {
+                    alert(result.d);
+                }
+            });
+
+        </script>
+        <script type="text/javascript">
+            $.ajax({
+                type: "POST",
+                url: "/Home/DonutMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    //Donut
+                    var donutChartCanvas = $('#donutChartPriority').get(0).getContext('2d')
                     var donutData = result
 
                     var donutOptions = {
