@@ -136,51 +136,63 @@ namespace Unbugit.Controllers
             return Json(chartData);
         }
         // CHART/DONUT PRIORITY
-        //[HttpPost]
-        //public async Task<JsonResult> DonutMethodPriority()
-        //{
-        //    int companyId = User.Identity.GetCompanyId().Value;
-        //    Random rnd = new();
+        [HttpPost]
+        public async Task<JsonResult> DonutMethodPriority()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+            Random rnd = new();
 
-        //    List<List<Ticket>> priorities = new();
-        //    List<Ticket> priority1 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Urgent")).OrderBy(p => p.Id).ToList();
-        //    List<Ticket> priority2 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "High")).OrderBy(p => p.Id).ToList();
-        //    List<Ticket> priority3 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Medium")).OrderBy(p => p.Id).ToList();
-        //    List<Ticket> priority4 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Low")).OrderBy(p => p.Id).ToList();
-        //    priorities.Add(priority1);
-        //    priorities.Add(priority2);
-        //    priorities.Add(priority3);
-        //    priorities.Add(priority4);
+            List<Ticket> allTickets = new();
+            List<Ticket> priority1 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Urgent")).OrderBy(p => p.Id).ToList();
+            List<Ticket> priority2 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "High")).OrderBy(p => p.Id).ToList();
+            List<Ticket> priority3 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Medium")).OrderBy(p => p.Id).ToList();
+            List<Ticket> priority4 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Low")).OrderBy(p => p.Id).ToList();
+            foreach (Ticket item in priority1)
+            {
+                allTickets.Add(item);
+            }
+            foreach (Ticket item in priority1)
+            {
+                allTickets.Add(item);
+            }
+            foreach (Ticket item in priority1)
+            {
+                allTickets.Add(item);
+            }
+            foreach (Ticket item in priority1)
+            {
+                allTickets.Add(item);
+            }
 
-        //    DonutViewModel chartData = new();
-        //    chartData.labels = priorities.Select(p => p.Name).ToArray();
+            DonutViewModel chartData = new();
+            chartData.labels = allTickets.Select(p => p.Title).ToArray();
 
-        //    List<SubData> dsArray = new();
-        //    List<int> tickets = new();
-        //    List<string> colors = new();
+            List<SubData> dsArray = new();
+            List<int> tickets = new();
+            List<string> colors = new();
 
-        //    foreach (Project prj in priorities)
-        //    {
-        //        tickets.Add(prj.Tickets.Count());
+            foreach (Ticket ticket in allTickets)
+            {
+                tickets.Add(ticket.TicketPriority.Id);
 
-        //        // This code will randomly select a color for each element of the data 
-        //        Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-        //        string colorHex = string.Format("#{0:X6}", randomColor.ToArgb() & 0X00FFFFFF);
+                // This code will randomly select a color for each element of the data 
+                Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                string colorHex = string.Format("#{0:X6}", randomColor.ToArgb() & 0X00FFFFFF);
 
-        //        colors.Add(colorHex);
-        //    }
+                colors.Add(colorHex);
+            }
 
-        //    SubData temp = new()
-        //    {
-        //        data = tickets.ToArray(),
-        //        backgroundColor = colors.ToArray()
-        //    };
-        //    dsArray.Add(temp);
+            SubData temp = new()
+            {
+                data = tickets.ToArray(),
+                backgroundColor = colors.ToArray()
+            };
+            dsArray.Add(temp);
 
-        //    chartData.datasets = dsArray.ToArray();
+            chartData.datasets = dsArray.ToArray();
 
-        //    return Json(chartData);
-        //}
+            return Json(chartData);
+        }
         // CHART/DONUT STATUS
         //[HttpPost]
         //public async Task<JsonResult> DonutMethodStatus()

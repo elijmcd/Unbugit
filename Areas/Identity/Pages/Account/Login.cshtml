@@ -7,8 +7,8 @@
 }
 
 <div class="row">
-    <div class="col text-center text-info">
-        <h1 class="text-light">@ViewData["Title"]</h1>
+    <div class="col-lg-6 text-center text-info">
+        <h4 class="text-light">@ViewData["Title"]</h4>
         <section>
             <form id="account" method="post">
                 <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:100%; opacity:.8;" />
@@ -48,21 +48,18 @@
             </form>
         </section>
     </div>
-</div>
-<div class="row">
-    <div class="col text-center">
+    <div class="col-lg-6 text-center">
         <section class="text-light">
-            <p>OR</p>
-            <h4>Use a Demo Account to log in</h4>
+            <h4 class="mb-4">Demo Account</h4>
             <hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:100%; opacity:.8;" />
             <form id="account" method="post">
                 <div class="form-group">
                     <div class="row">
                         <div class="col">
-                            <button type="submit" class="btn btn-outline-secondary text-info btn-block" name="demoEmail" value="DemoAdminEmail">Admin</button>
-                            <button type="submit" class="btn btn-outline-secondary text-info btn-block" name="demoEmail" value="DemoPMEmail">Project Manager</button>
-                            <button type="submit" class="btn btn-outline-secondary text-info btn-block" name="demoEmail" value="DemoDevEmail">Developer</button>
-                            <button type="submit" class="btn btn-outline-secondary text-info btn-block" name="demoEmail" value="DemoSubEmail">Submitter</button>
+                            <button type="submit" class="btn btn-outline-secondary text-info btn-block m-2" name="demoEmail" value="DemoAdminEmail">Admin</button>
+                            <button type="submit" class="btn btn-outline-secondary text-info btn-block m-2" name="demoEmail" value="DemoPMEmail">Project Manager</button>
+                            <button type="submit" class="btn btn-outline-secondary text-info btn-block m-2" name="demoEmail" value="DemoDevEmail">Developer</button>
+                            <button type="submit" class="btn btn-outline-secondary text-info btn-block m-2" name="demoEmail" value="DemoSubEmail">Submitter</button>
                         </div>
                     </div>
                 </div>
