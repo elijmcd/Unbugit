@@ -136,7 +136,7 @@ namespace Unbugit.Controllers
             return Json(chartData);
         }
         // CHART/DONUT PRIORITY
-        [HttpPost]
+        //[HttpPost]
         //public async Task<JsonResult> DonutMethodPriority()
         //{
         //    int companyId = User.Identity.GetCompanyId().Value;
@@ -182,7 +182,7 @@ namespace Unbugit.Controllers
         //    return Json(chartData);
         //}
         // CHART/DONUT STATUS
-        [HttpPost]
+        //[HttpPost]
         //public async Task<JsonResult> DonutMethodStatus()
         //{
         //    int companyId = User.Identity.GetCompanyId().Value;
@@ -220,7 +220,7 @@ namespace Unbugit.Controllers
         //    return Json(chartData);
         //}
         // CHART/DONUT TYPE
-        [HttpPost]
+        //[HttpPost]
         //public async Task<JsonResult> DonutMethodType()
         //{
         //    int companyId = User.Identity.GetCompanyId().Value;
