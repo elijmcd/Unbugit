@@ -333,6 +333,7 @@ namespace Unbugit.Controllers
                 Ticket oldTicket = await _context.Ticket.Include(t => t.TicketPriority)
                                                         .Include(t => t.TicketStatus)
                                                         .Include(t => t.TicketType)
+                                                        .Include(t => t.Comments)
                                                         .Include(t => t.Attachments)
                                                         .Include(t => t.Project)
                                                         .Include(t => t.DeveloperUser)

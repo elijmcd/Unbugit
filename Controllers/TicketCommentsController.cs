@@ -72,6 +72,15 @@ namespace Unbugit.Controllers
 
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();
+
+                if (ticketComment.Ticket.DeveloperUser is not null)
+                {
+                    Notification notification = new()
+                    {
+                        TicketId = ticketComment.TicketId
+
+                    };
+                }
                 return RedirectToAction("Details", "Tickets", new {id = ticketComment.TicketId });
             }
             ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description", ticketComment.TicketId);

@@ -405,7 +405,7 @@
                             <li class="nav-link-icon">
                                 <a asp-action="Create" asp-controller="Tickets">
                                     <span class="nav-link-icon">
-                                        <i style="color:#FF00FF;" data-feather="plus-square"></i>
+                                        <i style="color:#FFFF00;" data-feather="plus-square"></i>
                                     </span>
                                     <span>Add New Ticket</span>
                                 </a>
@@ -603,16 +603,16 @@
                                             @foreach (var item in notes.Where(n => n.Viewed == false).OrderByDescending(n => n.Created))
                                             {
                                                 <li class="px-4 py-2 list-group-item">
-                                                    <a href="#" class="d-flex align-items-center hide-show-toggler">
+                                                    <a class="d-flex align-items-center hide-show-toggler" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Ticket.Id">
                                                         <div class="flex-shrink-0">
                                                             <figure class="avatar mr-3">
                                                                 @if (item.Title == "New Ticket")
                                                                 {
-                                                                    <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Ticket.Id">
-                                                                        <i class="avatar-title bg-secondary-bright text-success rounded-circle">
+                                                                    @*<a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Ticket.Id">*@
+                                                                        <span class="avatar-title bg-secondary-bright text-success rounded-circle">
                                                                             <i class="ti-receipt"></i>
-                                                                        </i>
-                                                                    </a>
+                                                                        </span>
+                                                                    @*</a>*@
                                                                 }
                                                                 else if (item.Title == $"Ticket modified in {item.Ticket.Project.Name}")
                                                                 {
@@ -622,7 +622,9 @@
                                                                 }
                                                                 else if (item.Title == "A ticket assigned to you has been modified")
                                                                 {
-                                                                    <i class="avatar-title bg-secondary-bright text-warning rounded-circle ti-receipt"></i>
+                                                                        <span class="avatar-title bg-secondary-bright text-warning rounded-circle">
+                                                                            <i class="ti-receipt"></i>
+                                                                        </span>
                                                                 }
                                                             </figure>
                                                         </div>
@@ -834,7 +836,7 @@
     <script src="~/vendors/dataTable/datatables.min.js"></script>
 
     <!-- Dashboard scripts -->
-    <script src="~/js/examples/pages/dashboard.js"></script>
+    @*<script src="~/js/examples/pages/dashboard.js"></script>*@
 
     <!-- App scripts -->
     <script src="~/js/app.min.js"></script>
