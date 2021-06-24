@@ -50,7 +50,7 @@ namespace Unbugit.Controllers
             _notificationService = notificationService;
         }
 
-        // GET: Tickets
+        //GET: Tickets
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Ticket
