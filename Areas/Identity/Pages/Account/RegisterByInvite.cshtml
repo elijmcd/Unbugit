@@ -14,7 +14,7 @@
                         <p class="lead">Create an account</p>
                     </div>
                     <div class="body">
-                        <form class="form-auth-small" method="post">
+                        <form class="form-auth-small" enctype="multipart/form-data" method="post">
                             <input hidden asp-for="Input.CompanyId" />
                             <input hidden asp-for="Input.ProjectId" />
                             <div class="form-group">
