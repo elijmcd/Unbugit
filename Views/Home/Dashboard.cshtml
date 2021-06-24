@@ -108,7 +108,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-6 col-lg-3 my-2">
                         <div class="card shadow border">
                             <div class="card-body">
@@ -217,108 +217,108 @@
                         <tbody>
                             @foreach (var item in Model.Tickets)
                             {
-                            <tr>
-                                <td>
-                                    @if (item.Project.Members.Contains(btUser))
-                                    {
-                                        <a class="btn btn-outline-secondary text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                                            @item.Title
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a class="btn btn-outline-secondary text-primary" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                                            @item.Title
-                                        </a>
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.TicketPriorityId == 1)
-                                    {
-                                        <span class="badge badge-danger">@item.TicketPriority.Name</span>
-                                    }
-                                    else if (item.TicketPriorityId == 2)
-                                    {
-                                        <span class="badge badge-warning">@item.TicketPriority.Name</span>
-                                    }
-                                    else if (item.TicketPriorityId == 3)
-                                    {
-                                        <span class="badge badge-info">@item.TicketPriority.Name</span>
-                                    }
-                                    else if (item.TicketPriorityId == 4)
-                                    {
-                                        <span class="badge badge-primary">@item.TicketPriority.Name</span>
-                                    }
-                                </td>
+                                <tr>
+                                    <td>
+                                        @if (item.Project.Members.Contains(btUser))
+                                        {
+                                            <a class="btn btn-outline-secondary text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                @item.Title
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-outline-secondary text-primary" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                @item.Title
+                                            </a>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.TicketPriorityId == 1)
+                                        {
+                                            <span class="badge badge-danger">@item.TicketPriority.Name</span>
+                                        }
+                                        else if (item.TicketPriorityId == 2)
+                                        {
+                                            <span class="badge badge-warning">@item.TicketPriority.Name</span>
+                                        }
+                                        else if (item.TicketPriorityId == 3)
+                                        {
+                                            <span class="badge badge-info">@item.TicketPriority.Name</span>
+                                        }
+                                        else if (item.TicketPriorityId == 4)
+                                        {
+                                            <span class="badge badge-primary">@item.TicketPriority.Name</span>
+                                        }
+                                    </td>
 
-                                <td>
-                                    @item.Project.Name
-                                </td>
-                                <td>
-                                    @item.TicketType.Name
-                                </td>
-                                <td>
-                                    @if (item.TicketStatusId == 1)
-                                    {
-                                        <span class="text-danger">@item.TicketStatus.Name</span>
-                                    }
-                                    else if (item.TicketStatusId == 2)
-                                    {
-                                        <span class="text-warning">@item.TicketStatus.Name</span>
-                                    }
-                                    else if (item.TicketStatusId == 3)
-                                    {
-                                        <span class="text-secondary">@item.TicketStatus.Name</span>
-                                    }
-                                    else if (item.TicketStatusId == 4)
-                                    {
-                                        <span class="text-primary">@item.TicketStatus.Name</span>
-                                    }
-                                    else if (item.TicketStatusId == 5)
-                                    {
-                                        <span class="text-light">@item.TicketStatus.Name</span>
-                                    }
-                                    else if (item.TicketStatusId == 6)
-                                    {
-                                        <span class="text-muted">@item.TicketStatus.Name</span>
-                                    }
-                                </td>
+                                    <td>
+                                        @item.Project.Name
+                                    </td>
+                                    <td>
+                                        @item.TicketType.Name
+                                    </td>
+                                    <td>
+                                        @if (item.TicketStatusId == 1)
+                                        {
+                                            <span class="text-danger">@item.TicketStatus.Name</span>
+                                        }
+                                        else if (item.TicketStatusId == 2)
+                                        {
+                                            <span class="text-warning">@item.TicketStatus.Name</span>
+                                        }
+                                        else if (item.TicketStatusId == 3)
+                                        {
+                                            <span class="text-secondary">@item.TicketStatus.Name</span>
+                                        }
+                                        else if (item.TicketStatusId == 4)
+                                        {
+                                            <span class="text-primary">@item.TicketStatus.Name</span>
+                                        }
+                                        else if (item.TicketStatusId == 5)
+                                        {
+                                            <span class="text-light">@item.TicketStatus.Name</span>
+                                        }
+                                        else if (item.TicketStatusId == 6)
+                                        {
+                                            <span class="text-muted">@item.TicketStatus.Name</span>
+                                        }
+                                    </td>
 
-                                <td>
-                                    @item.Description
-                                </td>
-                                <td>
-                                    @if (item.Updated is not null)
-                                    {
-                                        @item.Updated?.ToString("d")
-                                    }
-                                    else
-                                    {
-                                        @item.Created.ToString("d")
-                                    }
-                                </td>
-                                @*<td>
-            @item.OwnerUser?.FullName
-        </td>*@
-                                <td>
-                                    @if (item.DeveloperUser is not null)
-                                    {
-                                        <figure class="avatar avatar-sm mr-3 bring-forward">
-                                            <img src="@FileService.ConvertByteArrayToFile(item.DeveloperUser.AvatarFileData, item.DeveloperUser.AvatarContentType)" title="@item.DeveloperUser.FullName" alt="@item.DeveloperUser.FullName" class="rounded-circle">
-                                        </figure>
-                                    }
-                                </td>
-                                @*<td>*@
-                                @*{
-            <a class="badge bg-danger-bright" asp-action="Delete" asp-controller="Tickets" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
-        }
-        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (item.Project.Members.Contains(btUser)) || (User.IsInRole("Developer") && (item.Project.Members.Contains(btUser))))
-        {
-            <a class="badge bg-warning-bright" asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
-        }
-        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">Details</a>*@
-                                @*</td>*@
-                            </tr>
+                                    <td>
+                                        @item.Description
+                                    </td>
+                                    <td>
+                                        @if (item.Updated is not null)
+                                        {
+                                            @item.Updated?.ToString("d")
+                                        }
+                                        else
+                                        {
+                                            @item.Created.ToString("d")
+                                        }
+                                    </td>
+                                    @*<td>
+                                            @item.OwnerUser?.FullName
+                                        </td>*@
+                                    <td>
+                                        @if (item.DeveloperUser is not null)
+                                        {
+                                            <figure class="avatar avatar-sm mr-3 bring-forward">
+                                                <img src="@FileService.ConvertByteArrayToFile(item.DeveloperUser.AvatarFileData, item.DeveloperUser.AvatarContentType)" title="@item.DeveloperUser.FullName" alt="@item.DeveloperUser.FullName" class="rounded-circle">
+                                            </figure>
+                                        }
+                                    </td>
+                                    @*<td>*@
+                                    @*{
+                                            <a class="badge bg-danger-bright" asp-action="Delete" asp-controller="Tickets" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
+                                        }
+                                        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (item.Project.Members.Contains(btUser)) || (User.IsInRole("Developer") && (item.Project.Members.Contains(btUser))))
+                                        {
+                                            <a class="badge bg-warning-bright" asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
+                                        }
+                                        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">Details</a>*@
+                                    @*</td>*@
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -1142,237 +1142,237 @@
         </div>
         <!-- ./ Content wrapper -->
     </div>
+</div>
 
+@section Scripts {
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            $.ajax({
+                type: "POST",
+                url: "/Home/PieChartMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var data = google.visualization.arrayToDataTable(result);
 
-    @section Scripts {
-        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-        <script type="text/javascript">
-            google.load("visualization", "1", { packages: ["corechart"] });
-            google.setOnLoadCallback(drawChart);
-            function drawChart() {
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/PieChartMethod",
-                    data: '{}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        var data = google.visualization.arrayToDataTable(result);
+                    //Pie
+                    var options = {
+                        title: 'Company Ticket Distribution',
+                        //is3D: true
+                    };
+                    var chart = new google.visualization.PieChart($("#chart1")[0]);
+                    chart.draw(data, options);
+                },
+                failure: function (result) {
+                    alert(result.d);
+                },
+                error: function (result) {
+                    alert(result.d);
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            $.ajax({
+                type: "POST",
+                url: "/Home/PieChartMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var data = google.visualization.arrayToDataTable(result);
 
-                        //Pie
-                        var options = {
-                            title: 'Company Ticket Distribution',
-                            //is3D: true
-                        };
-                        var chart = new google.visualization.PieChart($("#chart1")[0]);
-                        chart.draw(data, options);
-                    },
-                    failure: function (result) {
-                        alert(result.d);
-                    },
-                    error: function (result) {
-                        alert(result.d);
-                    }
-                });
+                    //3D Pie
+                    var options = {
+                        title: 'Company Ticket Distribution',
+                        is3D: true
+                    };
+                    var chart = new google.visualization.PieChart($("#chart3D")[0]);
+                    chart.draw(data, options);
+                },
+                failure: function (rresult) {
+                    alert(result.d);
+                },
+                error: function (result) {
+                    alert(result.d);
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            $.ajax({
+                type: "POST",
+                url: "/Home/PieChartMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var data = google.visualization.arrayToDataTable(result);
+
+                    //Donut
+                    var options = {
+                        title: 'Company Ticket Distribution',
+                        pieHole: 0.5
+                    };
+                    var chart = new google.visualization.PieChart($("#donut")[0]);
+                    chart.draw(data, options);
+                },
+                failure: function (rresult) {
+                    alert(result.d);
+                },
+                error: function (result) {
+                    alert(result.d);
+                }
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        $.ajax({
+            type: "POST",
+            url: "/Home/DonutMethod",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                //Donut
+                var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+                var donutData = result
+
+                var donutOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                new Chart(donutChartCanvas, {
+                    type: 'pie',
+                    data: donutData,
+                    options: donutOptions
+                })
+            },
+            failure: function (result) {
+                alert(result.d);
+            },
+            error: function (result) {
+                alert(result.d);
             }
-        </script>
-        <script type="text/javascript">
-            google.load("visualization", "1", { packages: ["corechart"] });
-            google.setOnLoadCallback(drawChart);
-            function drawChart() {
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/PieChartMethod",
-                    data: '{}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        var data = google.visualization.arrayToDataTable(result);
+        });
 
-                        //3D Pie
-                        var options = {
-                            title: 'Company Ticket Distribution',
-                            is3D: true
-                        };
-                        var chart = new google.visualization.PieChart($("#chart3D")[0]);
-                        chart.draw(data, options);
-                    },
-                    failure: function (rresult) {
-                        alert(result.d);
-                    },
-                    error: function (result) {
-                        alert(result.d);
-                    }
-                });
+    </script>
+    <script type="text/javascript">
+        $.ajax({
+            type: "POST",
+            url: "/Home/DonutMethodStatus",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                //Donut
+                var donutChartCanvas = $('#donutChartStatus').get(0).getContext('2d')
+                var donutData = result
+
+                var donutOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                new Chart(donutChartCanvas, {
+                    type: 'doughnut',
+                    data: donutData,
+                    options: donutOptions
+                })
+            },
+            failure: function (result) {
+                alert(result.d);
+            },
+            error: function (result) {
+                alert(result.d);
             }
-        </script>
-        <script type="text/javascript">
-            google.load("visualization", "1", { packages: ["corechart"] });
-            google.setOnLoadCallback(drawChart);
-            function drawChart() {
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/PieChartMethod",
-                    data: '{}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        var data = google.visualization.arrayToDataTable(result);
+        });
 
-                        //Donut
-                        var options = {
-                            title: 'Company Ticket Distribution',
-                            pieHole: 0.5
-                        };
-                        var chart = new google.visualization.PieChart($("#donut")[0]);
-                        chart.draw(data, options);
-                    },
-                    failure: function (rresult) {
-                        alert(result.d);
-                    },
-                    error: function (result) {
-                        alert(result.d);
-                    }
-                });
+    </script>
+    <script type="text/javascript">
+        $.ajax({
+            type: "POST",
+            url: "/Home/DonutMethodType",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                //Donut
+                var donutChartCanvas = $('#donutChartType').get(0).getContext('2d')
+                var donutData = result
+
+                var donutOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                new Chart(donutChartCanvas, {
+                    type: 'doughnut',
+                    data: donutData,
+                    options: donutOptions
+                })
+            },
+            failure: function (result) {
+                alert(result.d);
+            },
+            error: function (result) {
+                alert(result.d);
             }
-        </script>
+        });
 
-        <script type="text/javascript">
-            $.ajax({
-                type: "POST",
-                url: "/Home/DonutMethod",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    //Donut
-                    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
-                    var donutData = result
+    </script>
+    <script type="text/javascript">
+        $.ajax({
+            type: "POST",
+            url: "/Home/DonutMethodPriority",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                //Donut
+                var donutChartCanvas = $('#donutChartPriority').get(0).getContext('2d')
+                var donutData = result
 
-                    var donutOptions = {
-                        maintainAspectRatio: false,
-                        responsive: true,
-                    }
-                    //Create pie or douhnut chart
-                    // You can switch between pie and douhnut using the method below.
-                    new Chart(donutChartCanvas, {
-                        type: 'pie',
-                        data: donutData,
-                        options: donutOptions
-                    })
-                },
-                failure: function (result) {
-                    alert(result.d);
-                },
-                error: function (result) {
-                    alert(result.d);
+                var donutOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
                 }
-            });
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                new Chart(donutChartCanvas, {
+                    type: 'doughnut',
+                    data: donutData,
+                    options: donutOptions
+                })
+            },
+            failure: function (result) {
+                alert(result.d);
+            },
+            error: function (result) {
+                alert(result.d);
+            }
+        });
 
-        </script>
-        <script type="text/javascript">
-            $.ajax({
-                type: "POST",
-                url: "/Home/DonutMethodStatus",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    //Donut
-                    var donutChartCanvas = $('#donutChartStatus').get(0).getContext('2d')
-                    var donutData = result
+    </script>
 
-                    var donutOptions = {
-                        maintainAspectRatio: false,
-                        responsive: true,
-                    }
-                    //Create pie or douhnut chart
-                    // You can switch between pie and douhnut using the method below.
-                    new Chart(donutChartCanvas, {
-                        type: 'doughnut',
-                        data: donutData,
-                        options: donutOptions
-                    })
-                },
-                failure: function (result) {
-                    alert(result.d);
-                },
-                error: function (result) {
-                    alert(result.d);
-                }
-            });
-
-        </script>
-        <script type="text/javascript">
-            $.ajax({
-                type: "POST",
-                url: "/Home/DonutMethodType",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    //Donut
-                    var donutChartCanvas = $('#donutChartType').get(0).getContext('2d')
-                    var donutData = result
-
-                    var donutOptions = {
-                        maintainAspectRatio: false,
-                        responsive: true,
-                    }
-                    //Create pie or douhnut chart
-                    // You can switch between pie and douhnut using the method below.
-                    new Chart(donutChartCanvas, {
-                        type: 'doughnut',
-                        data: donutData,
-                        options: donutOptions
-                    })
-                },
-                failure: function (result) {
-                    alert(result.d);
-                },
-                error: function (result) {
-                    alert(result.d);
-                }
-            });
-
-        </script>
-        <script type="text/javascript">
-            $.ajax({
-                type: "POST",
-                url: "/Home/DonutMethodPriority",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    //Donut
-                    var donutChartCanvas = $('#donutChartPriority').get(0).getContext('2d')
-                    var donutData = result
-
-                    var donutOptions = {
-                        maintainAspectRatio: false,
-                        responsive: true,
-                    }
-                    //Create pie or douhnut chart
-                    // You can switch between pie and douhnut using the method below.
-                    new Chart(donutChartCanvas, {
-                        type: 'doughnut',
-                        data: donutData,
-                        options: donutOptions
-                    })
-                },
-                failure: function (result) {
-                    alert(result.d);
-                },
-                error: function (result) {
-                    alert(result.d);
-                }
-            });
-
-        </script>
-
-        <script>
-            $(document).ready(function () {
-                $('#myTable').DataTable();
-            });
-        </script>
-    }
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+}
