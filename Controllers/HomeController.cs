@@ -25,8 +25,15 @@ namespace Unbugit.Controllers
         private readonly IBTCompanyInfoService _companyInfoService;
         private readonly IBTRoleService _roleService;
         private readonly UserManager<BTUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, IBTProjectService projectService, IBTTicketService ticketService, IBTCompanyInfoService companyInfoService, IBTRoleService roleService, UserManager<BTUser> userManager)
+        public HomeController(ILogger<HomeController> logger, 
+            IBTProjectService projectService, 
+            IBTTicketService ticketService, 
+            IBTCompanyInfoService companyInfoService, 
+            IBTRoleService roleService, 
+            UserManager<BTUser> userManager,
+            ApplicationDbContext applicationDbContext)
         {
             _logger = logger;
             _projectService = projectService;
@@ -34,6 +41,7 @@ namespace Unbugit.Controllers
             _companyInfoService = companyInfoService;
             _roleService = roleService;
             _userManager = userManager;
+            _context = applicationDbContext;
         }
 
         public IActionResult Index()
@@ -142,38 +150,20 @@ namespace Unbugit.Controllers
             int companyId = User.Identity.GetCompanyId().Value;
             Random rnd = new();
 
-            List<Ticket> allTickets = new();
-            List<Ticket> priority1 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Urgent")).OrderBy(p => p.Id).ToList();
-            List<Ticket> priority2 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "High")).OrderBy(p => p.Id).ToList();
-            List<Ticket> priority3 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Medium")).OrderBy(p => p.Id).ToList();
-            List<Ticket> priority4 = (await _ticketService.GetAllTicketsByPriorityAsync((companyId), "Low")).OrderBy(p => p.Id).ToList();
-            foreach (Ticket item in priority1)
-            {
-                allTickets.Add(item);
-            }
-            foreach (Ticket item in priority1)
-            {
-                allTickets.Add(item);
-            }
-            foreach (Ticket item in priority1)
-            {
-                allTickets.Add(item);
-            }
-            foreach (Ticket item in priority1)
-            {
-                allTickets.Add(item);
-            }
+            List<TicketPriority> priorities = _context.TicketPriority.ToList();
+            List<Ticket> allTickets = (await _companyInfoService.GetAllTicketsAsync(companyId)).OrderBy(t=>t.TicketPriorityId).ToList();
 
             DonutViewModel chartData = new();
-            chartData.labels = allTickets.Select(p => p.Title).ToArray();
+            chartData.labels = priorities.Select(p => p.Name).ToArray();
+
 
             List<SubData> dsArray = new();
-            List<int> tickets = new();
+            List<int> pTickets = new();
             List<string> colors = new();
 
-            foreach (Ticket ticket in allTickets)
-            {
-                tickets.Add(ticket.TicketPriority.Id);
+            foreach (TicketPriority priority in priorities)
+            {   
+                pTickets.Add(allTickets.Where(t=>t.TicketPriorityId == priority.Id).Count());
 
                 // This code will randomly select a color for each element of the data 
                 Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
@@ -184,7 +174,7 @@ namespace Unbugit.Controllers
 
             SubData temp = new()
             {
-                data = tickets.ToArray(),
+                data = pTickets.ToArray(),
                 backgroundColor = colors.ToArray()
             };
             dsArray.Add(temp);
@@ -193,82 +183,86 @@ namespace Unbugit.Controllers
 
             return Json(chartData);
         }
-        // CHART/DONUT STATUS
-        //[HttpPost]
-        //public async Task<JsonResult> DonutMethodStatus()
-        //{
-        //    int companyId = User.Identity.GetCompanyId().Value;
-        //    Random rnd = new();
 
-        //    List<Project> projects = (await _projectService.GetAllProjectsByCompany(companyId)).OrderBy(p => p.Id).ToList();
+        [HttpPost]
+        public async Task<JsonResult> DonutMethodType()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+            Random rnd = new();
 
-        //    DonutViewModel chartData = new();
-        //    chartData.labels = projects.Select(p => p.Name).ToArray();
+            List<TicketType> types = _context.TicketType.ToList();
+            List<Ticket> allTickets = (await _companyInfoService.GetAllTicketsAsync(companyId)).OrderBy(t=>t.TicketPriorityId).ToList();
 
-        //    List<SubData> dsArray = new();
-        //    List<int> tickets = new();
-        //    List<string> colors = new();
+            DonutViewModel chartData = new();
+            chartData.labels = types.Select(p => p.Name).ToArray();
 
-        //    foreach (Project prj in projects)
-        //    {
-        //        tickets.Add(prj.Tickets.Count());
 
-        //        // This code will randomly select a color for each element of the data 
-        //        Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-        //        string colorHex = string.Format("#{0:X6}", randomColor.ToArgb() & 0X00FFFFFF);
+            List<SubData> dsArray = new();
+            List<int> tTickets = new();
+            List<string> colors = new();
 
-        //        colors.Add(colorHex);
-        //    }
+            foreach (TicketType type in types)
+            {   
+                tTickets.Add(allTickets.Where(t=>t.TicketTypeId == type.Id).Count());
 
-        //    SubData temp = new()
-        //    {
-        //        data = tickets.ToArray(),
-        //        backgroundColor = colors.ToArray()
-        //    };
-        //    dsArray.Add(temp);
+                // This code will randomly select a color for each element of the data 
+                Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                string colorHex = string.Format("#{0:X6}", randomColor.ToArgb() & 0X00FFFFFF);
 
-        //    chartData.datasets = dsArray.ToArray();
+                colors.Add(colorHex);
+            }
 
-        //    return Json(chartData);
-        //}
-        // CHART/DONUT TYPE
-        //[HttpPost]
-        //public async Task<JsonResult> DonutMethodType()
-        //{
-        //    int companyId = User.Identity.GetCompanyId().Value;
-        //    Random rnd = new();
+            SubData temp = new()
+            {
+                data = tTickets.ToArray(),
+                backgroundColor = colors.ToArray()
+            };
+            dsArray.Add(temp);
 
-        //    List<Project> projects = (await _projectService.GetAllProjectsByCompany(companyId)).OrderBy(p => p.Id).ToList();
+            chartData.datasets = dsArray.ToArray();
 
-        //    DonutViewModel chartData = new();
-        //    chartData.labels = projects.Select(p => p.Name).ToArray();
+            return Json(chartData);
+        }
 
-        //    List<SubData> dsArray = new();
-        //    List<int> tickets = new();
-        //    List<string> colors = new();
+        [HttpPost]
+        public async Task<JsonResult> DonutMethodStatus()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+            Random rnd = new();
 
-        //    foreach (Project prj in projects)
-        //    {
-        //        tickets.Add(prj.Tickets.Count());
+            List<TicketStatus> statuses = _context.TicketStatus.ToList();
+            List<Ticket> allTickets = (await _companyInfoService.GetAllTicketsAsync(companyId)).OrderBy(t=>t.TicketPriorityId).ToList();
 
-        //        // This code will randomly select a color for each element of the data 
-        //        Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-        //        string colorHex = string.Format("#{0:X6}", randomColor.ToArgb() & 0X00FFFFFF);
+            DonutViewModel chartData = new();
+            chartData.labels = statuses.Select(p => p.Name).ToArray();
 
-        //        colors.Add(colorHex);
-        //    }
 
-        //    SubData temp = new()
-        //    {
-        //        data = tickets.ToArray(),
-        //        backgroundColor = colors.ToArray()
-        //    };
-        //    dsArray.Add(temp);
+            List<SubData> dsArray = new();
+            List<int> sTickets = new();
+            List<string> colors = new();
 
-        //    chartData.datasets = dsArray.ToArray();
+            foreach (TicketStatus status in statuses)
+            {   
+                sTickets.Add(allTickets.Where(t=>t.TicketPriorityId == status.Id).Count());
 
-        //    return Json(chartData);
-        //}
+                // This code will randomly select a color for each element of the data 
+                Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                string colorHex = string.Format("#{0:X6}", randomColor.ToArgb() & 0X00FFFFFF);
+
+                colors.Add(colorHex);
+            }
+
+            SubData temp = new()
+            {
+                data = sTickets.ToArray(),
+                backgroundColor = colors.ToArray()
+            };
+            dsArray.Add(temp);
+
+            chartData.datasets = dsArray.ToArray();
+
+            return Json(chartData);
+        }
 
     }
 }

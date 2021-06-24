@@ -39,30 +39,30 @@
                     <div class="col-md-6 col-lg-3 my-2">
                         <div class="card shadow border">
                             <div class="card-body">
-                                <h6 class="card-title">@company Projects</h6>
+                                <p class="card-title">@company Projects</p>
                                 <div class="d-flex align-items-center mb-3">
                                     <div>
                                         <div class="avatar">
                                             <a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId">
                                                 <span class="avatar-title bg-primary-bright rounded-pill text-primary">
-                                                    <i class="fa fa- fa-tasks border-success"></i>
+                                                    <small class="fa fa-tasks border-success"></small>
                                                 </span>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="font-weight-bold ml-1 font-size-30 ml-3">@companyProjects.Count</div>
-                                </div>
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <p class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">See all projects</a> in your company.</p>
+                                    <small class="mb-0 pull-right"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">See all projects</a></small>
 
                                 }
                                 @if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
                                 {
-                                    <p class="mb-0"><a asp-action="MyProjects" asp-controller="Projects" asp-route-id="@btUser.Id" class="badge badge-primary bg-primary-bright"> My Projects</a></p>
-                                    <p class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">See all projects</a> in your company.</p>
+                                    <small class="mb-0 pull-right"><a asp-action="MyProjects" asp-controller="Projects" asp-route-id="@btUser.Id" class="badge badge-primary bg-primary-bright"> My Projects</a></small>
+                                    <small class="mb-0 pull-right"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">See all projects</a></small>
 
                                 }
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1235,7 +1235,7 @@
         <script type="text/javascript">
             $.ajax({
                 type: "POST",
-                url: "/Home/DonutMethod",
+                url: "/Home/DonutMethodStatus",
                 data: '{}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -1268,7 +1268,7 @@
         <script type="text/javascript">
             $.ajax({
                 type: "POST",
-                url: "/Home/DonutMethod",
+                url: "/Home/DonutMethodType",
                 data: '{}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
