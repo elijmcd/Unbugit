@@ -1,4 +1,5 @@
 ﻿@model Unbugit.Models.ViewModels.DashboardViewModel
+
 @using Unbugit.Services.Interfaces
 @using Microsoft.AspNetCore.Identity
 @using Unbugit.Extensions
@@ -10,8 +11,9 @@
 @inject UserManager<BTUser> UserManager
 
 @{ int companyId = User.Identity.GetCompanyId().Value;
-    int companyTickets = (CompanyInfoService.GetAllTicketsAsync(companyId)).Result.Count;
     var company = (CompanyInfoService.GetCompanyInfoByIdAsync(companyId)).Result.Name;
+    int companyTickets = (CompanyInfoService.GetAllTicketsAsync(companyId)).Result.Count;
+    int openTickets = CompanyInfoService.GetAllTicketsAsync(companyId).Result.Where(t => t.TicketStatusId != 1 && t.TicketStatusId != 2).Count();
     List<Project> companyProjects = await CompanyInfoService.GetAllProjectsAsync(companyId);
     BTUser btUser = await UserManager.GetUserAsync(User);
     int archivedTickets = TicketService.GetArchivedTicketsByCompanyAsync(companyId).Result.Count;
@@ -38,81 +40,62 @@
                 <div class="row m-2">
                     <div class="col-md-6 col-lg-3 my-2">
                         <div class="card shadow border">
-                            <div class="card-body">
-                                <p class="card-title">@company Projects</p>
+                            <div class="card-body bg-primary-gradient">
+                                <p class="card-title">Company Projects</p>
                                 <div class="d-flex align-items-center mb-3">
                                     <div>
                                         <div class="avatar">
                                             <a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId">
-                                                <span class="avatar-title bg-primary-bright rounded-pill text-primary">
+                                                <span class="avatar-title bg-primary rounded-pill">
                                                     <small class="fa fa-tasks border-success"></small>
                                                 </span>
                                             </a>
                                         </div>
                                     </div>
                                     <div class="font-weight-bold ml-1 font-size-30 ml-3">@companyProjects.Count</div>
+                                </div>
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <small class="mb-0 pull-right"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">See all projects</a></small>
+                                    <small class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary">View All Projects</a></small>
 
                                 }
                                 @if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
                                 {
-                                    <small class="mb-0 pull-right"><a asp-action="MyProjects" asp-controller="Projects" asp-route-id="@btUser.Id" class="badge badge-primary bg-primary-bright"> My Projects</a></small>
-                                    <small class="mb-0 pull-right"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">See all projects</a></small>
-
+                                    <small class="mb-0"><a asp-action="MyProjects" asp-controller="Projects" asp-route-id="@btUser.Id" class="badge badge-primary bg-primary-bright">View My Projects</a></small>
+                                    <small class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">View All Projects</a></small>
                                 }
-                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3 my-2">
                         <div class="card shadow border">
-                            <div class="card-body">
-                                <h6 class="card-title">Open Tickets</h6>
+                            <div class="card-body bg-secondary-gradient">
+                                <p class="card-title">Open Tickets</p>
                                 <div class="d-flex align-items-center mb-3">
                                     <div>
                                         <div class="avatar">
                                             <a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId">
-                                                <span class="avatar-title bg-secondary-bright text-secondary rounded-pill">
-                                                    <i class="ti-map"></i>
+                                                <span class="avatar-title bg-secondary text-dark rounded-pill">
+                                                    <i class="ti-ticket"></i>
                                                 </span>
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="font-weight-bold ml-1 font-size-30 ml-3">@companyTickets</div>
+                                    <div class="font-weight-bold ml-1 font-size-30 ml-3">@openTickets</div>
                                 </div>
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-secondary-bright">See All Tickets</a> in your company.</p>
+                                    <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary">View All Tickets</a></p>
 
                                 }
                                 else if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
                                 {
-                                    <p class="mb-0"><a asp-action="MyTickets" asp-controller="Tickets" asp-route-id="@btUser.Id" class="badge badge-secondary">My Tickets</a></p>
-                                    <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-secondary-bright">See All Tickets</a> in your company.</p>
-
+                                    <p class="mb-0"><a asp-action="MyTickets" asp-controller="Tickets" asp-route-id="@btUser.Id" class="badge badge-secondary">View My Tickets</a></p>
+                                    <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-secondary-bright">View All Tickets</a></p>
                                 }
-
                             </div>
                         </div>
                     </div>
-                    <!--<section class="content">
-                    <div class="container-fluid">
-                            <div class="col-md-6 col-lg-3 my-2">-->
-                    <!-- DONUT CHART -->
-                    <!--<div class="card shadow border">
-                                        <div class="card-header">
-                                            <h3 class="card-title pt-1">Tickets by Type</h3>
-                                        </div>
-                                        <div class="card-body">
-                                            <canvas id="donutChart">
-                                            </canvas>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>-->
                     <div class="col-md-6 col-lg-3 my-2">
                         <div class="card shadow border">
                             <div class="card-header">
@@ -126,21 +109,23 @@
                     </div>
                     <div class="col-md-6 col-lg-3 my-2">
                         <div class="card shadow border">
-                            <div class="card-body">
-                                <h6 class="card-title">Archived Tickets</h6>
+                            <div class="card-body bg-danger">
+                                <p class="card-title">Archived Tickets</p>
                                 <div class="d-flex align-items-center mb-3">
                                     <div>
                                         <div class="avatar">
-                                            <span class="avatar-title bg-danger-bright text-danger rounded-pill">
+                                            <span class="avatar-title bg-danger-gradient text-dark rounded-pill">
                                                 <i class="ti-archive"></i>
                                             </span>
                                         </div>
                                     </div>
                                     <div class="font-weight-bold ml-1 font-size-30 ml-3">@archivedTickets</div>
                                 </div>
-                                <p class="mb-0">
-                                    <a class="link-1 text-danger" href="#">View Archived Tickets</a>
-                                </p>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-danger-gradient">View the Archive</a></p>
+
+                                }
                             </div>
                         </div>
                     </div>
@@ -226,7 +211,6 @@
                                 <th>
                                     Developer
                                 </th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -234,7 +218,7 @@
                             {
                                 <tr>
                                     <td>
-                                        <a class="text-secondary" asp-action="Details" asp-controller="Tickets">
+                                        <a class="btn btn-outline-secondary text-secondary" asp-action="Details" asp-controller="Tickets">
                                             @item.Title
                                         </a>
                                     </td>
@@ -269,17 +253,16 @@
                                     <td>
                                         @item.DeveloperUser?.FullName
                                     </td>
-                                    <td>
-                                        @if (User.IsInRole("Admin"))
-                                        {
-                                            <a class="badge bg-danger-bright" asp-action="Delete" asp-controller="Tickets" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
-                                        }
-                                        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (item.Project.Members.Contains(btUser)) || (User.IsInRole("Developer") && (item.Project.Members.Contains(btUser))))
-                                        {
-                                            <a class="badge bg-warning-bright" asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
-                                        }
-                                        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">Details</a>
-                                    </td>
+                                    @*<td>*@
+                                        @*{
+                                                <a class="badge bg-danger-bright" asp-action="Delete" asp-controller="Tickets" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
+                                            }
+                                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (item.Project.Members.Contains(btUser)) || (User.IsInRole("Developer") && (item.Project.Members.Contains(btUser))))
+                                            {
+                                                <a class="badge bg-warning-bright" asp-action="Edit" asp-controller="Tickets" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
+                                            }
+                                            <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">Details</a>*@
+                                    @*</td>*@
                                 </tr>
                             }
                         </tbody>
