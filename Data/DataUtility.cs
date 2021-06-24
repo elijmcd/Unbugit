@@ -535,7 +535,7 @@ namespace Unbugit.Services
                 FirstName = "Admin",
                 LastName = "Demo",
                 EmailConfirmed = true,
-                CompanyId = company1Id
+                CompanyId = company2Id
             };
             try
             {

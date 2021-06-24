@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Identity;
 using Unbugit.Services.Interfaces;
 using Unbugit.Models.ViewModels;
 using Unbugit.Extensions;
-using Microsoft.AspNetCore.DataProtection;
 
 namespace Unbugit.Controllers
 {
