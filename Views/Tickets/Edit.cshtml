@@ -1,8 +1,6 @@
 ﻿@model Unbugit.Models.Ticket
 
-@using Unbugit.Services.Interfaces
 @using Microsoft.AspNetCore.Identity
-@using Unbugit.Extensions
 
 @inject UserManager<BTUser> UserManager
 
@@ -26,6 +24,7 @@
                     <input type="hidden" asp-for="Updated" />
                     <input type="hidden" asp-for="Created" />
                     <input type="hidden" asp-for="ArchivedDate" />
+                    <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
 
                     <div class="form-group">
                         <label asp-for="Title" class="control-label"></label>

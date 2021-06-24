@@ -305,7 +305,7 @@ namespace Unbugit.Controllers
             ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Name", ticket.TicketStatusId);
             ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Name", ticket.TicketTypeId);
 
-
+            ViewBag.returnUrl = Request.Headers["Referer"].ToString();
             return View(ticket);
         }
 
@@ -314,7 +314,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,ArchivedDate,Archived,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Edit(int id, string returnUrl, [Bind("Id,Title,Description,Created,Updated,ArchivedDate,Archived,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
         {
             if (id != ticket.Id)
             {
@@ -412,7 +412,7 @@ namespace Unbugit.Controllers
 
                 await _historyService.AddHistoryAsync(oldTicket, newTicket, currentUser.Id);
 
-                return RedirectToAction("MyTickets", "Tickets");
+                return Redirect(returnUrl);
             }
             ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
             ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
