@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Unbugit.Data;
 using Unbugit.Models;
+using Unbugit.Services.Interfaces;
 
 namespace Unbugit.Controllers
 {
@@ -15,11 +16,13 @@ namespace Unbugit.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IBTTicketService _ticketService;
 
-        public TicketCommentsController(ApplicationDbContext context, UserManager<BTUser> userManager)
+        public TicketCommentsController(ApplicationDbContext context, UserManager<BTUser> userManager, IBTTicketService ticketService)
         {
             _context = context;
             _userManager = userManager;
+            _ticketService = ticketService;
         }
 
         // GET: TicketComments
@@ -69,9 +72,12 @@ namespace Unbugit.Controllers
                 // created datetime
                 ticketComment.UserId = _userManager.GetUserId(User);
                 ticketComment.Created = DateTimeOffset.Now;
+                ticketComment.Ticket = (_ticketService.GetTicketByIdAsync(ticketComment.TicketId)).Result;
 
                 _context.Add(ticketComment);
                 await _context.SaveChangesAsync();
+
+                
 
                 if (ticketComment.Ticket.DeveloperUser is not null)
                 {

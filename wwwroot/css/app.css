@@ -9941,4 +9941,8 @@ small {
     body.dark.chat-app .chat-block .chat-content {
         background-color: #202124;
     }
+
+    body > div.layout-wrapper > section > div > div > div.text-center > footer {
+        margin-left:30px !important;
+    }
 }

@@ -441,5 +441,17 @@ namespace Unbugit.Services
 
         }// --
 
+        public async Task<Ticket> GetTicketByIdAsync(int ticketId)
+        {
+            try
+            {
+                return (await _context.Ticket.FirstOrDefaultAsync(t => t.Id == ticketId));
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
     }
 }
