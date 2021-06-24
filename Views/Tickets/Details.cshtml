@@ -34,12 +34,12 @@
                         @Model.Project.Name
                     </h6>
                     @if (
-                (User.IsInRole("Admin")) ||
-                (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
-                (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
-                (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
-                (Model.OwnerUser == currentUser)
-                )
+               (User.IsInRole("Admin")) ||
+               (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+               (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
+               (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+               (Model.OwnerUser == currentUser)
+               )
                     {
                         <h5 class="text-center bg-secondary-bright text-secondary py-3">
                             @Model.Title
@@ -79,12 +79,24 @@
                         <span class="text-light">Developer:</span>
                         @if (Model.DeveloperUser is not null)
                         {
-                            <a class="text-light" asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id">
-                                <figure class="avatar avatar-sm mr-3 bring-forward">
-                                    <img src="@BTFileService.ConvertByteArrayToFile(Model.DeveloperUser.AvatarFileData, Model.DeveloperUser.AvatarContentType)" title="@Model.DeveloperUser.FullName" alt="@Model.DeveloperUser.FullName" class="rounded-circle">
-                                </figure>
-                                <span class="badge badge-primary text-light">@Model.DeveloperUser.FullName</span>
-                            </a>
+                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && Model.Project.Members.Contains(currentUser))
+                            {
+                                <a class="text-light" asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id">
+                                    <figure class="avatar avatar-sm mr-3 bring-forward">
+                                        <img src="@BTFileService.ConvertByteArrayToFile(Model.DeveloperUser.AvatarFileData, Model.DeveloperUser.AvatarContentType)" title="@Model.DeveloperUser.FullName" alt="@Model.DeveloperUser.FullName" class="rounded-circle">
+                                    </figure>
+                                    <span class="badge badge-primary text-light">@Model.DeveloperUser.FullName</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="text-light" asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id">
+                                    <figure class="avatar avatar-sm mr-3 bring-forward">
+                                        <img src="@BTFileService.ConvertByteArrayToFile(Model.DeveloperUser.AvatarFileData, Model.DeveloperUser.AvatarContentType)" title="@Model.DeveloperUser.FullName" alt="@Model.DeveloperUser.FullName" class="rounded-circle">
+                                    </figure>
+                                    <span class="badge badge-primary text-light">@Model.DeveloperUser.FullName</span>
+                                </a>
+                            }
                         }
                         else
                         {
@@ -204,18 +216,18 @@
                         <div class="row">
                             <div class="col-lg-8 offset-lg-2">
                                 @if (
-                                      (User.IsInRole("Admin")) ||
-                                      (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
-                                      (User.IsInRole("Developer") && developerUser == currentUser) ||
-                                      (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
-                                      (Model.OwnerUser == currentUser)
-                                    )
+                                     (User.IsInRole("Admin")) ||
+                                     (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+                                     (User.IsInRole("Developer") && developerUser == currentUser) ||
+                                     (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+                                     (Model.OwnerUser == currentUser)
+                                   )
                                 {
-                                 <form asp-action="Create" asp-controller="TicketComments" method="post">
-                                    <input type="hidden" name="TicketId" value="@Model.Id" />
-                                    <textarea name="Comment" rows="4" class="form-control"></textarea>
-                                    <button class="btn-sm btn-block btn-outline-success bt-dark" type="submit">Submit</button>
-                                 </form>
+                                    <form asp-action="Create" asp-controller="TicketComments" method="post">
+                                        <input type="hidden" name="TicketId" value="@Model.Id" />
+                                        <textarea name="Comment" rows="4" class="form-control"></textarea>
+                                        <button class="btn-sm btn-block btn-outline-success bt-dark" type="submit">Submit</button>
+                                    </form>
                                 }
                             </div>
                         </div>
