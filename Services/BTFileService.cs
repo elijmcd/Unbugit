@@ -37,6 +37,7 @@ namespace Unbugit.Services
 
             return byteFile;
         }//
+
         public async Task<byte[]> ConvertFileToByteArrayAsync(string fileName)
         {
             var file = $"{Directory.GetCurrentDirectory()}/wwwroot/img/{fileName}";

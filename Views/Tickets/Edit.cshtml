@@ -1,101 +1,111 @@
 ﻿@model Unbugit.Models.Ticket
 
+@using Unbugit.Services.Interfaces
+@using Microsoft.AspNetCore.Identity
+@using Unbugit.Extensions
+
+@inject UserManager<BTUser> UserManager
+
 @{
+    BTUser currentUser = await UserManager.GetUserAsync(User);
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Ticket</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="OwnerUserId" />
-            <input type="hidden" asp-for="DeveloperUserId" />
-            <input type="hidden" asp-for="ProjectId" />
-            <input type="hidden" asp-for="Updated" />
-            <input type="hidden" asp-for="Created" />
-            <input type="hidden" asp-for="ArchivedDate" />
+    <div class="col-4 offset-4">
+        <div class="card shadow py-4" style="border: 1px solid #DD44A7">
+            <h4 class="text-center bg-secondary-bright text-info py-3">Edit Ticket</h4>
+            <div class="card-body">
+                <hr style="border: dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="OwnerUserId" />
+                    <input type="hidden" asp-for="DeveloperUserId" />
+                    <input type="hidden" asp-for="ProjectId" />
+                    <input type="hidden" asp-for="Updated" />
+                    <input type="hidden" asp-for="Created" />
+                    <input type="hidden" asp-for="ArchivedDate" />
 
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-            <label asp-for="Created" class="control-label"></label>
-            <input asp-for="Created" class="form-control" />
-            <span asp-validation-for="Created" class="text-danger"></span>
-        </div>*@
-            @*<div class="form-group">
-            <label asp-for="Updated" class="control-label"></label>
-            <input asp-for="Updated" class="form-control" />
-            <span asp-validation-for="Updated" class="text-danger"></span>
-        </div>*@
-            @*<div class="form-group">
-            <label asp-for="ArchivedDate" class="control-label"></label>
-            <input asp-for="ArchivedDate" class="form-control" />
-            <span asp-validation-for="ArchivedDate" class="text-danger"></span>
-        </div>*@
-            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-            {
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="Archived" /> @Html.DisplayNameFor(model => model.Archived)
-                    </label>
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter") && Model.OwnerUser == currentUser)
+                    {
+                        <div class="form-group">
+                            <label asp-for="TicketType.Name" class="control-label"></label>
+                            <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId">
+                                <option hidden>Select a Type</option>
+                            </select>
+                            <span asp-validation-for="TicketTypeId" class="text-danger"></span>
+                        </div>
+                    }
+                    else
+                    {
+                        <input type="hidden" asp-for="TicketTypeId" />
+                    }
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter") && Model.OwnerUser == currentUser)
+                    {
+                        <div class="form-group">
+                            <label asp-for="TicketPriority.Name" class="control-label"></label>
+                            <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId">
+                                <option hidden>Select a Priority</option>
+                            </select>
+                            <span asp-validation-for="TicketPriorityId" class="text-danger"></span>
+                        </div>
+                    }
+                    else
+                    {
+                        <input type="hidden" asp-for="TicketPriorityId" />
+                    }
+
+                    @if (!User.IsInRole("Submitter"))
+                    {
+                        <div class="form-group">
+                            <label asp-for="TicketStatus.Name" class="control-label"></label>
+                            <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId">
+                                <option hidden>Select a Status</option>
+                            </select>
+                            <span asp-validation-for="TicketStatusId" class="text-danger"></span>
+                        </div>
+                    }
+                    else
+                    {
+                        <input type="hidden" asp-for="TicketStatusId" />
+                    }
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    {
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="Archived" /> @Html.DisplayNameFor(model => model.Archived)
+                            </label>
+                        </div>
+                    }
+                    else
+                    {
+                        <input type="hidden" asp-for="Archived" />
+                    }
+
+                    <div class="form-group text-center">
+                        <input type="submit" value="Submit" class="btn btn-outline-secondary btn-block text-info" />
+                    </div>
+                </form>
+                <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+                <div class="text-center">
+                    <a class="text-danger" asp-action="MyTickets">Back to My Tickets</a>
                 </div>
-            }
-
-
-            @*<div class="form-group">
-            <label asp-for="ProjectId" class="control-label"></label>
-            <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-            <span asp-validation-for="ProjectId" class="text-danger"></span>
-        </div>*@
-            @if (!User.IsInRole("Admin"))
-            {
-                <input type="hidden" asp-for="TicketTypeId" />
-            }
-            else if (User.IsInRole("Admin"))
-            {
-                <div class="form-group">
-                    <label asp-for="TicketType.Name" class="control-label"></label>
-                    <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
-                    <span asp-validation-for="TicketTypeId" class="text-danger"></span>
-                </div>
-            }
-            <div class="form-group">
-                <label asp-for="TicketPriorityId" class="control-label"></label>
-                <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
-                <span asp-validation-for="TicketPriorityId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TicketStatusId" class="control-label"></label>
-                <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId"></select>
-                <span asp-validation-for="TicketStatusId" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-            <label asp-for="OwnerUserId" class="control-label"></label>
-            <select asp-for="OwnerUserId" class="form-control" asp-items="ViewBag.OwnerUserId"></select>
-            <span asp-validation-for="OwnerUserId" class="text-danger"></span>
-        </div>*@
-            @*<div class="form-group">
-            <label asp-for="DeveloperUserId" class="control-label"></label>
-            <select asp-for="DeveloperUserId" class="form-control" asp-items="ViewBag.DeveloperUserId"></select>
-            <span asp-validation-for="DeveloperUserId" class="text-danger"></span>
-        </div>*@
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
