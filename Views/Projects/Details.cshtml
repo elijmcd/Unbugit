@@ -30,12 +30,15 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-6 offset- card shadow bg-dark-gradient border-success p-3">
+    <div class="col-6 offset-3 card shadow bg-dark-gradient border-success p-3">
         <div class="row">
             <div class="col">
+                @if (User.IsInRole("Admin") || (User.IsInRole("ProjectManager") && Model.Members.Contains(currentUser)))
+                {
                 <span>
                     <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm text-warning fa fa-edit fa-pull-right p-3" style="font-size:1.2rem"></a><em style="font-size:1rem">@Model.Description</em>
                 </span>
+                }
                 <dl>
                     <br />
                     @if (Model.Archived)
@@ -44,15 +47,17 @@
                             <span class="text-danger">Archived</span>
                         </div>
                     }
-
+                    <dd>
+                        @Model.Description
+                    </dd>
                     <dt class="col-sm-6 text-light">
-                        Start
+                        Start Date
                     </dt>
                     <dd class="col-sm-6 text-success">
                         @Model.StartDate.ToString("d")
                     </dd>
                     <dt class="col-sm-6 text-light">
-                        End
+                        End Date
                     </dt>
                     <dd class="col-sm-6 text-danger">
                         @Model.EndDate?.ToString("d")
