@@ -430,13 +430,24 @@
                             @if (User.IsInRole("Submitter") || User.IsInRole("Developer") || User.IsInRole("ProjectManager"))
                             {
                                 <li>
-                                    <a asp-action="MyProjects" asp-controller="Projects">My Projects</a>
+                                    <a asp-action="MyProjects" asp-controller="Projects">
+                                        <span class="nav-link-icon">
+                                            <i style="color:#FFFF00;" data-feather="user"></i>
+                                        </span>
+
+                                        <span>My Projects</span>
+                                    </a>
                                 </li>
                             }
                             @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
                             {
                                 <li>
-                                    <a asp-action="Create" asp-controller="Projects">Creat New Project</a>
+                                    <a asp-action="Create" asp-controller="Projects">
+                                        <span class="nav-link-icon">
+                                            <i style="color:#FFFF00;" data-feather="plus-square"></i>
+                                        </span>
+                                        <span>Creat New Project</span>
+                                    </a>
                                 </li>
                             }
                         </ul>

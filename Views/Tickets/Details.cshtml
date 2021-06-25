@@ -20,26 +20,23 @@
     ViewData["Title"] = "Ticket Details";
 }
 
-<h2>Ticket Details: @Model.Id</h2>
+@*<h2>Ticket Details: @Model.Id</h2>*@
 
-<div class="row">
-    <p><a asp-action="Index" asp-controller="Projects" asp-route-id="@Model.Id">Return to Project</a></p>
-</div>
 <div class="row">
     <div class="col-6">
         <div class="row">
-            <div class="card border shadow my-1 mx-1 w-100">
+            <div class="card border shadow mb-1 mx-1 w-100">
                 <div class="card-body rounded shadow" style="border: 1px solid #DD44A7">
                     <h6 class="text-center bg-success-bright text-success py-2">
                         @Model.Project.Name
                     </h6>
                     @if (
-               (User.IsInRole("Admin")) ||
-               (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
-               (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
-               (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
-               (Model.OwnerUser == currentUser)
-               )
+           (User.IsInRole("Admin")) ||
+           (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+           (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
+           (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+           (Model.OwnerUser == currentUser)
+           )
                     {
                         <h5 class="text-center bg-secondary-bright text-secondary py-3">
                             @Model.Title
@@ -78,7 +75,7 @@
                         <span class="text-light">Developer:</span>
                         @if (Model.DeveloperUser is not null)
                         {
-                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && Model.Project.Members.Contains(currentUser))
+                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (await ProjectService.GetProjectManagerAsync(Model.Project.Id)) == currentUser)
                             {
                                 <a class="text-light" asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id">
                                     <figure class="avatar avatar-sm mr-3 bring-forward">
@@ -89,19 +86,21 @@
                             }
                             else
                             {
-                                <a class="text-light" asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id">
-                                    <figure class="avatar avatar-sm mr-3 bring-forward">
-                                        <img src="@BTFileService.ConvertByteArrayToFile(Model.DeveloperUser.AvatarFileData, Model.DeveloperUser.AvatarContentType)" title="@Model.DeveloperUser.FullName" alt="@Model.DeveloperUser.FullName" class="rounded-circle">
-                                    </figure>
-                                    <span class="badge badge-primary text-light">@Model.DeveloperUser.FullName</span>
-                                </a>
+                                <figure class="avatar avatar-sm mr-3 bring-forward">
+                                    <img src="@BTFileService.ConvertByteArrayToFile(Model.DeveloperUser.AvatarFileData, Model.DeveloperUser.AvatarContentType)" title="@Model.DeveloperUser.FullName" alt="@Model.DeveloperUser.FullName" class="rounded-circle">
+                                </figure>
+                                <span class="badge badge-primary text-light">@Model.DeveloperUser.FullName</span>
                             }
                         }
-                        else
+                        else if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (await ProjectService.GetProjectManagerAsync(Model.Project.Id)) == currentUser)
                         {
                             <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id">
                                 <span>No developer has been assigned.</span>
                             </a>
+                        }
+                        else
+                        {
+                            <span>No developer has been assigned.</span>
                         }
                     </p>
                     <p>
@@ -127,6 +126,8 @@
                     {
                         <div class="bg-primary-gradient text-center text-uppercase font-weight-bolder"><span class="text-dark">@Model.TicketPriority.Name</span></div>
                     }
+                    <p><a asp-action="Index" asp-controller="Projects" asp-route-id="@Model.Id">Return to Project</a></p>
+
                 </div>
             </div>
         </div>
@@ -215,12 +216,12 @@
                         <div class="row">
                             <div class="col-lg-8 offset-lg-2">
                                 @if (
-                                     (User.IsInRole("Admin")) ||
-                                     (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
-                                     (User.IsInRole("Developer") && developerUser == currentUser) ||
-                                     (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
-                                     (Model.OwnerUser == currentUser)
-                                   )
+                                  (User.IsInRole("Admin")) ||
+                                  (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+                                  (User.IsInRole("Developer") && developerUser == currentUser) ||
+                                  (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+                                  (Model.OwnerUser == currentUser)
+                                )
                                 {
                                     <form asp-action="Create" asp-controller="TicketComments" method="post">
                                         <input type="hidden" name="TicketId" value="@Model.Id" />

@@ -15,7 +15,7 @@
             <h4 class="text-center bg-secondary-bright text-info py-3">Edit Ticket</h4>
             <div class="card-body">
                 <hr style="border: dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-                <form asp-action="Create">
+                <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
                     <input type="hidden" asp-for="OwnerUserId" />
@@ -101,15 +101,11 @@
                 </form>
                 <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
                 <div class="text-center">
-                    <a class="text-danger" asp-action="MyTickets">Back to My Tickets</a>
+                    <a class="text-danger" asp-action="Details" asp-route-id="@Model.Id">Back to Ticket Details</a>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
