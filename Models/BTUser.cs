@@ -36,7 +36,7 @@ namespace Unbugit.Models
         [DisplayName("File Extension")]
         public string AvatarContentType { get; set; }
 
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
 
         //navigational properties
         public virtual Company Company { get; set; }
