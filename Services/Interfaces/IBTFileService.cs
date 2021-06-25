@@ -14,6 +14,8 @@ namespace Unbugit.Services.Interfaces
         //encode image from upload control
         public Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file);
         public Task<byte[]> ConvertFileToByteArrayAsync(string fileName);
+        public Task<byte[]> EncodeAndReduceFileAsync(IFormFile file);
+
 
         public string ConvertByteArrayToFile(byte[] fileData, string extension);
 

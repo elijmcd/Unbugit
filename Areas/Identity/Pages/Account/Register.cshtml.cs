@@ -121,7 +121,7 @@ namespace Unbugit.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
-                    AvatarFileData = (await _fileService.ConvertFileToByteArrayAsync(Input.ImageFile)) ?? 
+                    AvatarFileData = (await _fileService.EncodeAndReduceFileAsync(Input.ImageFile)) ?? 
                                 await _fileService.ConvertFileToByteArrayAsync(_configuration["DefaultUserImage"]),
 
                     AvatarContentType = Input.ImageFile is null ? 

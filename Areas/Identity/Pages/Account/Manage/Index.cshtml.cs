@@ -101,7 +101,7 @@ namespace Unbugit.Areas.Identity.Pages.Account.Manage
 
             if(Input.NewImage is not null)
             {
-                user.AvatarFileData = await _fileService.ConvertFileToByteArrayAsync(Input.NewImage);
+                user.AvatarFileData = await _fileService.EncodeAndReduceFileAsync(Input.NewImage);
                 user.AvatarContentType = _fileService.ContentType(Input.NewImage);
                 hasChanged = true;
             }

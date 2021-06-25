@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,6 +46,25 @@ namespace Unbugit.Services
         {
             var file = $"{Directory.GetCurrentDirectory()}/wwwroot/img/{fileName}";
             return await File.ReadAllBytesAsync(file);
+        }
+
+        public async Task<byte[]> EncodeAndReduceFileAsync(IFormFile file)
+        {
+            if (file is null) return null;
+
+            var image = Image.Load(file.OpenReadStream(), out IImageFormat format);
+            image.Mutate(x => x.Resize(new ResizeOptions
+            {
+                Mode = ResizeMode.Min,
+                Size = new Size(1024)
+            }));
+
+            using (var memoryStream = new MemoryStream())
+            {
+                var imageEncoder = image.GetConfiguration().ImageFormatsManager.FindEncoder(format);
+                await image.SaveAsync(memoryStream, imageEncoder);
+                return memoryStream.ToArray();
+            }
         }
 
         public string FormatFileSize(long bytes)
