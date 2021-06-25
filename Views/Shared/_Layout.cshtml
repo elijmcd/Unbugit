@@ -424,7 +424,12 @@
                             @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
                             {
                                 <li>
-                                    <a asp-action="Index" asp-controller="Projects">Company Projects</a>
+                                    <a asp-action="Index" asp-controller="Projects">
+                                        <span class="nav-link-icon">
+                                            <i style="color:#FFFF00;" data-feather="layers"></i>
+                                        </span>
+                                        <span>Company Projects</span>
+                                    </a>
                                 </li>
                             }
                             @if (User.IsInRole("Submitter") || User.IsInRole("Developer") || User.IsInRole("ProjectManager"))
@@ -434,7 +439,6 @@
                                         <span class="nav-link-icon">
                                             <i style="color:#FFFF00;" data-feather="user"></i>
                                         </span>
-
                                         <span>My Projects</span>
                                     </a>
                                 </li>
