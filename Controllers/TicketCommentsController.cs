@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -100,6 +101,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: TicketComments/Edit/5
+        [Authorize("Admin,ProjectManager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -122,6 +124,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("Admin,ProjectManager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment)
         {
             if (id != ticketComment.Id)
@@ -155,6 +158,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: TicketComments/Delete/5
+        [Authorize("Admin,ProjectManager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -177,6 +181,7 @@ namespace Unbugit.Controllers
         // POST: TicketComments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("Admin,ProjectManager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var ticketComment = await _context.TicketComment.FindAsync(id);

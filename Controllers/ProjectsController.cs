@@ -110,9 +110,9 @@ namespace Unbugit.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin, ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> Create([Bind("Id,Name,CompanyId,Description,StartDate,EndDate,ProjectPriority,ProjectPriorityId")] Project project) //CompanyId,ImageFileName,ImageFileData,ImageContentType,Archived
         {
             BTUser btUser = await _userManager.GetUserAsync(User);
@@ -154,9 +154,9 @@ namespace Unbugit.Controllers
         // POST: Projects/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin, ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,Description,StartDate,EndDate,ProjectPriority,ProjectPriorityId,ImageFileName,ImageFileData,ImageContentType,Archived")] Project project)
         {
             if (id != project.Id)
@@ -190,8 +190,8 @@ namespace Unbugit.Controllers
         }
 
         //GET Users/Assign
-        [Authorize(Roles = "Admin, ProjectManager")]
         [HttpGet]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> AssignUsers(int id)
         {
             ProjectMembersViewModel model = new();
@@ -213,9 +213,9 @@ namespace Unbugit.Controllers
         }
 
         //POST Users/Assign
-        [Authorize(Roles = "Admin, ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ProjectManager")]
         public async Task<IActionResult> AssignUsers(ProjectMembersViewModel model)
         {
             if (ModelState.IsValid)
@@ -246,8 +246,8 @@ namespace Unbugit.Controllers
         }
 
         //GET Users/AssignPM
-        [Authorize(Roles = "Admin")]
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignPM(int id)
         {
             AssignPMViewModel model = new();
@@ -267,9 +267,9 @@ namespace Unbugit.Controllers
         }
 
         //POST Users/AssignPM
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignPM(AssignPMViewModel model)
         {
             if (ModelState.IsValid)
@@ -288,8 +288,8 @@ namespace Unbugit.Controllers
         }
 
         //GET Users/RemoveUsers
-        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpGet]
+        [Authorize(Roles = "Admin,ProjectManager")]
         public async Task<IActionResult> RemoveUsers(int id)
         {
             ProjectMembersViewModel model = new();
@@ -311,9 +311,9 @@ namespace Unbugit.Controllers
         }
 
         //POST Users/RemoveUsers
-        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,ProjectManager")]
         public async Task<IActionResult> RemoveUsers(ProjectMembersViewModel model)
         {
             if (ModelState.IsValid)

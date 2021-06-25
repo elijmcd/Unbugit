@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Unbugit.Services.Interfaces;
 using Unbugit.Models.ViewModels;
 using Unbugit.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Unbugit.Controllers
 {
@@ -74,6 +75,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Invites/Create
+        [Authorize("Admin")]
         public async Task<IActionResult> Create()
         {
             InviteViewModel model = new();
@@ -100,6 +102,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("Admin")]
         public async Task<ActionResult> Create(InviteViewModel viewModel)
         {
             var companyId = User.Identity.GetCompanyId();
@@ -137,20 +140,9 @@ namespace Unbugit.Controllers
 
             return RedirectToAction("Dashboard", "Home");
         }
-        //if (ModelState.IsValid)
-        //{
-        //    _context.Add(invite);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-        //ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name", invite.CompanyId);
-        //ViewData["InviteeId"] = new SelectList(_context.Users, "Id", "Id", invite.InviteeId);
-        //ViewData["InvitorId"] = new SelectList(_context.Users, "Id", "Id", invite.InvitorId);
-        //ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "Id", "Name", invite.ProjectId);
-        //return View(invite);
-
 
         // GET: Invites/Edit/5
+        [Authorize("Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -175,6 +167,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,InviteDate,CompanyToken,CompanyId,ProjectId,InvitorId,InviteeId,InviteeEmail,InviteeFirstName,InviteeLastName,IsValid")] Invite invite)
         {
             if (id != invite.Id)
@@ -210,6 +203,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Invites/Delete/5
+        [Authorize("Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -234,6 +228,7 @@ namespace Unbugit.Controllers
         // POST: Invites/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var invite = await _context.Invite.FindAsync(id);

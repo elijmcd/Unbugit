@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -141,6 +142,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: TicketAttachments/Delete/5
+        [Authorize("Admin, ProjectManager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -163,6 +165,7 @@ namespace Unbugit.Controllers
         // POST: TicketAttachments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("Admin, ProjectManager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var ticketAttachment = await _context.TicketAttachment.FindAsync(id);

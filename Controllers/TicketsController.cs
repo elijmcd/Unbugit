@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Unbugit.Models.Enums;
 using Unbugit.Models.ViewModels;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Unbugit.Controllers
 {
@@ -89,6 +90,7 @@ namespace Unbugit.Controllers
 
         //GET: Tickets/Assign
         [HttpGet]
+        [Authorize("Admin,ProjectManager")]
         public async Task<IActionResult> AssignTicket(int? ticketId)
         {
             if (!ticketId.HasValue)
@@ -108,6 +110,7 @@ namespace Unbugit.Controllers
         //POST: Tickets/Assign
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("Admin,ProjectManager")]
         public async Task<IActionResult> AssignTicket(AssignDeveloperViewModel viewModel)
         {
             if (!string.IsNullOrEmpty(viewModel.DeveloperId))
@@ -424,6 +427,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Tickets/Delete/5
+        [Authorize("Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -450,6 +454,7 @@ namespace Unbugit.Controllers
         // POST: Tickets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var ticket = await _context.Ticket.FindAsync(id);

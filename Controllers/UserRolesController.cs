@@ -15,7 +15,7 @@ using Unbugit.Services.Interfaces;
 
 namespace Unbugit.Controllers
 {
-    //[Authorize(Roles="Admin")]
+    [Authorize(Roles = "Admin")]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;

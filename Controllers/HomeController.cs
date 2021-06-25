@@ -183,7 +183,7 @@ namespace Unbugit.Controllers
 
             return Json(chartData);
         }
-
+        //CHART/DONUT TYPE
         [HttpPost]
         public async Task<JsonResult> DonutMethodType()
         {
@@ -223,7 +223,7 @@ namespace Unbugit.Controllers
 
             return Json(chartData);
         }
-
+        //CHART/DONUT STATUS
         [HttpPost]
         public async Task<JsonResult> DonutMethodStatus()
         {
