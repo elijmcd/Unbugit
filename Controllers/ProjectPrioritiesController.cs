@@ -27,7 +27,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: ProjectPriorities/Details/5
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,7 +46,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: ProjectPriorities/Create
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public IActionResult Create()
         {
             return View();
@@ -57,7 +57,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public async Task<IActionResult> Create([Bind("Id,Name")] ProjectPriority projectPriority)
         {
             if (ModelState.IsValid)
@@ -70,7 +70,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: ProjectPriorities/Edit/5
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,7 +91,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] ProjectPriority projectPriority)
         {
             if (id != projectPriority.Id)
@@ -123,7 +123,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: ProjectPriorities/Delete/5
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,7 +144,7 @@ namespace Unbugit.Controllers
         // POST: ProjectPriorities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var projectPriority = await _context.ProjectPriority.FindAsync(id);

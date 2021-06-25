@@ -45,7 +45,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Companies/Create
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +56,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,ImageFileName,ImageFileData,ImageContentType")] Company company)
         {
             if (ModelState.IsValid)
@@ -69,7 +69,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Companies/Edit/5
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +90,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ImageFileName,ImageFileData,ImageContentType")] Company company)
         {
             if (id != company.Id)
@@ -122,7 +122,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Companies/Delete/5
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,7 +143,7 @@ namespace Unbugit.Controllers
         // POST: Companies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var company = await _context.Company.FindAsync(id);

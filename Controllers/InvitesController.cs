@@ -75,7 +75,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Invites/Create
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Create()
         {
             InviteViewModel model = new();
@@ -102,7 +102,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult> Create(InviteViewModel viewModel)
         {
             var companyId = User.Identity.GetCompanyId();
@@ -142,7 +142,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Invites/Edit/5
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -167,7 +167,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,InviteDate,CompanyToken,CompanyId,ProjectId,InvitorId,InviteeId,InviteeEmail,InviteeFirstName,InviteeLastName,IsValid")] Invite invite)
         {
             if (id != invite.Id)
@@ -203,7 +203,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: Invites/Delete/5
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -228,7 +228,7 @@ namespace Unbugit.Controllers
         // POST: Invites/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var invite = await _context.Invite.FindAsync(id);

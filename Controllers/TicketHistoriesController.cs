@@ -71,7 +71,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: TicketHistories/Edit/5
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,7 +93,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,TicketId,Property,OldValue,NewValue,Created,UserId,Description")] TicketHistory ticketHistory)
         {
             if (id != ticketHistory.Id)
@@ -126,7 +126,7 @@ namespace Unbugit.Controllers
         }
 
         // GET: TicketHistories/Delete/5
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -148,7 +148,7 @@ namespace Unbugit.Controllers
         // POST: TicketHistories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin, ProjectManager")]
+        [Authorize(Roles="Admin, ProjectManager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var ticketHistory = await _context.TicketHistory.FindAsync(id);
