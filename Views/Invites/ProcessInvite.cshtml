@@ -6,26 +6,26 @@
 <div id="wrapper">
     <div class="vertical-align-wrap">
         <div class="vertical-align-middle auth-main">
-            <div class="auth-box">
+            <div class="auth-box card shadow bg-dark">
                 <div class="top">
                 </div>
-                <div class="card">
-                    <div class="header">
+                <div class="card rounded shadow-lg">
+                    <div class="card-header text-dark bg-dark text-light">
                         <h3>
                             <span class="clearfix title">
-                                <span class="number">Welcome</span><br />
-                                <span>@Model.InviteeFirstName @Model.InviteeLastName!</span> <br>
+                                <span class="text-muted">Welcome</span><br />
+                                <span class="badge badge-info-bright text-secondary" style="font-size:2rem">@Model.InviteeFirstName @Model.InviteeLastName!</span> <br>
                             </span>
                         </h3>
-                        <h5><span>@Model.Company.Name Company</span></h5>
+                        <h5><span class="text-muted">@Model.Company.Name is excited to have you on board!</span></h5>
                     </div>
 
-                    <div class="body">
+                    <div class="card-body shadow bg-dark-bright text-dark">
                         <p>
                             @Model.Invitor.FullName has invited you to collaborate on the @Model.Project.Name project.
                             <br /><br /> Click the "JOIN" button below to register with the company and begin entering tickets.
                         </p>
-                        <a class="btn btn-primary btn-lg btn-block" asp-area="Identity" asp-page="/Account/RegisterByInvite" asp-route-id="@Model.Id"><i class="fa fa-sign-in"></i> <span>JOIN</span></a>
+                        <a class="btn btn-gradient-secondary text-secondary btn-lg btn-lg" asp-area="Identity" asp-page="/Account/RegisterByInvite" asp-route-id="@Model.Id"><i class="fa fa-sign-in"></i> <span> JOIN</span></a>
                     </div>
                 </div>
             </div>
