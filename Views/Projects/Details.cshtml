@@ -26,15 +26,15 @@
 <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
 <div class="row">
     <div class="col text-center">
-        <h1>@Model.Name</h1>
+        <h3>@Model.Name</h3>
     </div>
 </div>
 <div class="row">
-    <div class="col-10 offset-1 card shadow bg-dark-gradient border-success p-3">
+    <div class="col-6 offset- card shadow bg-dark-gradient border-success p-3">
         <div class="row">
             <div class="col">
                 <span>
-                    <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-warning fa fa-edit fa-pull-right p-3" style="font-size:1.2rem"></a><em style="font-size:1.3rem">@Model.Description</em>
+                    <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm text-warning fa fa-edit fa-pull-right p-3" style="font-size:1.2rem"></a><em style="font-size:1rem">@Model.Description</em>
                 </span>
                 <dl>
                     <br />

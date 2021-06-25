@@ -31,12 +31,12 @@
                         @Model.Project.Name
                     </h6>
                     @if (
-           (User.IsInRole("Admin")) ||
-           (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
-           (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
-           (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
-           (Model.OwnerUser == currentUser)
-           )
+          (User.IsInRole("Admin")) ||
+          (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+          (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
+          (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+          (Model.OwnerUser == currentUser)
+          )
                     {
                         <h5 class="text-center bg-secondary-bright text-secondary py-3">
                             @Model.Title
@@ -54,7 +54,14 @@
                     <p class="text-light"><em class="text-success">Created on:</em> @Model.Created.ToString("d")</p>
 
                     <p class="text-info"><span class="text-light">Type:</span> @Model.TicketType.Name</p>
-                    <p class="text-info"><span class="text-light">Status:</span> @Model.TicketStatus.Name</p>
+                    @if (Model.TicketStatusId == 1)
+                    {
+                        <p class="text-danger badge-danger bg-danger-bright"><span>Status:</span> @Model.TicketStatus.Name</p>
+                    }
+                    else
+                    {
+                        <p class="text-info"><span>Status:</span> @Model.TicketStatus.Name</p>
+                    }
                     <p>
                         <span class="text-light">Submitter:</span>
                         @if (Model.OwnerUser is not null)
@@ -95,17 +102,17 @@
                         else if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (await ProjectService.GetProjectManagerAsync(Model.Project.Id)) == currentUser)
                         {
                             <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id">
-                                <span>No developer has been assigned.</span>
+                                <span class="btn btn-outline-light">No developer has been assigned.</span>
                             </a>
                         }
                         else
                         {
-                            <span>No developer has been assigned.</span>
+                            <span class="btn btn-outline-light">No developer has been assigned.</span>
                         }
                     </p>
                     <p>
                         <a asp-action="Details" asp-controller="Projects" asp-route-id="@Model.ProjectId">
-                            Project: <span style="color:#22dc0a">@Model.Project.Name</span>
+                            <span class="text-light">Project:</span> <span style="color:#22dc0a">@Model.Project.Name</span>
                         </a>
                     </p>
                     <p><em class="text-danger">Project Deadline:</em> @Model.Project.EndDate?.ToString("d")</p>
@@ -226,7 +233,7 @@
                                     <form asp-action="Create" asp-controller="TicketComments" method="post">
                                         <input type="hidden" name="TicketId" value="@Model.Id" />
                                         <textarea name="Comment" rows="4" class="form-control"></textarea>
-                                        <button class="btn-sm btn-block btn-outline-success bt-dark" type="submit">Submit</button>
+                                        <button class="btn-sm btn-block btn-outline-success btn-dark" type="submit">Submit</button>
                                     </form>
                                 }
                             </div>
@@ -252,7 +259,7 @@
                         <div class="timeline">
                             @foreach (var item in Model.TicketHistory.OrderByDescending(c => c.Created))
                             {
-                                <div class="timeline-item">
+                                <div class="timeline-item card bg-light p-2">
                                     <div>
                                         <a href="#">
                                             <figure class="avatar avatar-sm mr-3 bring-forward">
@@ -261,7 +268,7 @@
                                         </a>
                                     </div>
                                     <div>
-                                        <h6 class="d-flex justify-content-between mb-4">
+                                        <h6 class="d-flex justify-content-between mb-2">
                                             <span>
                                                 <a href="#" class="link-1">@item.User.FullName</a>
                                             </span>
