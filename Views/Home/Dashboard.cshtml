@@ -189,10 +189,13 @@
                         <a class="nav-link active" id="myTickets-tab" data-toggle="tab" href="#myTickets" role="tab"
                            aria-controls="myTickets" aria-selected="true">MyTickets</a>
                     </li>
+                    @if (!User.IsInRole("Admin"))
+                    {
                     <li class="nav-item">
                         <a class="nav-link" id="myProjects-tab" data-toggle="tab" href="#myProjects" role="tab"
                            aria-controls="myProjects" aria-selected="false">MyProjects</a>
                     </li>
+                    }
                     <li class="nav-item">
                         <a class="nav-link" id="companyTickets-tab" data-toggle="tab" href="#companyTickets" role="tab"
                            aria-controls="companyTickets" aria-selected="false">Company Tickets</a>
@@ -571,136 +574,135 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in (Model.Projects).Where(p => p.CompanyId == companyId))
-                                    {
-                                        <tr>
-                                            <td>
-                                                @if ((item.Members.Contains(btUser)) || (User.IsInRole("Admin")) || (User.IsInRole("ProjectManager") && item.Members.Contains(btUser)))
-                                                {
-                                                    <a class="btn btn-outline-success text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                                                        @item.Name
-                                                    </a>
-                                                }
-                                                else
-                                                {
-                                                    <a class="btn btn-outline-success text-primary" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                                                        @item.Name
-                                                    </a>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (item.ProjectPriorityId == 1)
-                                                {
-                                                    <span class="badge badge-danger">@item.ProjectPriority.Name</span>
-                                                }
-                                                else if (item.ProjectPriorityId == 2)
-                                                {
-                                                    <span class="badge badge-warning">@item.ProjectPriority.Name</span>
-                                                }
-                                                else if (item.ProjectPriorityId == 3)
-                                                {
-                                                    <span class="badge badge-info">@item.ProjectPriority.Name</span>
-                                                }
-                                                else if (item.ProjectPriorityId == 4)
-                                                {
-                                                    <span class="badge badge-primary">@item.ProjectPriority.Name</span>
-                                                }
-                                            </td>
-                                            <td>
-                                                @item.StartDate.ToString("d")
-                                            </td>
-                                            <td>
-                                                @item.EndDate?.ToString("d")
-                                            </td>
-                                            <td>
-                                                @item.Members.Count
-                                            </td>
-                                            <td>
-                                                @item.Tickets.Count
-                                            </td>
-                                        </tr>
+                                        @foreach (var item in (Model.Projects))
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @if ((item.Members.Contains(btUser)) || (User.IsInRole("Admin")) || (User.IsInRole("ProjectManager") && item.Members.Contains(btUser)))
+                                                    {
+                                                        <a class="btn btn-outline-success text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                            @item.Name
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn btn-outline-success text-primary" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                            @item.Name
+                                                        </a>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (item.ProjectPriorityId == 1)
+                                                    {
+                                                        <span class="badge badge-danger">@item.ProjectPriority.Name</span>
+                                                    }
+                                                    else if (item.ProjectPriorityId == 2)
+                                                    {
+                                                        <span class="badge badge-warning">@item.ProjectPriority.Name</span>
+                                                    }
+                                                    else if (item.ProjectPriorityId == 3)
+                                                    {
+                                                        <span class="badge badge-info">@item.ProjectPriority.Name</span>
+                                                    }
+                                                    else if (item.ProjectPriorityId == 4)
+                                                    {
+                                                        <span class="badge badge-primary">@item.ProjectPriority.Name</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @item.StartDate.ToString("d")
+                                                </td>
+                                                <td>
+                                                    @item.EndDate?.ToString("d")
+                                                </td>
+                                                <td>
+                                                    @item.Members.Count
+                                                </td>
+                                                <td>
+                                                    @item.Tickets.Count
+                                                </td>
+                                            </tr>
                                     }
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-        
+
             </div>
 
             <!-- ALL TICKETS IN COMPANY TABLE-->
+            <!-- GOOGLE CHARTS -->
+            @*<div class="row clearfix">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card">
+                            <div class="body">
+                                <div id="chart1" class="bg-warning-bright text-warning">
 
-                    <!-- GOOGLE CHARTS -->
-                    @*<div class="row clearfix">
-                            <div class="col-lg-4 col-md-6">
-                                <div class="card">
-                                    <div class="body">
-                                        <div id="chart1" class="bg-warning-bright text-warning">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="card">
-                                    <div class="body">
-                                        <div id="chart3D">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="card">
-                                    <div class="body">
-                                        <div id="donut">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>*@
-
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-body text-center">
-                                    <div class="row my-3">
-                                        <div class="col-md-6 ml-auto mr-auto">
-                                            <figure>
-                                                <img class="img-fluid" src="~/media/svg/upgrade.svg" alt="upgrade">
-                                            </figure>
-                                        </div>
-                                    </div>
-                                    <h4 class="mb-3 text-center">Get an Upgrade</h4>
-                                    <div class="row my-3">
-                                        <div class="col-md-10 ml-auto mr-auto">
-                                            <p class="text-muted">Get additional 500 GB space for your documents and files. Expand your storage and enjoy your business. Change plan for more space.</p>
-                                            <button class="btn btn-primary" data-dismiss="modal">Plan Upgrade</button>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="align-items-center d-flex link-1 small justify-content-center" data-dismiss="modal">
-                                        <i class="ti-close font-size-10 mr-1"></i>Close
-                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <!-- ./ Content -->
-                <!-- Footer -->
-                <footer class="content-footer">
-                    <div class="pull-left">© 2021 Eli McDougal | <a href="https://www.dougaldev.net" target="_blank">dougaldev.net</a></div>
-                    <div>
-                        <nav class="nav">
-                            <a href="https://themeforest.net/licenses/standard" class="nav-link">Licenses</a>
-                            <a href="#" class="nav-link">Change Log</a>
-                            <a href="#" class="nav-link">Get Help</a>
-                        </nav>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card">
+                            <div class="body">
+                                <div id="chart3D">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </footer>
-                <!-- ./ Footer -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card">
+                            <div class="body">
+                                <div id="donut">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body text-center">
+                            <div class="row my-3">
+                                <div class="col-md-6 ml-auto mr-auto">
+                                    <figure>
+                                        <img class="img-fluid" src="~/media/svg/upgrade.svg" alt="upgrade">
+                                    </figure>
+                                </div>
+                            </div>
+                            <h4 class="mb-3 text-center">Get an Upgrade</h4>
+                            <div class="row my-3">
+                                <div class="col-md-10 ml-auto mr-auto">
+                                    <p class="text-muted">Get additional 500 GB space for your documents and files. Expand your storage and enjoy your business. Change plan for more space.</p>
+                                    <button class="btn btn-primary" data-dismiss="modal">Plan Upgrade</button>
+                                </div>
+                            </div>
+                            <a href="#" class="align-items-center d-flex link-1 small justify-content-center" data-dismiss="modal">
+                                <i class="ti-close font-size-10 mr-1"></i>Close
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ./ Content -->
+            <!-- Footer -->
+            <footer class="content-footer">
+                <div class="pull-left">© 2021 Eli McDougal | <a href="https://www.dougaldev.net" target="_blank">dougaldev.net</a></div>
+                <div>
+                    <nav class="nav">
+                        <a href="https://themeforest.net/licenses/standard" class="nav-link">Licenses</a>
+                        <a href="#" class="nav-link">Change Log</a>
+                        <a href="#" class="nav-link">Get Help</a>
+                    </nav>
+                </div>
+            </footer>
+            <!-- ./ Footer -->
             <!-- ./ Content body -->
         </div>
         <!-- ./ Content wrapper -->

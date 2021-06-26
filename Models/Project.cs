@@ -33,7 +33,7 @@ namespace Unbugit.Models
 
 
         [DisplayName("Priority")]
-        public int ProjectPriorityId { get; set; }
+        public int? ProjectPriorityId { get; set; }
 
         [NotMapped]
         [DataType(DataType.Upload)]

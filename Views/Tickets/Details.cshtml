@@ -23,7 +23,8 @@
 @*<h2>Ticket Details: @Model.Id</h2>*@
 
 <div class="row">
-    <div class="col-6">
+    <!--TICKET DETAILS-->
+    <div class="col-lg-4">
         <div class="row">
             <div class="card border shadow mb-1 mx-1 w-100">
                 <div class="card-body rounded shadow" style="border: 1px solid #DD44A7">
@@ -31,12 +32,12 @@
                         @Model.Project.Name
                     </h6>
                     @if (
-          (User.IsInRole("Admin")) ||
-          (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
-          (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
-          (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
-          (Model.OwnerUser == currentUser)
-          )
+(User.IsInRole("Admin")) ||
+(User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+(User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
+(User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+(Model.OwnerUser == currentUser)
+)
                     {
                         <h5 class="text-center bg-secondary-bright text-secondary py-3">
                             @Model.Title
@@ -138,161 +139,175 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-6">
-                <div class="card shadow border my-1 mx-1 w-100">
-                    <div class="card-body">
-                        <div>
-                            <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <input type="hidden" asp-for="@Model.Id" name="TicketId">
-                                <div class="media-body ml-3">
-                                    <label class="form-label d-block mb-2">Add Attachment</label>
-                                    <label>
-                                        Description
-                                        <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
-                                    </label><br />
-                                    <label class="btn btn-outline-primary btn-sm">
-                                        <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" />
-                                    </label>
-                                    <button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="row">
-                    @foreach (TicketAttachment item in Model.Attachments)
+    </div>
+
+    <!--COMMENTS-->
+    <div class="col-lg-4">
+        <br />
+        <h6 class="text-center">@Model.Comments.Count Comment(s)</h6>
+        <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+        <div class="card border shadow rounded">
+            <div class="card-body rounded shadow">
+                <div class="col" style="max-height:300px; overflow-y:scroll;">
+                    @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
                     {
-                        <div class="col-6">
-                            <div class="card shadow border my-1 p-1">
-                                <div class="file">
-                                    <a asp-action="ShowFile" asp-controller="Tickets" asp-route-Id="@item.Id">
-                                        <div class="hover">
-                                            <button type="button" class="btn btn-icon btn-danger">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </div>
-                                        <div class="icon">
-                                            <img src="@BTFileService.GetFileIcon(item.FileName)" style="height:60px;width:60px" />
-                                        </div>
-                                        <div class="file-name">
-                                            <p class="m-b-5 text-muted">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
-                                            <small>Size: @BTFileService.FormatFileSize(item.FileData.Length) <span class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</span></small>
-                                        </div>
-                                    </a>
+                        <div class="row">
+                            <div class="col">
+                                <div class="media border p-3 shadow bg-dark-gradient" style="border:2px; border-radius: 7px; margin-bottom: 1px;">
+                                    <figure class="avatar avatar-sm mr-3 bring-forward" title="@comment.User.FullName" data-toggle="tooltip">
+                                        <img src="@BTFileService.ConvertByteArrayToFile(comment.User.AvatarFileData, comment.User.AvatarContentType)" alt="@comment.User.FullName" class="rounded-circle">
+                                    </figure>
+                                    <div class="media-body bg-light" style="border:3px #ccc inset; padding:2px;">
+                                        <span class="text-light">
+                                            @comment.User.FullName
+                                            <small><i> on @comment.Created.ToString("d")</i></small><br />
+                                            <small><i>@comment.Comment</i></small><br />
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    }
+
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-lg-8 offset-lg-2">
+                        @if ((User.IsInRole("Admin")) ||
+(User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+(User.IsInRole("Developer") && developerUser == currentUser) ||
+(User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+(Model.OwnerUser == currentUser))
+                        {
+                            <form asp-action="Create" asp-controller="TicketComments" method="post">
+                                <input type="hidden" name="TicketId" value="@Model.Id" />
+                                <textarea name="Comment" rows="2" class="form-control"></textarea>
+                                <button class="btn-sm btn-block btn-outline-success bg-dark-gradient" type="submit">Add Comment</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--History-->
+    <div class="col-lg-4">
+        <br />
+        <h6 class="text-center">Ticket History</h6>
+        <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+        <div class="card border shadow rounded">
+            <div class="card-body" style="overflow-y: auto; height:500px;">
+                <div class="timeline">
+                    <div class="accordion custom-accordion">
+                        @foreach (var item in Model.TicketHistory.OrderByDescending(c => c.Created))
+                        {
+                            <div class="accordion-row">
+                                <a href="#" class="accordion-header">
+                                    <small>@item.Created.ToString("d")</small><span>@item.Description</span>
+                                    <i class="accordion-status-icon close fa fa-chevron-up"></i>
+                                    <i class="accordion-status-icon open fa fa-chevron-down"></i>
+                                </a>
+                                <div class="accordion-body">
+
+                                    <div class="timeline-item card bg-light p-2">
+                                        <div>
+                                            <figure class="avatar avatar-sm mr-3 bring-forward" title="@item.User.FullName" data-toggle="tooltip">
+                                                <img src="@BTFileService.ConvertByteArrayToFile(item.User.AvatarFileData, item.User.AvatarContentType)" alt="@item.User.FullName" class="rounded-circle">
+                                            </figure>
+                                            <span class="d-flex justify-content-between mb-2">
+                                                <small>
+                                                    @item.User.FullName
+                                                </small>
+                                                <small class="text-muted font-weight-normal">@item.Created.ToString("t")</small>
+                                            </span>
+                                            <div class="row no-gutters border card flex-row border-radius-1 p-2">
+                                                <p>@item.Description</p>
+                                                @*<div class="col-xl-2 col-lg-12">
+                                                        <img src="../../assets/media/image/photo6.jpg" class="w-100"
+                                                             alt="image">
+                                                    </div>*@
+                                                <div class="col-xl-10 col-lg-12 px-3">
+                                                    @*<h5>@item.Property</h5>*@
+                                                    <p>Old: @item.OldValue</p>
+                                                    <p>New: @item.NewValue</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--ATTACHMENTS-->
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card shadow border my-1 mx-1 w-100">
+            <div class="card-body">
+                <h6 class="text-center">Ticket Attachments</h6>
+                <div>
+                    @if (User.IsInRole("Admin") ||
+                     (await ProjectService.GetProjectManagerAsync(Model.Project.Id) == currentUser) ||
+                     Model.DeveloperUser == currentUser ||
+                     Model.OwnerUser == currentUser)
+                    {
+                        <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="@Model.Id" name="TicketId">
+                            <div class="media-body ml-3">
+                                <label class="form-label d-block mb-2">Add New</label>
+                                <label>
+                                    Description
+                                    <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
+                                </label><br />
+                                <label class="btn btn-outline-primary btn-sm">
+                                    <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" />
+                                </label>
+                                <button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
+                            </div>
+                        </form>
                     }
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="col-6">
+    <div class="col-lg-3">
         <div class="row">
-            <div class="card border rounded shadow my-1 w-100">
-                <div class="card-body rounded shadow">
-                    <div class="col">
-                        <div class="text-center text-light"><h6>@Model.Comments.Count Comment(s)</h6></div>
-                        @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
-                        {
-                            <div class="row">
-                                <div class="col">
-                                    <div class="media border p-3 shadow bg-dark-gradient" style="border:2px; border-radius: 7px; margin-bottom: 4px;">
-                                        <figure class="avatar avatar-sm mr-3 bring-forward">
-                                            <img src="@BTFileService.ConvertByteArrayToFile(comment.User.AvatarFileData, comment.User.AvatarContentType)" alt="@comment.User.FullName" class="rounded-circle">
-                                        </figure>
-                                        <div class="media-body bg-light" style="border:3px #ccc inset; padding:5px;">
-                                            <span class="text-light">
-                                                @comment.User.FullName
-                                                <small><i> on @comment.Created.ToString("d")</i></small><br />
-                                                <small><i>@comment.Comment</i></small><br />
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-                        <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-
-                        <div class="row">
-                            <div class="col-lg-8 offset-lg-2">
-                                @if (
-                                  (User.IsInRole("Admin")) ||
-                                  (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
-                                  (User.IsInRole("Developer") && developerUser == currentUser) ||
-                                  (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
-                                  (Model.OwnerUser == currentUser)
-                                )
+            @foreach (TicketAttachment item in Model.Attachments)
+            {
+                <div class="col-6">
+                    <div class="card shadow border my-1 p-1">
+                        <div class="file">
+                            <a target="_blank" asp-action="ShowFile" asp-controller="Tickets" asp-route-Id="@item.Id">
+                                @if ((User.IsInRole("Admin")) || (await ProjectService.GetProjectManagerAsync(item.Ticket.Project.Id) == currentUser) || item.User == currentUser)
                                 {
-                                    <form asp-action="Create" asp-controller="TicketComments" method="post">
-                                        <input type="hidden" name="TicketId" value="@Model.Id" />
-                                        <textarea name="Comment" rows="4" class="form-control"></textarea>
-                                        <button class="btn-sm btn-block btn-outline-success btn-dark" type="submit">Submit</button>
-                                    </form>
+                                    <div class="hover">
+                                        <button type="button" class="btn btn-icon btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
                                 }
-                            </div>
-                        </div>
-
-                        <div>
-                            @if (User.IsInRole("Administrator"))
-                            {
-                                <a asp-action="Edit" asp-route-id="@Model.Id">Edit Post </a>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <br />
-                <h6 class="text-center">Ticket History</h6>
-                <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-                <div class="card border shadow rounded">
-                    <div class="card-body" style="overflow-y: auto; height:220px;">
-                        <div class="timeline">
-                            @foreach (var item in Model.TicketHistory.OrderByDescending(c => c.Created))
-                            {
-                                <div class="timeline-item card bg-light p-2">
-                                    <div>
-                                        <a href="#">
-                                            <figure class="avatar avatar-sm mr-3 bring-forward">
-                                                <img src="@BTFileService.ConvertByteArrayToFile(item.User.AvatarFileData, item.User.AvatarContentType)" alt="@item.User.FullName" class="rounded-circle">
-                                            </figure>
-                                        </a>
-                                    </div>
-                                    <div>
-                                        <h6 class="d-flex justify-content-between mb-2">
-                                            <span>
-                                                <a href="#" class="link-1">@item.User.FullName</a>
-                                            </span>
-                                            <span class="text-muted font-weight-normal">@item.Created.ToString("d")</span>
-                                        </h6>
-                                        <div class="row no-gutters border card flex-row border-radius-1 p-2">
-                                            <p>@item.Description</p>
-                                            @*<div class="col-xl-2 col-lg-12">
-                                                    <img src="../../assets/media/image/photo6.jpg" class="w-100"
-                                                         alt="image">
-                                                </div>*@
-                                            <div class="col-xl-10 col-lg-12 p-3">
-                                                @*<h5>@item.Property</h5>*@
-                                                <p>Old: @item.OldValue</p>
-                                                <p>New: @item.NewValue</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="icon">
+                                    <img src="@BTFileService.GetFileIcon(item.FileName)" style="height:60px;width:60px" />
                                 </div>
-                            }
+                                <div class="file-name">
+                                    <p class="m-b-5 text-muted">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
+                                    <small>Size: @BTFileService.FormatFileSize(item.FileData.Length) <span class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</span></small>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
+</div>
+
 </div>

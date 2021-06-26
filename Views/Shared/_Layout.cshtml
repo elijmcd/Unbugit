@@ -10,7 +10,7 @@
 @inject IBTCompanyInfoService CompanyInfoService
 
 @{ BTUser currentUser = await UserManager.GetUserAsync(User);
-    var companyId = currentUser.CompanyId;
+    var companyId = (int)currentUser.CompanyId;
     var notes = await NotificationService.GetReceivedNotificationsAsync(currentUser.Id);
     //var totalTickets = (await CompanyInfoService.GetAllTicketsAsync(companyId)).ToList();
     //var closedTickets = totalTickets.Where(t => t.TicketStatusId == 2).ToList();
