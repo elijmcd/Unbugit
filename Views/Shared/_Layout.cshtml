@@ -631,6 +631,14 @@
                                                                         </span>
                                                                     @*</a>*@
                                                                 }
+                                                                @if (item.Title == "New Developer Ticket")
+                                                                {
+                                                                    <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Ticket.Id">
+                                                                        <span class="avatar-title bg-secondary-bright text-success rounded-circle">
+                                                                            <i class="ti-receipt"></i>
+                                                                        </span>
+                                                                    </a>
+                                                                }
                                                                 else if (item.Title == $"Ticket modified in {item.Ticket.Project.Name}")
                                                                 {
                                                                     <span class="avatar-title bg-success-bright text-warning rounded-circle">

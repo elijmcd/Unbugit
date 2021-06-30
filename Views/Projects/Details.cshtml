@@ -47,9 +47,9 @@
                             <span class="text-danger">Archived</span>
                         </div>
                     }
-                    <dd>
+                    @*<dd>
                         @Model.Description
-                    </dd>
+                    </dd>*@
                     <dt class="col-sm-6 text-light">
                         Start Date
                     </dt>
@@ -181,9 +181,6 @@
                         Title
                     </th>
                     <th>
-                        Description
-                    </th>
-                    <th>
                         Created
                     </th>
                     <th>
@@ -209,12 +206,9 @@
                     <tr>
 
                         <td>
-                            <a class="btn btn-sm btn-outline-secondary text-secondary" asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">
+                            <a class="btn btn-sm btn-outline-secondary text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">
                                 @ticket.Title
                             </a>
-                        </td>
-                        <td>
-                            @ticket.Description
                         </td>
                         <td>
                             @ticket.Created.ToString("D")
