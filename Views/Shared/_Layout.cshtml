@@ -632,10 +632,10 @@
                                                                 else if (item.Title == "New Developer Ticket")
                                                                 {
                                                                     <span class="avatar-title bg-secondary-bright text-success rounded-circle">
-                                                                        <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Ticket.Id">
                                                                             <i class="ti-receipt"></i>
-                                                                        </a>
                                                                     </span>
+                                                                        @*<a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Ticket.Id">
+                                                                        </a>*@
                                                                 }
                                                                 else if (item.Title == $"Ticket modified in {item.Ticket.Project.Name}")
                                                                 {
