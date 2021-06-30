@@ -59,9 +59,13 @@
                     {
                         <p class="text-danger badge-danger bg-danger-bright"><span class="text-info">Status:</span> @Model.TicketStatus.Name</p>
                     }
+                    else if (Model.TicketStatusId == 2)
+                    {
+                        <p class="text-success"><span class="text-info">Status:</span> @Model.TicketStatus.Name</p>
+                    }
                     else
                     {
-                        <p class="text.light"><span class="text-info">Status:</span> @Model.TicketStatus.Name</p>
+                        <p class="text-light"><span class="text-info">Status:</span> @Model.TicketStatus.Name</p>
                     }
                     <p>
                         <span class="text-info">Submitter:</span>
