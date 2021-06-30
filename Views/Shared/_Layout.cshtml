@@ -10,7 +10,6 @@
 @inject IBTCompanyInfoService CompanyInfoService
 
 @{ BTUser currentUser = await UserManager.GetUserAsync(User);
-    var companyId = (int)currentUser.CompanyId;
     var notes = await NotificationService.GetReceivedNotificationsAsync(currentUser.Id);
     //var totalTickets = (await CompanyInfoService.GetAllTicketsAsync(companyId)).ToList();
     //var closedTickets = totalTickets.Where(t => t.TicketStatusId == 2).ToList();
@@ -631,7 +630,7 @@
                                                                         </span>
                                                                     @*</a>*@
                                                                 }
-                                                                @if (item.Title == "New Developer Ticket")
+                                                                else if (item.Title == "New Developer Ticket")
                                                                 {
                                                                     <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Ticket.Id">
                                                                         <span class="avatar-title bg-secondary-bright text-success rounded-circle">
