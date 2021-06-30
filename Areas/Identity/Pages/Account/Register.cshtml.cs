@@ -141,8 +141,9 @@ namespace Unbugit.Areas.Identity.Pages.Account
                     Company company = new()
                     {
                         Name = Input.CompanyName,
-                        Description = Input.CompanyDescription
+                        Description = Input.CompanyDescription,
                     };
+
 
                     _context.Add(company);
                     await _context.SaveChangesAsync();

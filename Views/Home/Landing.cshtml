@@ -19,8 +19,72 @@
 
     <!-- App styles -->
     <link rel="stylesheet" href="~/css/app.min.css" type="text/css">
+
+    <!-- Landing Styles -->
+    <link rel="stylesheet" href="~/css/styles-merged.css">
+    <link rel="stylesheet" href="~/css/style.min.css">
 </head>
+
+
 <body class="h-100-vh pt-0" style="background:#080e18">
+
+    <section class="probootstrap-hero">
+        <div class="container">
+            <div class="row align-items-md-center">
+                <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 text-center text-light probootstrap-hero-text pb0 probootstrap-animate" data-animate-effect="fadeIn">
+                    <img class="img-fluid" src="~/media/image/unbugit-logo2-rs.png" />
+
+                    <h1 class="text-primary" style="font-size:3.5rem">Welcome to Unbugit!</h1>
+                    <p>A solution to help teams communicate, plan, and track development.</p>
+                        <a class="btn btn-outline-secondary rounded" asp-area="Identity" asp-page="/Account/Login">Login to Demo the App</a>
+
+                </div>
+            </div>
+            <div class="row probootstrap-feature-showcase">
+                <div class="col-md-4 col-md-push-8 probootstrap-showcase-nav probootstrap-animate rounded">
+                    <ul>
+                        <li style="background-color:#5066e1; border-radius:7px;" class="active">
+                            <a class="text-info text-capitalize" style="font-size:2rem" href="#"><i class="icon fa fa-suitcase" style="font-size:2rem"></i> Plan Projects</a>
+                            <p class="text-light">Information at a glance. All you need to know who, what, where, and when.</p>
+                        </li>
+                        <li style="background-color:#5066e1; border-radius:7px;" >
+                            <a class="text-info text-capitalize" style="font-size:2rem" href="#"><i class="icon fa fa-ticket" style="font-size:2rem"></i> Track Tickets</a>
+                            <p class="text-light">Organize tickets by development cycle and priority to track all aspects of development in real-time.</p>
+                        </li>
+                        <li style="background-color:#5066e1; border-radius:7px;" >
+                            <a class="text-info text-capitalize" style="font-size:2rem" href="#"><i class="icon fa fa-users" style="font-size:2rem"></i> Communicate</a>
+                            <p class="text-light">With comments, informative details, and attachments for every ticket.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-8 col-md-pull-4 probootstrap-animate" style="position: relative;">
+                    <div class="probootstrap-home-showcase-wrap">
+                        <div class="probootstrap-home-showcase-inner">
+                            <div class="probootstrap-chrome">
+                                <div><span></span><span></span><span></span></div>
+                            </div>
+                            <div class="probootstrap-image-showcase">
+                                <ul class="probootstrap-images-list">
+                                    <li class="active"><img src="~/img/unbugit-dash.png" alt="Image" class="img-responsive"></li>
+                                    <li><img src="~/img/unbugit-ticket-list.png" alt="Image" class="img-responsive"></li>
+                                    <li><img src="img/unbugit-ticket-details.png" alt="Image" class="img-responsive"></li>
+                                    <li><img src="img/img_showcase_1.jpg" alt="Image" class="img-responsive"></li>
+                                    <li><img src="img/img_showcase_2.jpg" alt="Image" class="img-responsive"></li>
+                                    <li><img src="img/img_showcase_1.jpg" alt="Image" class="img-responsive"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
 
     <div class="container h-100-vh">
         <div class="row align-items-md-center h-100-vh">
@@ -41,5 +105,9 @@
 
     <!-- App scripts -->
     <script src="~/js/app.min.js"></script>
+
+    <!-- Landing Scripts -->
+    <script src="js/scripts.min.js"></script>
+    <script src="js/custom.min.js"></script>
 </body>
 </html>

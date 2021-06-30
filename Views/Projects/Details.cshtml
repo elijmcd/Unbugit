@@ -116,7 +116,6 @@
                         </ul>
                     </dd>
                 </dl>
-                <br />
                 <div>
                     <a class="btn btn-outline-success" asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Id">Manage Users on Project</a>
                 </div>
@@ -170,7 +169,7 @@
    (User.IsInRole("Developer") && developers.Contains(currentUser)) ||
    (User.IsInRole("Submitter") && submitters.Contains(currentUser)))
     {
-        <a class="justify-content-center" asp-action="Create" asp-controller=Tickets asp-route-id="@Model.Id"><span class="btn btn-block text-secondary centered">Create New Ticket</span></a>
+        <a class="justify-content-center" asp-action="Create" asp-controller="Tickets"><span class="btn btn-block text-secondary centered">Create New Ticket</span></a>
     }
 </div>
     <div class="table-responsive">

@@ -1,36 +1,34 @@
 ﻿@model Unbugit.Models.ViewModels.AssignDeveloperViewModel
-@using Unbugit.Services.Interfaces 
+@using Unbugit.Services.Interfaces
 @using Microsoft.AspNetCore.Mvc.Rendering
 
-@inject  IBTCompanyInfoService CompanyInfoService;
- 
+@inject IBTCompanyInfoService CompanyInfoService;
+
 @{
     int companyId = Model.Ticket.Project.CompanyId;
     List<BTUser> devs = await CompanyInfoService.GetMembersInRoleAsync("Developer", companyId);
 }
 
 <div class="row">
-    <div class="col">
+    <div class="col-lg-4 offset-lg-4">
         <div class="card shadow">
             <div class="card-body">
+                Assign a Developer for Ticket:<br />
+                <h5>@Model.Ticket.Title</h5>
                 <form asp-action="AssignTicket" method="post">
-                    <div class="card">
-                        <div class="body">
-                            <input asp-for="@Model.Ticket.Id" hidden />
-                            <input asp-for="@Model.Ticket.ProjectId" hidden />
-                            <div class="row clearfix">
-                                <div class="col-md-6 col-sm-12">
-                                    <label>Select Developer </label>
-                                    <div class="form-group">
-                                        <select class="form-control" asp-for="DeveloperId" asp-items="Model.Developers">
-                                            <option>Select Developer</option>
-                                        </select>
-                                    </div>
-                                    <div class="mt-4 form-group">
-                                        <button type="submit" class="btn btn-outline-primary">Submit</button>
-                                        <button asp-action="Dashboard" asp-controller="Home" class="btn btn-outline-danger">Cancel</button>
-                                    </div>
-                                </div>
+                    <input asp-for="@Model.Ticket.Id" hidden />
+                    <input asp-for="@Model.Ticket.ProjectId" hidden />
+                    <div class="row clearfix">
+                        <div class="col-md-6 col-sm-12">
+                            <label>Select Developer </label>
+                            <div class="form-group">
+                                <select class="form-control" asp-for="DeveloperId" asp-items="Model.Developers">
+                                    <option>Select Developer</option>
+                                </select>
+                            </div>
+                            <div class="mt-4 form-group">
+                                <button type="submit" class="btn btn-outline-primary">Submit</button>
+                                <button asp-action="Details" asp-controller="Tickets" asp-route-id="@Model.Ticket.Id" class="btn btn-outline-danger">Cancel</button>
                             </div>
                         </div>
                     </div>

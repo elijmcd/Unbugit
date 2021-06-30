@@ -13,7 +13,7 @@
 
 @{
     BTUser btUser = await UserManager.GetUserAsync(User);
-    Company company = btUser.Company;
+    Company company = await CompanyInfoService.GetCompanyInfoByIdAsync(btUser.CompanyId);
     List<Project> companyProjects = await ProjectService.GetAllProjectsByCompany((int)btUser.CompanyId);
     
 

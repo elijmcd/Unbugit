@@ -65,7 +65,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FormFile,FileName,FileData,FileContentType,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment)
+        public async Task<IActionResult> Create([Bind("Id,FileName,FormFile,FileContentType,Description,Created,TicketId,UserId")] TicketAttachment ticketAttachment)
         {
             if (ModelState.IsValid)
             {
@@ -171,7 +171,7 @@ namespace Unbugit.Controllers
             var ticketAttachment = await _context.TicketAttachment.FindAsync(id);
             _context.TicketAttachment.Remove(ticketAttachment);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Tickets", new { id = id });
         }
 
         private bool TicketAttachmentExists(int id)

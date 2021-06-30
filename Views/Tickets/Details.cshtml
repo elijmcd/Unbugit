@@ -51,20 +51,20 @@
                         <h5 class="text-center text-muted py-3" style="border: 1px solid #DD44A7">@Model.Title</h5>
                     }
 
+                    <p class="text-light"><em class="text-light">Created on:</em> @Model.Created.ToString("d")</p>
                     <h6 class="text-light">@Model.Description</h6>
-                    <p class="text-light"><em class="text-success">Created on:</em> @Model.Created.ToString("d")</p>
 
-                    <p class="text-info"><span class="text-light">Type:</span> @Model.TicketType.Name</p>
+                    <p class="text-light"><span class="text-info">Type:</span> @Model.TicketType.Name</p>
                     @if (Model.TicketStatusId == 1)
                     {
-                        <p class="text-danger badge-danger bg-danger-bright"><span>Status:</span> @Model.TicketStatus.Name</p>
+                        <p class="text-danger badge-danger bg-danger-bright"><span class="text-info">Status:</span> @Model.TicketStatus.Name</p>
                     }
                     else
                     {
-                        <p class="text-info"><span>Status:</span> @Model.TicketStatus.Name</p>
+                        <p class="text.light"><span class="text-info">Status:</span> @Model.TicketStatus.Name</p>
                     }
                     <p>
-                        <span class="text-light">Submitter:</span>
+                        <span class="text-info">Submitter:</span>
                         @if (Model.OwnerUser is not null)
                         {
                             <figure class="avatar avatar-sm mr-3 bring-forward">
@@ -80,7 +80,7 @@
                         }
                     </p>
                     <p>
-                        <span class="text-light">Developer:</span>
+                        <span class="text-info">Developer:</span>
                         @if (Model.DeveloperUser is not null)
                         {
                             @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (await ProjectService.GetProjectManagerAsync(Model.Project.Id)) == currentUser)
@@ -134,7 +134,7 @@
                     {
                         <div class="bg-primary-gradient text-center text-uppercase font-weight-bolder"><span class="text-dark">@Model.TicketPriority.Name</span></div>
                     }
-                    <p><a asp-action="Index" asp-controller="Projects" asp-route-id="@Model.Id">Return to Project</a></p>
+                    <p><a asp-action="Index" asp-controller="Projects" asp-route-id="@Model.Project.Id">Return to Project</a></p>
 
                 </div>
             </div>
@@ -254,9 +254,9 @@
                 <h6 class="text-center">Ticket Attachments</h6>
                 <div>
                     @if (User.IsInRole("Admin") ||
-                     (await ProjectService.GetProjectManagerAsync(Model.Project.Id) == currentUser) ||
-                     Model.DeveloperUser == currentUser ||
-                     Model.OwnerUser == currentUser)
+                    (await ProjectService.GetProjectManagerAsync(Model.Project.Id) == currentUser) ||
+                    Model.DeveloperUser == currentUser ||
+                    Model.OwnerUser == currentUser)
                     {
                         <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -285,15 +285,15 @@
                 <div class="col-6">
                     <div class="card shadow border my-1 p-1">
                         <div class="file">
+                            @if ((User.IsInRole("Admin")) || (await ProjectService.GetProjectManagerAsync(item.Ticket.Project.Id) == currentUser) || item.User == currentUser)
+                            {
+                                <a asp-action="Delete" asp-controller="TicketAttachments" asp-route-id="@item.Id" class="hover">
+                                    <button type="button" class="btn btn-icon btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </a>
+                            }
                             <a target="_blank" asp-action="ShowFile" asp-controller="Tickets" asp-route-Id="@item.Id">
-                                @if ((User.IsInRole("Admin")) || (await ProjectService.GetProjectManagerAsync(item.Ticket.Project.Id) == currentUser) || item.User == currentUser)
-                                {
-                                    <div class="hover">
-                                        <button type="button" class="btn btn-icon btn-danger">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </div>
-                                }
                                 <div class="icon">
                                     <img src="@BTFileService.GetFileIcon(item.FileName)" style="height:60px;width:60px" />
                                 </div>
@@ -308,6 +308,4 @@
             }
         </div>
     </div>
-</div>
-
 </div>

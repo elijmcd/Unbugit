@@ -119,8 +119,6 @@ namespace Unbugit.Controllers
 
             if (ModelState.IsValid)
             {
-                project.StartDate = DateTimeOffset.Now;
-                project.Company = btUser.Company;
                 project.CompanyId = ((int)btUser.CompanyId);
 
                 _context.Add(project);

@@ -48,6 +48,7 @@ namespace Unbugit.Services
                 }
             }
         }
+
         public async Task CloseTicketAsync(int ticketId, string userId)
         {
             Ticket ticket = await _context.Ticket.FirstOrDefaultAsync(t => t.Id == ticketId);
