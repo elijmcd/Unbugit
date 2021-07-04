@@ -713,7 +713,7 @@
 
 
 @section Scripts {
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    @*<script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
         google.load("visualization", "1", { packages: ["corechart"] });
         google.setOnLoadCallback(drawChart);
@@ -803,7 +803,7 @@
                 }
             });
         }
-    </script>
+    </script>*@
 
     <script type="text/javascript">
         $.ajax({
@@ -919,11 +919,12 @@
                 var donutOptions = {
                     maintainAspectRatio: false,
                     responsive: true,
+                    legend: false,
                 }
                 //Create pie or douhnut chart
                 // You can switch between pie and douhnut using the method below.
                 new Chart(donutChartCanvas, {
-                    type: 'doughnut',
+                    type: 'bar',
                     data: donutData,
                     options: donutOptions
                 })

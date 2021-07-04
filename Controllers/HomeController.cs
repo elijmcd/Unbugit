@@ -143,7 +143,7 @@ namespace Unbugit.Controllers
 
             return Json(chartData);
         }
-        // CHART/DONUT PRIORITY
+        // CHART/BAR PRIORITY
         [HttpPost]
         public async Task<JsonResult> DonutMethodPriority()
         {
@@ -162,8 +162,8 @@ namespace Unbugit.Controllers
             List<string> colors = new();
 
             foreach (TicketPriority priority in priorities)
-            {   
-                pTickets.Add(allTickets.Where(t=>t.TicketPriorityId == priority.Id).Count());
+            {
+                pTickets.Add(allTickets.Where(t => t.TicketPriorityId == priority.Id).Count());
 
                 // This code will randomly select a color for each element of the data 
                 Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));

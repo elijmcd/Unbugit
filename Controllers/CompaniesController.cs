@@ -121,7 +121,7 @@ namespace Unbugit.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Companies", new { id = id });
             }
             return View(company);
         }

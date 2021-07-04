@@ -161,7 +161,7 @@
 <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
 
 <div class="text-center">
-    <h5>Tickets for @Model.Name</h5>
+    <h5>Tickets for <strong>@Model.Name</strong></h5>
 </div>
 <div class="justify-content-center">
     @if (User.IsInRole("Admin") ||
@@ -251,7 +251,7 @@
     </div>
     <div class="d-block">
         <br />
-        <a asp-action="Index"><button class="btn btn-block btn-outline-light text-light">Back to Company Projects List</button></a>
+        <a asp-action="Index"><button class="btn btn-outline-light text-light">Back to Company Projects List</button></a>
     </div>
 
     @section Scripts{
