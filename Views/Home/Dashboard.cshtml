@@ -30,153 +30,152 @@
         <!-- Content body -->
         <div class="content-body">
             <!-- Content -->
-            <div>
-                <div class="page-header d-md-flex justify-content-between ">
-                    <h3 style="text-align:center;">Welcome back, @btUser.FirstName.</h3><span class="pull-right"><h3>@company</h3></span>
+            <div class="row">
+                <h3 style="text-align:center;">
+                    Welcome back, @btUser.FirstName.
                     @*<a href="#" class="btn btn-gradient-dark ml-0 ml-md-2 mt-2 mt-md-0 dropdown-toggle" data-toggle="dropdown">Actions</a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" asp-controller="Projects" asp-action="MyProjects" asp-route-id="@btUser.Id">My Projects</a>
                             <a class="dropdown-item" asp-controller="Tickets" asp-action="MyTickets" asp-route-id="@btUser.Id">My Tickets</a>
                         </div>*@
-                </div>
+                </h3><br />
+            </div>
+            <div class="row mx-2">
 
-                <div class="row mx-2">
-
-                    <div class="col-lg-3 col-md-6 col-sm-12 my-1">
-                        <div class="row">
-                            <div class="col">
-                                @*COMPANY PROJECTS*@
-                                <div class="card shadow border">
-                                    <div class="card-body bg-dark">
-                                        <p class="card-title">Company Projects</p>
-                                        <div class="d-flex align-items-center mb-3">
-                                            <div class="avatar">
-                                                <a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId">
-                                                    <span class="avatar-title bg-primary-bright rounded-pill">
-                                                        <small class="fa fa-tasks text-info"></small>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div class="font-weight-bold ml-1 font-size-30 ml-3">@companyProjects.Count</div>
-                                        </div>
-                                        @if (User.IsInRole("Admin"))
-                                        {
-                                            <small class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary">View All Projects</a></small>
-
-                                        }
-                                        @if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
-                                        {
-                                            <small class="mb-0"><a asp-action="MyProjects" asp-controller="Projects" asp-route-id="@btUser.Id" class="badge badge-primary bg-primary">View My Projects</a></small>
-                                            <small class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">View All Projects</a></small>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                @*OPEN TICKETS*@
-                                <div class="card shadow border">
-                                    <div class="card-body bg-dark">
-                                        <p class="card-title">Open Tickets</p>
-                                        <div class="d-flex align-items-center mb-3">
-                                            <div class="avatar">
-                                                <a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId">
-                                                    <span class="avatar-title bg-secondary-bright text-info rounded-pill">
-                                                        <i class="ti-ticket"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div class="font-weight-bold ml-1 font-size-30 ml-3">@openTickets</div>
-                                        </div>
-                                        @if (User.IsInRole("Admin"))
-                                        {
-                                            <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary">View All Tickets</a></p>
-
-                                        }
-                                        else if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
-                                        {
-                                            <small class="mb-0"><a asp-action="MyTickets" asp-controller="Tickets" asp-route-id="@btUser.Id" class="badge badge-secondary">View My Tickets</a></small>
-                                            <small class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-secondary-bright">View All Tickets</a></small>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                @*UNASSIGNED TICKETS*@
-                                <div class="card shadow border">
-                                    <div class="card-body bg-dark">
-                                        <p class="card-title">Unassigned Tickets</p>
-                                        <div class="d-flex align-items-center mb-3">
-                                            <div class="avatar">
-                                                <span class="avatar-title bg-success-bright text-success rounded-pill">
-                                                    <i class="ti-files"></i>
+                <div class="col-lg-3 col-md-6 col-sm-12 my-1">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @*COMPANY PROJECTS*@
+                            <div class="card shadow border">
+                                <div class="card-body bg-dark">
+                                    <p class="card-title">Company Projects</p>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="avatar">
+                                            <a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId">
+                                                <span class="avatar-title bg-primary-bright rounded-pill">
+                                                    <small class="fa fa-tasks text-info"></small>
                                                 </span>
-                                            </div>
-                                            <div class="font-weight-bold ml-1 font-size-30 ml-3">@unassigned</div>
+                                            </a>
                                         </div>
-                                        @*@if (User.IsInRole("Admin"))
-                                            {
-                                                <small class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-success bg-success-gradient">Assign Tickets</a></small>
-                                            }*@
+                                        <div class="font-weight-bold ml-1 font-size-30 ml-3">@companyProjects.Count</div>
                                     </div>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <small class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary">View All Projects</a></small>
+
+                                    }
+                                    @if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
+                                    {
+                                        <small class="mb-0"><a asp-action="MyProjects" asp-controller="Projects" asp-route-id="@btUser.Id" class="badge badge-primary bg-primary">View My Projects</a></small>
+                                        <small class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">View All Projects</a></small>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            @*OPEN TICKETS*@
+                            <div class="card shadow border">
+                                <div class="card-body bg-dark">
+                                    <p class="card-title">Open Tickets</p>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="avatar">
+                                            <a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId">
+                                                <span class="avatar-title bg-secondary-bright text-info rounded-pill">
+                                                    <i class="ti-ticket"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="font-weight-bold ml-1 font-size-30 ml-3">@openTickets</div>
+                                    </div>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary">View All Tickets</a></p>
 
-                    <div class="col-lg-9 col-md-12 col-md-12 my-1">
-                        <div class="row">
-                            <div class="col-lg-9 col-md-12 col-sm-12">
-                                <!-- TICKET DISTRIBUTION CHART -->
-                                <div class="card shadow border">
-                                    <div class="card-header">
-                                        <h3 class="card-title pt-1">Company Ticket Distribution</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <canvas id="donutChart">
-                                        </canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-12 col-sm-12">
-                                <!-- TICKETS BY PRIORITY CHART -->
-                                <div class="card shadow border">
-                                    <div class="card-header">
-                                        <h4 class="card-title pt-1">Tickets by Priority</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <canvas id="donutChartPriority">
-                                        </canvas>
-                                    </div>
+                                    }
+                                    else if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
+                                    {
+                                        <small class="mb-0"><a asp-action="MyTickets" asp-controller="Tickets" asp-route-id="@btUser.Id" class="badge badge-secondary">View My Tickets</a></small>
+                                        <small class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-secondary-bright">View All Tickets</a></small>
+                                    }
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-12 col-sm-12">
-                                <!-- TICKETS BY STATUS CHART -->
-                                <div class="card shadow border">
-                                    <div class="card-header">
-                                        <h5 class="card-title pt-1">Tickets by Status</h5>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            @*UNASSIGNED TICKETS*@
+                            <div class="card shadow border">
+                                <div class="card-body bg-dark">
+                                    <p class="card-title">Unassigned Tickets</p>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="avatar">
+                                            <span class="avatar-title bg-success-bright text-success rounded-pill">
+                                                <i class="ti-files"></i>
+                                            </span>
+                                        </div>
+                                        <div class="font-weight-bold ml-1 font-size-30 ml-3">@unassigned</div>
                                     </div>
-                                    <div class="card-body">
-                                        <canvas id="donutChartStatus">
-                                        </canvas>
-                                    </div>
+                                    @*@if (User.IsInRole("Admin"))
+                                        {
+                                            <small class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-success bg-success-gradient">Assign Tickets</a></small>
+                                        }*@
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-12 col-sm-12">
-                                <!-- TICKETS BY TYPE CHART -->
-                                <div class="card shadow border">
-                                    <div class="card-header">
-                                        <h5 class="card-title pt-1">Tickets by Type</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <canvas id="donutChartType">
-                                        </canvas>
-                                    </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 col-md-12 col-sm-12 my-1">
+                    <div class="row">
+                        <div class="col-lg-9 col-md-12 col-sm-12">
+                            <!-- TICKET DISTRIBUTION CHART -->
+                            <div class="card shadow border">
+                                <div class="card-header">
+                                    <h3 class="card-title pt-1">Company Ticket Distribution</h3>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="donutChart">
+                                    </canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 col-sm-12">
+                            <!-- TICKETS BY PRIORITY CHART -->
+                            <div class="card shadow border">
+                                <div class="card-header">
+                                    <h4 class="card-title pt-1">Tickets by Priority</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="donutChartPriority">
+                                    </canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12 col-sm-12">
+                            <!-- TICKETS BY STATUS CHART -->
+                            <div class="card shadow border">
+                                <div class="card-header">
+                                    <h5 class="card-title pt-1">Tickets by Status</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="donutChartStatus">
+                                    </canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 col-sm-12">
+                            <!-- TICKETS BY TYPE CHART -->
+                            <div class="card shadow border">
+                                <div class="card-header">
+                                    <h5 class="card-title pt-1">Tickets by Type</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="donutChartType">
+                                    </canvas>
                                 </div>
                             </div>
                         </div>
@@ -185,16 +184,19 @@
             </div>
             <div class="justify-content-center">
                 <ul class="nav nav-pills mb-3" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="myTickets-tab" data-toggle="tab" href="#myTickets" role="tab"
-                           aria-controls="myTickets" aria-selected="true">MyTickets</a>
-                    </li>
                     @if (!User.IsInRole("Admin"))
                     {
-                    <li class="nav-item">
-                        <a class="nav-link" id="myProjects-tab" data-toggle="tab" href="#myProjects" role="tab"
-                           aria-controls="myProjects" aria-selected="false">MyProjects</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="myTickets-tab" data-toggle="tab" href="#myTickets" role="tab"
+                               aria-controls="myTickets" aria-selected="true">MyTickets</a>
+                        </li>
+                    }
+                    @if (!User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" id="myProjects-tab" data-toggle="tab" href="#myProjects" role="tab"
+                               aria-controls="myProjects" aria-selected="false">MyProjects</a>
+                        </li>
                     }
                     <li class="nav-item">
                         <a class="nav-link" id="companyTickets-tab" data-toggle="tab" href="#companyTickets" role="tab"
@@ -574,54 +576,54 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        @foreach (var item in (Model.Projects))
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @if ((item.Members.Contains(btUser)) || (User.IsInRole("Admin")) || (User.IsInRole("ProjectManager") && item.Members.Contains(btUser)))
-                                                    {
-                                                        <a class="btn btn-outline-success text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                                                            @item.Name
-                                                        </a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a class="btn btn-outline-success text-primary" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                                                            @item.Name
-                                                        </a>
-                                                    }
-                                                </td>
-                                                <td>
-                                                    @if (item.ProjectPriorityId == 1)
-                                                    {
-                                                        <span class="badge badge-danger">@item.ProjectPriority.Name</span>
-                                                    }
-                                                    else if (item.ProjectPriorityId == 2)
-                                                    {
-                                                        <span class="badge badge-warning">@item.ProjectPriority.Name</span>
-                                                    }
-                                                    else if (item.ProjectPriorityId == 3)
-                                                    {
-                                                        <span class="badge badge-info">@item.ProjectPriority.Name</span>
-                                                    }
-                                                    else if (item.ProjectPriorityId == 4)
-                                                    {
-                                                        <span class="badge badge-primary">@item.ProjectPriority.Name</span>
-                                                    }
-                                                </td>
-                                                <td>
-                                                    @item.StartDate.ToString("d")
-                                                </td>
-                                                <td>
-                                                    @item.EndDate?.ToString("d")
-                                                </td>
-                                                <td>
-                                                    @item.Members.Count
-                                                </td>
-                                                <td>
-                                                    @item.Tickets.Count
-                                                </td>
-                                            </tr>
+                                    @foreach (var item in (Model.Projects))
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if ((item.Members.Contains(btUser)) || (User.IsInRole("Admin")) || (User.IsInRole("ProjectManager") && item.Members.Contains(btUser)))
+                                                {
+                                                    <a class="btn btn-outline-success text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                        @item.Name
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-outline-success text-primary" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                        @item.Name
+                                                    </a>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.ProjectPriorityId == 1)
+                                                {
+                                                    <span class="badge badge-danger">@item.ProjectPriority.Name</span>
+                                                }
+                                                else if (item.ProjectPriorityId == 2)
+                                                {
+                                                    <span class="badge badge-warning">@item.ProjectPriority.Name</span>
+                                                }
+                                                else if (item.ProjectPriorityId == 3)
+                                                {
+                                                    <span class="badge badge-info">@item.ProjectPriority.Name</span>
+                                                }
+                                                else if (item.ProjectPriorityId == 4)
+                                                {
+                                                    <span class="badge badge-primary">@item.ProjectPriority.Name</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @item.StartDate.ToString("d")
+                                            </td>
+                                            <td>
+                                                @item.EndDate?.ToString("d")
+                                            </td>
+                                            <td>
+                                                @item.Members.Count
+                                            </td>
+                                            <td>
+                                                @item.Tickets.Count
+                                            </td>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>
@@ -714,96 +716,96 @@
 
 @section Scripts {
     @*<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-        google.load("visualization", "1", { packages: ["corechart"] });
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
-            $.ajax({
-                type: "POST",
-                url: "/Home/PieChartMethod",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    var data = google.visualization.arrayToDataTable(result);
+        <script type="text/javascript">
+            google.load("visualization", "1", { packages: ["corechart"] });
+            google.setOnLoadCallback(drawChart);
+            function drawChart() {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/PieChartMethod",
+                    data: '{}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        var data = google.visualization.arrayToDataTable(result);
 
-                    //Pie
-                    var options = {
-                        title: 'Company Ticket Distribution',
-                        //is3D: true
-                    };
-                    var chart = new google.visualization.PieChart($("#chart1")[0]);
-                    chart.draw(data, options);
-                },
-                failure: function (result) {
-                    alert(result.d);
-                },
-                error: function (result) {
-                    alert(result.d);
-                }
-            });
-        }
-    </script>
-    <script type="text/javascript">
-        google.load("visualization", "1", { packages: ["corechart"] });
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
-            $.ajax({
-                type: "POST",
-                url: "/Home/PieChartMethod",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    var data = google.visualization.arrayToDataTable(result);
+                        //Pie
+                        var options = {
+                            title: 'Company Ticket Distribution',
+                            //is3D: true
+                        };
+                        var chart = new google.visualization.PieChart($("#chart1")[0]);
+                        chart.draw(data, options);
+                    },
+                    failure: function (result) {
+                        alert(result.d);
+                    },
+                    error: function (result) {
+                        alert(result.d);
+                    }
+                });
+            }
+        </script>
+        <script type="text/javascript">
+            google.load("visualization", "1", { packages: ["corechart"] });
+            google.setOnLoadCallback(drawChart);
+            function drawChart() {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/PieChartMethod",
+                    data: '{}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        var data = google.visualization.arrayToDataTable(result);
 
-                    //3D Pie
-                    var options = {
-                        title: 'Company Ticket Distribution',
-                        is3D: true
-                    };
-                    var chart = new google.visualization.PieChart($("#chart3D")[0]);
-                    chart.draw(data, options);
-                },
-                failure: function (rresult) {
-                    alert(result.d);
-                },
-                error: function (result) {
-                    alert(result.d);
-                }
-            });
-        }
-    </script>
-    <script type="text/javascript">
-        google.load("visualization", "1", { packages: ["corechart"] });
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
-            $.ajax({
-                type: "POST",
-                url: "/Home/PieChartMethod",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    var data = google.visualization.arrayToDataTable(result);
+                        //3D Pie
+                        var options = {
+                            title: 'Company Ticket Distribution',
+                            is3D: true
+                        };
+                        var chart = new google.visualization.PieChart($("#chart3D")[0]);
+                        chart.draw(data, options);
+                    },
+                    failure: function (rresult) {
+                        alert(result.d);
+                    },
+                    error: function (result) {
+                        alert(result.d);
+                    }
+                });
+            }
+        </script>
+        <script type="text/javascript">
+            google.load("visualization", "1", { packages: ["corechart"] });
+            google.setOnLoadCallback(drawChart);
+            function drawChart() {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/PieChartMethod",
+                    data: '{}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        var data = google.visualization.arrayToDataTable(result);
 
-                    //Donut
-                    var options = {
-                        title: 'Company Ticket Distribution',
-                        pieHole: 0.5
-                    };
-                    var chart = new google.visualization.PieChart($("#donut")[0]);
-                    chart.draw(data, options);
-                },
-                failure: function (rresult) {
-                    alert(result.d);
-                },
-                error: function (result) {
-                    alert(result.d);
-                }
-            });
-        }
-    </script>*@
+                        //Donut
+                        var options = {
+                            title: 'Company Ticket Distribution',
+                            pieHole: 0.5
+                        };
+                        var chart = new google.visualization.PieChart($("#donut")[0]);
+                        chart.draw(data, options);
+                    },
+                    failure: function (rresult) {
+                        alert(result.d);
+                    },
+                    error: function (result) {
+                        alert(result.d);
+                    }
+                });
+            }
+        </script>*@
 
     <script type="text/javascript">
         $.ajax({
