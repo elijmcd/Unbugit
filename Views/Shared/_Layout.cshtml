@@ -1,15 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using System.Linq
 @using Unbugit.Services.Interfaces
-
+@using Microsoft.AspNetCore.Mvc;
+@using System.Threading.Tasks;
+@using Unbugit.Data;
 
 @inject SignInManager<BTUser> SignInManager
 @inject UserManager<BTUser> UserManager
 @inject IBTFileService FileService
 @inject IBTNotificationService NotificationService
 @inject IBTCompanyInfoService CompanyInfoService
+@inject ApplicationDbContext _context
 
 @{ BTUser currentUser = await UserManager.GetUserAsync(User);
+    string companyName = _context.Company.FirstOrDefault(c => c.Id == currentUser.CompanyId).Name;
     var notes = await NotificationService.GetReceivedNotificationsAsync(currentUser.Id);
     //var totalTickets = (await CompanyInfoService.GetAllTicketsAsync(companyId)).ToList();
     //var closedTickets = totalTickets.Where(t => t.TicketStatusId == 2).ToList();
@@ -483,7 +487,7 @@
                     <div class="header-body-left">
                         <ul class="navbar-nav">
                             <li class="nav-item ml-3">
-                                <span class="btn btn-outline-light pt-3"><h3>@currentUser.Company.Name</h3></span>
+                                <span class="btn btn-outline-light pt-3"><h3>@companyName</h3></span>
                             </li>
                             @*/*SEARCH*/*@
                             @*<li class="nav-item pt-2 mr-3">
@@ -634,9 +638,9 @@
                                                                 else if (item.Title == "New Developer Ticket")
                                                                 {
                                                                     <span class="avatar-title bg-secondary-bright text-success rounded-circle">
-                                                                            <i class="ti-receipt"></i>
+                                                                        <i class="ti-receipt"></i>
                                                                     </span>
-                                                                        @*<a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Ticket.Id">
+                                                                    @*<a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Ticket.Id">
                                                                         </a>*@
                                                                 }
                                                                 else if (item.Title == $"Ticket modified in {item.Ticket.Project.Name}")

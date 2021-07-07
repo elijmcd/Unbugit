@@ -184,13 +184,10 @@
             </div>
             <div class="justify-content-center">
                 <ul class="nav nav-pills mb-3" role="tablist">
-                    @if (!User.IsInRole("Admin"))
-                    {
                         <li class="nav-item">
                             <a class="nav-link active" id="myTickets-tab" data-toggle="tab" href="#myTickets" role="tab"
                                aria-controls="myTickets" aria-selected="true">MyTickets</a>
                         </li>
-                    }
                     @if (!User.IsInRole("Admin"))
                     {
                         <li class="nav-item">
