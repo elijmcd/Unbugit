@@ -8844,12 +8844,12 @@ body.dark.hidden-navigation .navigation {
 }
 
 footer.content-footer {
-  margin-right: 30px;
-  display: flex;
+/*  margin-right: 30px;
+*/  display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-left: 280px;
-  height: 50px;
+/*  margin-left: 280px;
+*/  height: 50px;
 }
 
 footer.content-footer * {

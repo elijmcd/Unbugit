@@ -209,7 +209,7 @@
             <div class="tab-content">
 
                 <div class="tab-pane fade show active" id="myTickets" role="tabpanel" aria-labelledby="home-tab">
-                   
+
                     <a asp-action="Create" asp-controller="Tickets" class="pull-left">
                         <span class="btn btn-outline-secondary">
                             <i class="text-warning" data-feather="plus-square"></i>
@@ -299,7 +299,7 @@
                                                 }
                                                 else if (item.TicketStatusId == 2)
                                                 {
-                                                    <span class="text-warning">@item.TicketStatus.Name</span>
+                                                    <span class="text-success">@item.TicketStatus.Name</span>
                                                 }
                                                 else if (item.TicketStatusId == 3)
                                                 {
@@ -345,15 +345,15 @@
                 </div>
 
                 <div class="tab-pane fade" id="myProjects" role="tabpanel" aria-labelledby="home-tab">
-                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-                {
-                    <a asp-action="Create" asp-controller="Projects" class="pull-left">
-                        <span class="btn btn-outline-success">
-                            <i class="text-warning" data-feather="plus-square"></i>
-                        </span>
-                        <span>Add New Project</span>
-                    </a>
-                }
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    {
+                        <a asp-action="Create" asp-controller="Projects" class="pull-left">
+                            <span class="btn btn-outline-success">
+                                <i class="text-warning" data-feather="plus-square"></i>
+                            </span>
+                            <span>Add New Project</span>
+                        </a>
+                    }
                     <div row="row my-1">
                         <div class="table-responsive">
                             <div class="text-center">
@@ -522,7 +522,7 @@
                                                 }
                                                 else if (item.TicketStatusId == 2)
                                                 {
-                                                    <span class="text-warning">@item.TicketStatus.Name</span>
+                                                    <span class="text-success">@item.TicketStatus.Name</span>
                                                 }
                                                 else if (item.TicketStatusId == 3)
                                                 {
@@ -568,14 +568,14 @@
                 </div>
 
                 <div class="tab-pane fade" id="companyProjects" role="tabpanel" aria-labelledby="home-tab">
-                    @if(User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
                     {
-                    <a asp-action="Create" asp-controller="Projects" class="pull-left">
-                        <span class="btn btn-outline-success">
-                            <i class="text-warning" data-feather="plus-square"></i>
-                        </span>
-                        <span>Add New Project</span>
-                    </a>
+                        <a asp-action="Create" asp-controller="Projects" class="pull-left">
+                            <span class="btn btn-outline-success">
+                                <i class="text-warning" data-feather="plus-square"></i>
+                            </span>
+                            <span>Add New Project</span>
+                        </a>
                     }
                     <div row="row my-1">
                         <div class="table-responsive">
@@ -937,7 +937,42 @@
         });
 
     </script>
+
     <script type="text/javascript">
+        $.ajax({
+            type: "POST",
+            url: "/Home/DonutMethodPriority",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                //Donut
+                var donutChartCanvas = $('#donutChartPriority').get(0).getContext('2d')
+                var donutData = result
+
+                var donutOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                new Chart(donutChartCanvas, {
+                    type: 'doughnut',
+                    data: donutData,
+                    options: donutOptions
+                })
+            },
+            failure: function (result) {
+                alert(result.d);
+            },
+            error: function (result) {
+                alert(result.d);
+            }
+        });
+
+    </script>
+
+    @*<script type="text/javascript">
         $.ajax({
             type: "POST",
             url: "/Home/DonutMethodPriority",
@@ -970,7 +1005,7 @@
             }
         });
 
-    </script>
+    </script>*@
 
     <script>
         $(document).ready(function () {
