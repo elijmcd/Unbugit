@@ -40,8 +40,10 @@
                         </div>*@
                 </h3><br />
             </div>
+
             <div class="row mx-2">
 
+                <!--INFO BOXES-->
                 <div class="col-lg-3 col-md-6 col-sm-12 my-1">
                     <div class="row">
                         <div class="col-sm-12">
@@ -127,10 +129,12 @@
                     </div>
                 </div>
 
+                <!--CHARTS-->
                 <div class="col-lg-9 col-md-12 col-sm-12 my-1">
                     <div class="row">
-                        <div class="col-lg-9 col-md-12 col-sm-12">
+
                             <!-- TICKET DISTRIBUTION CHART -->
+                        <div class="col-lg-9 col-md-12 col-sm-12">
                             <div class="card shadow border">
                                 <div class="card-header">
                                     <h3 class="card-title pt-1">Company Ticket Distribution</h3>
@@ -141,8 +145,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-12 col-sm-12">
+
                             <!-- TICKETS BY PRIORITY CHART -->
+                        <div class="col-lg-3 col-md-12 col-sm-12">
                             <div class="card shadow border">
                                 <div class="card-header">
                                     <h4 class="card-title pt-1">Tickets by Priority</h4>
@@ -155,8 +160,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-12 col-sm-12">
+
                             <!-- TICKETS BY STATUS CHART -->
+                        <div class="col-lg-6 col-md-12 col-sm-12">
                             <div class="card shadow border">
                                 <div class="card-header">
                                     <h5 class="card-title pt-1">Tickets by Status</h5>
@@ -167,8 +173,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-12 col-sm-12">
+
                             <!-- TICKETS BY TYPE CHART -->
+                        <div class="col-lg-6 col-md-12 col-sm-12">
                             <div class="card shadow border">
                                 <div class="card-header">
                                     <h5 class="card-title pt-1">Tickets by Type</h5>
@@ -181,7 +188,10 @@
                         </div>
                     </div>
                 </div>
+           
             </div>
+
+            <!--TABS-->
             <div class="justify-content-center">
                 <ul class="nav nav-pills mb-3" role="tablist">
                     <li class="nav-item">
@@ -206,17 +216,17 @@
                 </ul>
             </div>
 
+            <!--TAB CONTENT-->
             <div class="tab-content">
 
+                <!--MY TICKETS TAB-->
                 <div class="tab-pane fade show active" id="myTickets" role="tabpanel" aria-labelledby="home-tab">
-
                     <a asp-action="Create" asp-controller="Tickets" class="pull-left">
                         <span class="btn btn-outline-secondary">
                             <i class="text-warning" data-feather="plus-square"></i>
                         </span>
                         <span>Add New Ticket</span>
                     </a>
-
                     <div row="row my-1">
                         <div class="table-responsive">
                             <div class="text-center">
@@ -344,6 +354,7 @@
                     </div>
                 </div>
 
+                <!--MY PROJECTS TAB-->
                 <div class="tab-pane fade" id="myProjects" role="tabpanel" aria-labelledby="home-tab">
                     @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
                     {
@@ -428,18 +439,16 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
 
+                <!--COMPANY TICKETS TAB-->
                 <div class="tab-pane fade" id="companyTickets" role="tabpanel" aria-labelledby="home-tab">
-
                     <a asp-action="Create" asp-controller="Tickets" class="pull-left">
                         <span class="btn btn-outline-secondary">
                             <i class="text-warning" data-feather="plus-square"></i>
                         </span>
                         <span>Add New Ticket</span>
                     </a>
-
                     <div row="row my-1">
                         <div class="table-responsive">
                             <div class="text-center">
@@ -567,6 +576,7 @@
                     </div>
                 </div>
 
+                <!--COMPANY PROJECTS TAB-->
                 <div class="tab-pane fade" id="companyProjects" role="tabpanel" aria-labelledby="home-tab">
                     @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
                     {
@@ -664,39 +674,6 @@
 
             </div>
 
-            <!-- ALL TICKETS IN COMPANY TABLE-->
-            <!-- GOOGLE CHARTS -->
-            @*<div class="row clearfix">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card">
-                            <div class="body">
-                                <div id="chart1" class="bg-warning-bright text-warning">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card">
-                            <div class="body">
-                                <div id="chart3D">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card">
-                            <div class="body">
-                                <div id="donut">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>*@
-
-
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -723,6 +700,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- ./ Content -->
             <!-- Footer -->
             <footer class="content-footer pull-left">
@@ -746,99 +724,10 @@
 
 
 @section Scripts {
-    @*<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-        <script type="text/javascript">
-            google.load("visualization", "1", { packages: ["corechart"] });
-            google.setOnLoadCallback(drawChart);
-            function drawChart() {
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/PieChartMethod",
-                    data: '{}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        var data = google.visualization.arrayToDataTable(result);
 
-                        //Pie
-                        var options = {
-                            title: 'Company Ticket Distribution',
-                            //is3D: true
-                        };
-                        var chart = new google.visualization.PieChart($("#chart1")[0]);
-                        chart.draw(data, options);
-                    },
-                    failure: function (result) {
-                        alert(result.d);
-                    },
-                    error: function (result) {
-                        alert(result.d);
-                    }
-                });
-            }
-        </script>
-        <script type="text/javascript">
-            google.load("visualization", "1", { packages: ["corechart"] });
-            google.setOnLoadCallback(drawChart);
-            function drawChart() {
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/PieChartMethod",
-                    data: '{}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        var data = google.visualization.arrayToDataTable(result);
-
-                        //3D Pie
-                        var options = {
-                            title: 'Company Ticket Distribution',
-                            is3D: true
-                        };
-                        var chart = new google.visualization.PieChart($("#chart3D")[0]);
-                        chart.draw(data, options);
-                    },
-                    failure: function (rresult) {
-                        alert(result.d);
-                    },
-                    error: function (result) {
-                        alert(result.d);
-                    }
-                });
-            }
-        </script>
-        <script type="text/javascript">
-            google.load("visualization", "1", { packages: ["corechart"] });
-            google.setOnLoadCallback(drawChart);
-            function drawChart() {
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/PieChartMethod",
-                    data: '{}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        var data = google.visualization.arrayToDataTable(result);
-
-                        //Donut
-                        var options = {
-                            title: 'Company Ticket Distribution',
-                            pieHole: 0.5
-                        };
-                        var chart = new google.visualization.PieChart($("#donut")[0]);
-                        chart.draw(data, options);
-                    },
-                    failure: function (rresult) {
-                        alert(result.d);
-                    },
-                    error: function (result) {
-                        alert(result.d);
-                    }
-                });
-            }
-        </script>*@
 
     <script type="text/javascript">
+        //Tickets By PROJECT Chart
         $.ajax({
             type: "POST",
             url: "/Home/DonutMethod",
@@ -869,9 +758,10 @@
                 alert(result.d);
             }
         });
-
     </script>
+
     <script type="text/javascript">
+        //Tickets by STATUS Chart
         $.ajax({
             type: "POST",
             url: "/Home/DonutMethodStatus",
@@ -890,7 +780,7 @@
                 //Create pie or douhnut chart
                 // You can switch between pie and douhnut using the method below.
                 new Chart(donutChartCanvas, {
-                    type: 'doughnut',
+                    type: 'polarArea',
                     data: donutData,
                     options: donutOptions
                 })
@@ -902,9 +792,10 @@
                 alert(result.d);
             }
         });
-
     </script>
+
     <script type="text/javascript">
+        //Tickets by TYPE Chart
         $.ajax({
             type: "POST",
             url: "/Home/DonutMethodType",
@@ -935,10 +826,10 @@
                 alert(result.d);
             }
         });
-
     </script>
 
     <script type="text/javascript">
+        //Tickets by PRIORITY Chart
         $.ajax({
             type: "POST",
             url: "/Home/DonutMethodPriority",
@@ -951,43 +842,16 @@
                 var donutData = result
 
                 var donutOptions = {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
                     maintainAspectRatio: false,
                     responsive: true,
-                }
-                //Create pie or douhnut chart
-                // You can switch between pie and douhnut using the method below.
-                new Chart(donutChartCanvas, {
-                    type: 'doughnut',
-                    data: donutData,
-                    options: donutOptions
-                })
-            },
-            failure: function (result) {
-                alert(result.d);
-            },
-            error: function (result) {
-                alert(result.d);
-            }
-        });
-
-    </script>
-
-    @*<script type="text/javascript">
-        $.ajax({
-            type: "POST",
-            url: "/Home/DonutMethodPriority",
-            data: '{}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-                //Donut
-                var donutChartCanvas = $('#donutChartPriority').get(0).getContext('2d')
-                var donutData = result
-
-                var donutOptions = {
-                    maintainAspectRatio: false,
-                    responsive: true,
-                    legend: false,
+                    legend: { display: false },
                 }
                 //Create pie or douhnut chart
                 // You can switch between pie and douhnut using the method below.
@@ -1004,8 +868,7 @@
                 alert(result.d);
             }
         });
-
-    </script>*@
+    </script>
 
     <script>
         $(document).ready(function () {
