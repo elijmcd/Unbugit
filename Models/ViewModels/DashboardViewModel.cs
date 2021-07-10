@@ -10,5 +10,8 @@ namespace Unbugit.Models.ViewModels
         public List<Project> Projects { get; set; }
         public List<Ticket> Tickets { get; set; }
         public List<BTUser> Users { get; set; }
+
+        public virtual Ticket Ticket { get; set; }
+        public virtual Project Project { get; set; }
     }
 }

@@ -208,8 +208,9 @@ namespace Unbugit.Controllers
 
             ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Name");
             ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Name");
+            ViewBag.returnUrl = Request.Headers["Referer"].ToString();
 
-            return View();
+            return PartialView();
         }
 
         // POST: Tickets/Create
@@ -217,7 +218,7 @@ namespace Unbugit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,OwnerUser,OwnerUserId,Description,ProjectId,TicketTypeId,TicketType,TicketPriorityId")] Ticket ticket)
+        public async Task<IActionResult> Create(string returnUrl, [Bind("Id,Title,OwnerUser,OwnerUserId,Description,ProjectId,TicketTypeId,TicketType,TicketPriorityId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
@@ -275,7 +276,7 @@ namespace Unbugit.Controllers
 
                 #endregion
 
-                return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
+                return Redirect(returnUrl);
             }
             //ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
             //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
@@ -283,7 +284,7 @@ namespace Unbugit.Controllers
             //ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Id", ticket.TicketPriorityId);
             //ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id", ticket.TicketStatusId);
             //ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Id", ticket.TicketTypeId);
-            return View(ticket);
+            return View("/Home/Dashboard", ticket);
         }
 
         // GET: Tickets/Edit/5

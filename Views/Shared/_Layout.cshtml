@@ -405,7 +405,7 @@
                                 </a>
                             </li>
                             <li class="nav-link-icon">
-                                <a asp-action="Create" asp-controller="Tickets">
+                                <a id="LayoutNewTicketLauncher" data-toggle="modal" data-target="#newTicketModal" asp-action="Create" asp-controller="Tickets">
                                     <span class="nav-link-icon">
                                         <i style="color:#FFFF00;" data-feather="plus-square"></i>
                                     </span>
@@ -873,6 +873,31 @@
     <!-- Chart Scripts -->
     <script src="~/js/chart.min.js"></script>
     <script src="~/js/chartjs.js"></script>
+
+    <!--LAYOUT ADD TICKET Modal Launcher-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#LayoutNewTicketLauncher').click(function () {
+                var url = $('#newTicketModal').data('url');
+                $.get(url, function (data) {
+                    $("#newTicketModal").html(data);
+                    $("#newTicketModal").modal('show');
+                });
+            });
+        });
+    </script>
+    <!--ADD TICKET Modal Launcher-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#newTicketLauncher').click(function () {
+                var url = $('#newTicketModal').data('url');
+                $.get(url, function (data) {
+                    $("#newTicketModal").html(data);
+                    $("#newTicketModal").modal('show');
+                });
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

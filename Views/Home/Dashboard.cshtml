@@ -91,16 +91,12 @@
                                         </div>
                                         <div class="font-weight-bold ml-1 font-size-30 ml-3">@openTickets</div>
                                     </div>
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <p class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary">View All Tickets</a></p>
-
-                                    }
-                                    else if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
+                                    @if (!User.IsInRole("Admin"))
                                     {
                                         <small class="mb-0"><a asp-action="MyTickets" asp-controller="Tickets" asp-route-id="@btUser.Id" class="badge badge-secondary">View My Tickets</a></small>
-                                        <small class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-secondary-bright">View All Tickets</a></small>
+
                                     }
+                                    <small class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-secondary-bright">View All Tickets</a></small>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +129,7 @@
                 <div class="col-lg-9 col-md-12 col-sm-12 my-1">
                     <div class="row">
 
-                            <!-- TICKET DISTRIBUTION CHART -->
+                        <!-- TICKET DISTRIBUTION CHART -->
                         <div class="col-lg-9 col-md-12 col-sm-12">
                             <div class="card shadow border">
                                 <div class="card-header">
@@ -146,7 +142,7 @@
                             </div>
                         </div>
 
-                            <!-- TICKETS BY PRIORITY CHART -->
+                        <!-- TICKETS BY PRIORITY CHART -->
                         <div class="col-lg-3 col-md-12 col-sm-12">
                             <div class="card shadow border">
                                 <div class="card-header">
@@ -161,7 +157,7 @@
                     </div>
                     <div class="row">
 
-                            <!-- TICKETS BY STATUS CHART -->
+                        <!-- TICKETS BY STATUS CHART -->
                         <div class="col-lg-6 col-md-12 col-sm-12">
                             <div class="card shadow border">
                                 <div class="card-header">
@@ -174,7 +170,7 @@
                             </div>
                         </div>
 
-                            <!-- TICKETS BY TYPE CHART -->
+                        <!-- TICKETS BY TYPE CHART -->
                         <div class="col-lg-6 col-md-12 col-sm-12">
                             <div class="card shadow border">
                                 <div class="card-header">
@@ -188,7 +184,7 @@
                         </div>
                     </div>
                 </div>
-           
+
             </div>
 
             <!--TABS-->
@@ -218,15 +214,24 @@
 
             <!--TAB CONTENT-->
             <div class="tab-content">
+                <a id="newTicketLauncher" asp-action="Create" asp-controller="Tickets" class="pull-left mx-1" data-toggle="modal" data-target="#newTicketModal">
+                    <span class="btn btn-outline-secondary">
+                        <i class="text-warning" data-feather="plus-square"></i>
+                    </span>
+                    <span>Add New Ticket</span>
+                </a>
+                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                {
+                    <a asp-action="Create" asp-controller="Projects" class="pull-left mx-1">
+                        <span class="btn btn-outline-success">
+                            <i class="text-warning" data-feather="plus-square"></i>
+                        </span>
+                        <span>Add New Project</span>
+                    </a>
+                }
 
                 <!--MY TICKETS TAB-->
                 <div class="tab-pane fade show active" id="myTickets" role="tabpanel" aria-labelledby="home-tab">
-                    <a asp-action="Create" asp-controller="Tickets" class="pull-left">
-                        <span class="btn btn-outline-secondary">
-                            <i class="text-warning" data-feather="plus-square"></i>
-                        </span>
-                        <span>Add New Ticket</span>
-                    </a>
                     <div row="row my-1">
                         <div class="table-responsive">
                             <div class="text-center">
@@ -356,15 +361,6 @@
 
                 <!--MY PROJECTS TAB-->
                 <div class="tab-pane fade" id="myProjects" role="tabpanel" aria-labelledby="home-tab">
-                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-                    {
-                        <a asp-action="Create" asp-controller="Projects" class="pull-left">
-                            <span class="btn btn-outline-success">
-                                <i class="text-warning" data-feather="plus-square"></i>
-                            </span>
-                            <span>Add New Project</span>
-                        </a>
-                    }
                     <div row="row my-1">
                         <div class="table-responsive">
                             <div class="text-center">
@@ -443,12 +439,6 @@
 
                 <!--COMPANY TICKETS TAB-->
                 <div class="tab-pane fade" id="companyTickets" role="tabpanel" aria-labelledby="home-tab">
-                    <a asp-action="Create" asp-controller="Tickets" class="pull-left">
-                        <span class="btn btn-outline-secondary">
-                            <i class="text-warning" data-feather="plus-square"></i>
-                        </span>
-                        <span>Add New Ticket</span>
-                    </a>
                     <div row="row my-1">
                         <div class="table-responsive">
                             <div class="text-center">
@@ -578,15 +568,6 @@
 
                 <!--COMPANY PROJECTS TAB-->
                 <div class="tab-pane fade" id="companyProjects" role="tabpanel" aria-labelledby="home-tab">
-                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-                    {
-                        <a asp-action="Create" asp-controller="Projects" class="pull-left">
-                            <span class="btn btn-outline-success">
-                                <i class="text-warning" data-feather="plus-square"></i>
-                            </span>
-                            <span>Add New Project</span>
-                        </a>
-                    }
                     <div row="row my-1">
                         <div class="table-responsive">
                             <div class="text-center">
@@ -675,31 +656,61 @@
             </div>
 
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body text-center">
-                            <div class="row my-3">
-                                <div class="col-md-6 ml-auto mr-auto">
-                                    <figure>
-                                        <img class="img-fluid" src="~/media/svg/upgrade.svg" alt="upgrade">
-                                    </figure>
-                                </div>
+            <div class="modal fade" id="newTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'>
+                @*<div class="modal-footer">
+                    <a href="#" class="align-items-center d-flex link-1 justify-content-center" data-dismiss="modal">
+                        <i class="ti-close font-size-14 mr-1"></i>Dismiss
+                    </a>
+                </div>*@
+            </div>
+
+            <!--<div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" style="border: 1px solid #DD44A7">
+                    <h4 class="text-center bg-secondary-bright text-info py-3">Add New Ticket</h4>
+                    <div class="modal-body text-center">
+                        <hr style="border: 1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+                        <form method="post" asp-action="Create" asp-controller="Tickets">-->
+                            @*<div>
+                                    <input type="hidden" asp-for="@Model.Project.Id" name="ProjectId" />
+                                </div>*@
+                            <!--<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Ticket.Title" class="control-label"></label>
+                                <input asp-for="Ticket.Title" class="form-control" />
+                                <span asp-validation-for="Ticket.Title" class="text-danger"></span>
                             </div>
-                            <h4 class="mb-3 text-center">Get an Upgrade</h4>
-                            <div class="row my-3">
-                                <div class="col-md-10 ml-auto mr-auto">
-                                    <p class="text-muted">Get additional 500 GB space for your documents and files. Expand your storage and enjoy your business. Change plan for more space.</p>
-                                    <button class="btn btn-primary" data-dismiss="modal">Plan Upgrade</button>
-                                </div>
+                            <div class="form-group">
+                                <label asp-for="Ticket.Description" class="control-label"></label>
+                                <input asp-for="Ticket.Description" class="form-control" />
+                                <span asp-validation-for="Ticket.Description" class="text-danger"></span>
                             </div>
-                            <a href="#" class="align-items-center d-flex link-1 small justify-content-center" data-dismiss="modal">
-                                <i class="ti-close font-size-10 mr-1"></i>Close
-                            </a>
-                        </div>
+                            <div class="form-group">
+                                <label asp-for="Ticket.ProjectId" class="control-label"></label>
+                                <select asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
+                                    <option hidden>Select a Project</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Ticket.TicketTypeId" class="control-label"></label>
+                                <select asp-for="Ticket.TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId">
+                                    <option hidden>Select a Ticket Type</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Ticket.TicketPriorityId" class="control-label"></label>
+                                <select asp-for="Ticket.TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId">
+                                    <option hidden>Select a Priority</option>
+
+                                </select>
+                            </div>
+                            <div class="form-group text-center">
+                                <input type="submit" value="Submit" class="btn btn-outline-secondary btn-block text-info" />
+                            </div>
+                        </form>
+                        <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             <!-- ./ Content -->
             <!-- Footer -->
@@ -780,7 +791,7 @@
                 //Create pie or douhnut chart
                 // You can switch between pie and douhnut using the method below.
                 new Chart(donutChartCanvas, {
-                    type: 'polarArea',
+                    type: 'doughnut',
                     data: donutData,
                     options: donutOptions
                 })
@@ -810,13 +821,26 @@
                 var donutOptions = {
                     maintainAspectRatio: false,
                     responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'left'
+                        }
+                    }
                 }
+                const actions = [
+                    {
+                        name: 'Position: left',
+                        handler(chart) {
+                            chart.options.plugins.legend.position = 'left';
+                            chart.update();
+                        }
+                    }]
                 //Create pie or douhnut chart
                 // You can switch between pie and douhnut using the method below.
                 new Chart(donutChartCanvas, {
-                    type: 'doughnut',
+                    type: 'polarArea',
                     data: donutData,
-                    options: donutOptions
+                    options: donutOptions,
                 })
             },
             failure: function (result) {
@@ -890,4 +914,18 @@
             $('#cPTable').DataTable();
         });
     </script>
+
+    <!--ADD TICKET Modal Launcher-->
+    <!--<script type="text/javascript">
+        $(document).ready(function () {
+            $('#newTicketLauncher').click(function () {
+                var url = $('#newTicketModal').data('url');
+                $.get(url, function (data) {
+                    $("#newTicketModal").html(data);
+                    $("#newTicketModal").modal('show');
+                });
+            });
+        });
+    </script>-->
+
 }
