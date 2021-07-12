@@ -85,24 +85,24 @@
                         <span class="text-info">Project: </span>@Model.Project.Name
                     </h6>
                     @if (
-                  (User.IsInRole("Admin")) ||
-                  (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
-                  (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
-                  (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
-                  (Model.OwnerUser == currentUser)
-                  )
+                 (User.IsInRole("Admin")) ||
+                 (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+                 (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
+                 (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+                 (Model.OwnerUser == currentUser)
+                 )
                     {
                         <div style="border: 1px solid #DD44A7;">
 
                             @*<a id="newTicketLauncher" asp-action="Create" asp-controller="Tickets" class="pull-left mx-1" data-toggle="modal" data-target="#newTicketModal">
-                                <span class="btn btn-outline-secondary">
-                                    <i class="text-warning" data-feather="plus-square"></i>
-                                </span>
-                                <span>Add New Ticket</span>
-                            </a>*@
+                                    <span class="btn btn-outline-secondary">
+                                        <i class="text-warning" data-feather="plus-square"></i>
+                                    </span>
+                                    <span>Add New Ticket</span>
+                                </a>*@
 
 
-                            <a id="editTicketLauncher" asp-action="Edit" asp-controller="Tickets" asp-route-id="@Model.Id" data-toggle="modal" data-target="#editTicketModal">
+                            <a asp-action="Edit" asp-controller="Tickets" asp-route-id="@Model.Id">
                                 <h5 class="text-center bg-secondary-bright text-secondary py-3" style="margin-bottom:0px">
                                     @Model.Title
                                     <span class="fa fa-edit pull-right text-warning mr-2"></span>
@@ -272,9 +272,9 @@
                 <h6 class="text-center">Ticket Attachments</h6>
                 <div>
                     @if (User.IsInRole("Admin") ||
-            (await ProjectService.GetProjectManagerAsync(Model.Project.Id) == currentUser) ||
-            Model.DeveloperUser == currentUser ||
-            Model.OwnerUser == currentUser)
+           (await ProjectService.GetProjectManagerAsync(Model.Project.Id) == currentUser) ||
+           Model.DeveloperUser == currentUser ||
+           Model.OwnerUser == currentUser)
                     {
                         <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -333,19 +333,22 @@
 </div>
 
 <!-- EDIT TICKET Modal Launcher -->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#editTicketLauncher').click(function () {
-            var ticketId = $(this).data('id');
-            var url = $('#editTicketModal').data('url');
-            $.ajax({
-                url: "/Edit/Get/" + ticketId,
-                cache: false
-            }).done(url, function (data) {
-                $("#editTicketModal").html(data);
-                $("#editTicketModal").modal('show');
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $('#editTicketLauncher').click(function () {
+                var ticketId = $(this).data('id');
+                var url = $('#editTicketModal').data('url');
+                $.ajax({
+                    url: "/Edit/Get/" + ticketId,
+                    cache: false
+                }).done(url, function (data) {
+                    $("#editTicketModal").html(data);
+                    $("#editTicketModal").modal('show');
+                });
             });
         });
-    });
 
-</script>
+    PUT THIS IN ANCHOR
+        id="editTicketLauncher" data-toggle="modal" data-target="#editTicketModal"
+
+    </script>*@

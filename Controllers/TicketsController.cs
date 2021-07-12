@@ -310,7 +310,7 @@ namespace Unbugit.Controllers
             ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Name", ticket.TicketTypeId);
 
             ViewBag.returnUrl = Request.Headers["Referer"].ToString();
-            return PartialView();
+            return View(ticket);
         }
 
         // POST: Tickets/Edit/5
