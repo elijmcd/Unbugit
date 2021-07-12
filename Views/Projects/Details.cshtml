@@ -98,7 +98,7 @@
                             {
                                 <a class="btn btn-outline-primary bg-primary-bright" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">
                                     <li>
-                                        <figure class="avatar" title="@projectManager.FullName">
+                                        <figure class="avatar" title="@projectManager.FullName" data-toggle="tooltip">
                                             <img src="@FileService.ConvertByteArrayToFile(projectManager.AvatarFileData, projectManager.AvatarContentType)" class="rounded-circle" alt="@projectManager.FullName">
                                         </figure>
                                         <span>@projectManager.FullName</span>
@@ -107,11 +107,11 @@
                             }
                             else if (User.IsInRole("Admin"))
                             {
-                                <a class="btn btn-outline-warning" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">No Project Manager Assigned</a>
+                                <a class="btn btn-outline-warning" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">Assign Project Manager</a>
                             }
                             else
                             {
-                                <li>No Project Manager Assigned</li>
+                                <li class="text-muted">No Project Manager Assigned</li>
                             }
                         </ul>
                     </dd>
@@ -132,7 +132,7 @@
                     <div class="avatar-group">
                         @foreach (var member in developers)
                         {
-                            <figure class="avatar" title="@member.FullName">
+                            <figure class="avatar" title="@member.FullName" data-toggle="tooltip">
                                 <img src="@FileService.ConvertByteArrayToFile(member.AvatarFileData, member.AvatarContentType)" class="rounded-circle" alt="@member.FullName">
                             </figure>
                         }
@@ -147,7 +147,7 @@
                     <div class="avatar-group">
                         @foreach (var member in submitters)
                         {
-                            <figure class="avatar" title="@member.FullName">
+                            <figure class="avatar" title="@member.FullName" data-toggle="tooltip">
                                 <img src="@FileService.ConvertByteArrayToFile(member.AvatarFileData, member.AvatarContentType)" class="rounded-circle" alt="@member.FullName">
                             </figure>
                         }
@@ -203,47 +203,59 @@
             <tbody>
                 @foreach (Ticket ticket in Model.Tickets)
                 {
-                    <tr>
+                <tr>
 
-                        <td>
-                            <a class="btn btn-sm btn-outline-secondary text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">
-                                @ticket.Title
-                            </a>
-                        </td>
-                        <td>
-                            @ticket.Created.ToString("D")
-                        </td>
-                        <td>
-                            @ticket.OwnerUser?.FullName
-                        </td>
-                        <td>
-                            @ticket.DeveloperUser?.FullName
-                        </td>
-                        <td>
-                            @if (ticket.TicketPriorityId == 1)
-                            {
-                                <span class="badge bg-danger-bright text-danger">@ticket.TicketPriority.Name</span>
-                            }
-                            else if (ticket.TicketPriorityId == 2)
-                            {
-                                <span class="badge bg-warning-bright text-warning">@ticket.TicketPriority.Name</span>
-                            }
-                            else if (ticket.TicketPriorityId == 3)
-                            {
-                                <span class="badge bg-info-bright text-info">@ticket.TicketPriority.Name</span>
-                            }
-                            else if (ticket.TicketPriorityId == 4)
-                            {
-                                <span class="badge bg-primary-bright text-primary">@ticket.TicketPriority.Name</span>
-                            }
-                        </td>
-                        <td>
-                            @ticket.TicketStatus.Name
-                        </td>
-                        <td>
-                            @ticket.TicketType.Name
-                        </td>
-                    </tr>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">
+                            @ticket.Title
+                        </a>
+                    </td>
+                    <td>
+                        @ticket.Created.ToString("D")
+                    </td>
+                    <td>
+                        @if (ticket.OwnerUser is not null)
+                        {
+                            <figure class="avatar avatar-sm mr-3 bring-forward">
+                                <img src="@FileService.ConvertByteArrayToFile(ticket.OwnerUser.AvatarFileData, ticket.OwnerUser.AvatarContentType)" title="@ticket.OwnerUser?.FullName" data-toggle="tooltip" alt="@ticket.OwnerUser?.FullName" class="rounded-circle">
+                            </figure>
+                            <small>@ticket.OwnerUser?.FullName</small>
+                        }
+                    </td>
+                    <td>
+                        @if (ticket.DeveloperUser is not null)
+                        {
+                            <figure class="avatar avatar-sm mr-3 bring-forward">
+                                <img src="@FileService.ConvertByteArrayToFile(ticket.DeveloperUser.AvatarFileData, ticket.DeveloperUser.AvatarContentType)" title="@ticket.DeveloperUser?.FullName" data-toggle="tooltip" alt="@ticket.DeveloperUser?.FullName" class="rounded-circle">
+                            </figure>
+                            <small>@ticket.DeveloperUser?.FullName</small>
+                        }
+                    </td>
+                    <td>
+                        @if (ticket.TicketPriorityId == 1)
+                        {
+                            <span class="badge bg-danger-bright text-danger">@ticket.TicketPriority.Name</span>
+                        }
+                        else if (ticket.TicketPriorityId == 2)
+                        {
+                            <span class="badge bg-warning-bright text-warning">@ticket.TicketPriority.Name</span>
+                        }
+                        else if (ticket.TicketPriorityId == 3)
+                        {
+                            <span class="badge bg-info-bright text-info">@ticket.TicketPriority.Name</span>
+                        }
+                        else if (ticket.TicketPriorityId == 4)
+                        {
+                            <span class="badge bg-primary-bright text-primary">@ticket.TicketPriority.Name</span>
+                        }
+                    </td>
+                    <td>
+                        @ticket.TicketStatus.Name
+                    </td>
+                    <td>
+                        @ticket.TicketType.Name
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

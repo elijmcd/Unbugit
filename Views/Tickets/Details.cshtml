@@ -20,15 +20,13 @@
     ViewData["Title"] = "Ticket Details";
 }
 
-@*<h2>Ticket Details: @Model.Id</h2>*@
-
 <div class="row">
 
     <!--History-->
     <div class="col-lg-4">
         <br />
         <h6 class="text-center">Ticket History</h6>
-        <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+        <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:100%; opacity:.8;" />
         <div class="card border shadow rounded">
             <div class="card-body" style="overflow-y: scroll; height:500px;">
                 <div class="timeline">
@@ -84,30 +82,45 @@
             <div class="card border shadow mb-1 mx-1 w-100">
                 <div class="card-body rounded shadow" style="border: 1px solid #DD44A7">
                     <h6 class="text-center bg-success-bright text-success py-2">
-                        @Model.Project.Name
+                        <span class="text-info">Project: </span>@Model.Project.Name
                     </h6>
                     @if (
-(User.IsInRole("Admin")) ||
-(User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
-(User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
-(User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
-(Model.OwnerUser == currentUser)
-)
+                  (User.IsInRole("Admin")) ||
+                  (User.IsInRole("ProjectManager") && ticketPM == currentUser) ||
+                  (User.IsInRole("Developer") && Model.DeveloperUser == currentUser) ||
+                  (User.IsInRole("Submitter") && Model.OwnerUser == currentUser) ||
+                  (Model.OwnerUser == currentUser)
+                  )
                     {
-                        <h5 class="text-center bg-secondary-bright text-secondary py-3">
-                            @Model.Title
-                            <a asp-action="Edit" asp-route-id="@Model.Id">
-                                <span class="fa fa-edit pull-right text-warning mr-2"></span>
+                        <div style="border: 1px solid #DD44A7;">
+
+                            @*<a id="newTicketLauncher" asp-action="Create" asp-controller="Tickets" class="pull-left mx-1" data-toggle="modal" data-target="#newTicketModal">
+                                <span class="btn btn-outline-secondary">
+                                    <i class="text-warning" data-feather="plus-square"></i>
+                                </span>
+                                <span>Add New Ticket</span>
+                            </a>*@
+
+
+                            <a id="editTicketLauncher" asp-action="Edit" asp-controller="Tickets" asp-route-id="@Model.Id" data-toggle="modal" data-target="#editTicketModal">
+                                <h5 class="text-center bg-secondary-bright text-secondary py-3" style="margin-bottom:0px">
+                                    @Model.Title
+                                    <span class="fa fa-edit pull-right text-warning mr-2"></span>
+                                </h5>
                             </a>
-                        </h5>
+                        </div>
                     }
                     else
                     {
                         <h5 class="text-center text-muted py-3" style="border: 1px solid #DD44A7">@Model.Title</h5>
                     }
 
-                    <p class="text-light"><em class="text-light">Created on:</em> @Model.Created.ToString("d")</p>
-                    <h6 class="text-light">@Model.Description</h6>
+                    <div class="py-3">
+                        <strong class="text-success" style="opacity:.8">Ticket Created:</strong> <em class="text-light">@Model.Created.ToString("d")</em>
+                        <span class="pull-right"><strong class="text-danger" style="opacity:.8">Project Deadline:</strong> <em class="text-light">@Model.Project.EndDate?.ToString("d")</em></span>
+                    </div>
+
+                    <p class="text-light bg-light p-3">@Model.Description</p>
 
                     <p class="text-light"><span class="text-info">Type:</span> @Model.TicketType.Name</p>
                     @if (Model.TicketStatusId == 1)
@@ -126,7 +139,7 @@
                         <span class="text-info">Submitter:</span>
                         @if (Model.OwnerUser is not null)
                         {
-                            <figure class="avatar avatar-sm mr-3 bring-forward">
+                            <figure class="avatar avatar-sm mr-3 bring-forward" title="@Model.OwnerUser.FullName" data-toggle="tooltip">
                                 <img src="@BTFileService.ConvertByteArrayToFile(Model.OwnerUser.AvatarFileData, Model.OwnerUser.AvatarContentType)" title="@Model.OwnerUser.FullName" alt="@Model.OwnerUser.FullName" class="rounded-circle">
                             </figure>
                             @Model.OwnerUser.FullName
@@ -167,15 +180,14 @@
                         }
                         else
                         {
-                            <span class="btn btn-outline-light">No developer has been assigned.</span>
+                            <span class="font-weight-bolder">No developer has been assigned.</span>
                         }
                     </p>
                     <p>
                         <a asp-action="Details" asp-controller="Projects" asp-route-id="@Model.ProjectId">
-                            <span class="text-light">Project:</span> <span style="color:#22dc0a">@Model.Project.Name</span>
+                            <span class="text-info">Project:</span> <span style="color:#22dc0a">@Model.Project.Name</span>
                         </a>
                     </p>
-                    <p><em class="text-danger">Project Deadline:</em> @Model.Project.EndDate?.ToString("d")</p>
                     <h6>Ticket Priority:</h6>
                     @if (Model.TicketPriorityId == 1)
                     {
@@ -204,7 +216,7 @@
     <div class="col-lg-4">
         <br />
         <h6 class="text-center">@Model.Comments.Count Comment(s)</h6>
-        <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+        <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:100%; opacity:.8;" />
         <div class="card border shadow rounded">
             <div class="card-body rounded shadow">
                 <div class="col" style="max-height:300px; overflow-y:scroll; height:500px;">
@@ -260,9 +272,9 @@
                 <h6 class="text-center">Ticket Attachments</h6>
                 <div>
                     @if (User.IsInRole("Admin") ||
-                    (await ProjectService.GetProjectManagerAsync(Model.Project.Id) == currentUser) ||
-                    Model.DeveloperUser == currentUser ||
-                    Model.OwnerUser == currentUser)
+            (await ProjectService.GetProjectManagerAsync(Model.Project.Id) == currentUser) ||
+            Model.DeveloperUser == currentUser ||
+            Model.OwnerUser == currentUser)
                     {
                         <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -315,3 +327,25 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="editTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-id="@Model.Id" data-url='@Url.Action("Edit", "Tickets")'>
+</div>
+
+<!-- EDIT TICKET Modal Launcher -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#editTicketLauncher').click(function () {
+            var ticketId = $(this).data('id');
+            var url = $('#editTicketModal').data('url');
+            $.ajax({
+                url: "/Edit/Get/" + ticketId,
+                cache: false
+            }).done(url, function (data) {
+                $("#editTicketModal").html(data);
+                $("#editTicketModal").modal('show');
+            });
+        });
+    });
+
+</script>

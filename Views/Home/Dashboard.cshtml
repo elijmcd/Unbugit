@@ -336,7 +336,7 @@
                                             <td>
                                                 @if (item.OwnerUser is not null)
                                                 {
-                                                    <figure class="avatar avatar-sm mr-3 bring-forward">
+                                                    <figure class="avatar avatar-sm mr-3 bring-forward" title="@item.OwnerUser.FullName" data-toggle="tooltip">
                                                         <img src="@FileService.ConvertByteArrayToFile(item.OwnerUser.AvatarFileData, item.OwnerUser.AvatarContentType)" title="@item.OwnerUser?.FullName" alt="@item.OwnerUser?.FullName" class="rounded-circle">
                                                     </figure>
                                                 }
@@ -345,7 +345,7 @@
                                             <td>
                                                 @if (item.DeveloperUser is not null)
                                                 {
-                                                    <figure class="avatar avatar-sm mr-3 bring-forward">
+                                                    <figure class="avatar avatar-sm mr-3 bring-forward" title="@item.DeveloperUser.FullName" data-toggle="tooltip">
                                                         <img src="@FileService.ConvertByteArrayToFile(item.DeveloperUser.AvatarFileData, item.DeveloperUser.AvatarContentType)" title="@item.DeveloperUser.FullName" alt="@item.DeveloperUser.FullName" class="rounded-circle">
                                                     </figure>
                                                 }
@@ -483,9 +483,15 @@
                                                         @item.Title
                                                     </a>
                                                 }
-                                                else
+                                                else if (item.OwnerUserId == btUser.Id && item.DeveloperUserId != btUser.Id)
                                                 {
                                                     <a class="btn btn-outline-secondary text-primary" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                        @item.Title
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-outline-secondary text-dark" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
                                                         @item.Title
                                                     </a>
                                                 }
@@ -543,8 +549,8 @@
                                             <td>
                                                 @if (item.OwnerUser is not null)
                                                 {
-                                                    <figure class="avatar avatar-sm mr-3 bring-forward">
-                                                        <img src="@FileService.ConvertByteArrayToFile(item.OwnerUser.AvatarFileData, item.OwnerUser.AvatarContentType)" title="@item.OwnerUser?.FullName" alt="@item.OwnerUser?.FullName" class="rounded-circle">
+                                                    <figure class="avatar avatar-sm mr-3 bring-forward" title="@item.OwnerUser.FullName" data-toggle="tooltip">
+                                                        <img src="@FileService.ConvertByteArrayToFile(item.OwnerUser.AvatarFileData, item.OwnerUser.AvatarContentType)" title="@item.OwnerUser?.FullName" data-toggle="tooltip" alt="@item.OwnerUser?.FullName" class="rounded-circle">
                                                     </figure>
                                                 }
                                                 <small>@item.OwnerUser?.FullName</small>
@@ -552,8 +558,8 @@
                                             <td>
                                                 @if (item.DeveloperUser is not null)
                                                 {
-                                                    <figure class="avatar avatar-sm mr-3 bring-forward">
-                                                        <img src="@FileService.ConvertByteArrayToFile(item.DeveloperUser.AvatarFileData, item.DeveloperUser.AvatarContentType)" title="@item.DeveloperUser.FullName" alt="@item.DeveloperUser.FullName" class="rounded-circle">
+                                                    <figure class="avatar avatar-sm mr-3 bring-forward" title="@item.DeveloperUser.FullName" data-toggle="tooltip">
+                                                        <img src="@FileService.ConvertByteArrayToFile(item.DeveloperUser.AvatarFileData, item.DeveloperUser.AvatarContentType)" title="@item.DeveloperUser.FullName" data-toggle="tooltip" alt="@item.DeveloperUser.FullName" class="rounded-circle">
                                                     </figure>
                                                 }
                                                 <small>@item.DeveloperUser?.FullName</small>
@@ -598,19 +604,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in (Model.Projects))
+                                    @foreach (var item in companyProjects)
                                     {
                                         <tr>
                                             <td>
                                                 @if ((item.Members.Contains(btUser)) || (User.IsInRole("Admin")) || (User.IsInRole("ProjectManager") && item.Members.Contains(btUser)))
                                                 {
-                                                    <a class="btn btn-outline-success text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                    <a class="btn btn-outline-success text-info" asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">
                                                         @item.Name
                                                     </a>
                                                 }
                                                 else
                                                 {
-                                                    <a class="btn btn-outline-success text-primary" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                    <a class="btn btn-outline-success text-dark" asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">
                                                         @item.Name
                                                     </a>
                                                 }
@@ -618,19 +624,19 @@
                                             <td>
                                                 @if (item.ProjectPriorityId == 1)
                                                 {
-                                                    <span class="badge badge-danger">@item.ProjectPriority.Name</span>
+                                                    <span class="badge badge-danger">@item.ProjectPriority?.Name</span>
                                                 }
                                                 else if (item.ProjectPriorityId == 2)
                                                 {
-                                                    <span class="badge badge-warning">@item.ProjectPriority.Name</span>
+                                                    <span class="badge badge-warning">@item.ProjectPriority?.Name</span>
                                                 }
                                                 else if (item.ProjectPriorityId == 3)
                                                 {
-                                                    <span class="badge badge-info">@item.ProjectPriority.Name</span>
+                                                    <span class="badge badge-info">@item.ProjectPriority?.Name</span>
                                                 }
                                                 else if (item.ProjectPriorityId == 4)
                                                 {
-                                                    <span class="badge badge-primary">@item.ProjectPriority.Name</span>
+                                                    <span class="badge badge-primary">@item.ProjectPriority?.Name</span>
                                                 }
                                             </td>
                                             <td>

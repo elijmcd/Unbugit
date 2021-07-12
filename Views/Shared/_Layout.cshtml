@@ -851,6 +851,16 @@
         </section>
     </div>
 
+
+    <div class="modal fade" id="newTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'>
+        @*<div class="modal-footer">
+                <a href="#" class="align-items-center d-flex link-1 justify-content-center" data-dismiss="modal">
+                    <i class="ti-close font-size-14 mr-1"></i>Dismiss
+                </a>
+            </div>*@
+    </div>
+
+
     <!-- ./ Layout wrapper -->
     <!-- Main scripts -->
     <script src="~/vendors/bundle.js"></script>
@@ -873,6 +883,9 @@
     <!-- Chart Scripts -->
     <script src="~/js/chart.min.js"></script>
     <script src="~/js/chartjs.js"></script>
+
+    <!-- JQUERY SCRIPT -->
+    <script src="~/vendors/jquery/jquery-ui.min.js"></script>
 
     <!--LAYOUT ADD TICKET Modal Launcher-->
     <script type="text/javascript">
@@ -898,6 +911,8 @@
             });
         });
     </script>
+
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -9,100 +9,98 @@
     ViewData["Title"] = "Edit";
 }
 
-<div class="row">
-    <div class="col-4 offset-4">
-        <div class="card shadow py-4" style="border: 1px solid #DD44A7">
-            <h4 class="text-center bg-secondary-bright text-info py-3">Edit Ticket</h4>
-            <div class="card-body">
-                <hr style="border: dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-                <form asp-action="Edit">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="Id" />
-                    <input type="hidden" asp-for="OwnerUserId" />
-                    <input type="hidden" asp-for="DeveloperUserId" />
-                    <input type="hidden" asp-for="ProjectId" />
-                    <input type="hidden" asp-for="Updated" />
-                    <input type="hidden" asp-for="Created" />
-                    <input type="hidden" asp-for="ArchivedDate" />
-                    <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="border: 1px solid #DD44A7">
+        <h4 class="text-center bg-secondary-bright text-info py-3">Edit Ticket</h4>
+        <div class="modal-body text-center">
+            <hr style="border: 1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="OwnerUserId" />
+                <input type="hidden" asp-for="DeveloperUserId" />
+                <input type="hidden" asp-for="ProjectId" />
+                <input type="hidden" asp-for="Updated" />
+                <input type="hidden" asp-for="Created" />
+                <input type="hidden" asp-for="ArchivedDate" />
+                <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
 
-                    <div class="form-group">
-                        <label asp-for="Title" class="control-label"></label>
-                        <input asp-for="Title" class="form-control" />
-                        <span asp-validation-for="Title" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Description" class="control-label"></label>
-                        <input asp-for="Description" class="form-control" />
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-
-                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter") && Model.OwnerUser == currentUser)
-                    {
-                        <div class="form-group">
-                            <label asp-for="TicketType.Name" class="control-label"></label>
-                            <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId">
-                                <option hidden>Select a Type</option>
-                            </select>
-                            <span asp-validation-for="TicketTypeId" class="text-danger"></span>
-                        </div>
-                    }
-                    else
-                    {
-                        <input type="hidden" asp-for="TicketTypeId" />
-                    }
-
-                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter") && Model.OwnerUser == currentUser)
-                    {
-                        <div class="form-group">
-                            <label asp-for="TicketPriority.Name" class="control-label"></label>
-                            <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId">
-                                <option hidden>Select a Priority</option>
-                            </select>
-                            <span asp-validation-for="TicketPriorityId" class="text-danger"></span>
-                        </div>
-                    }
-                    else
-                    {
-                        <input type="hidden" asp-for="TicketPriorityId" />
-                    }
-
-                    @if (!User.IsInRole("Submitter"))
-                    {
-                        <div class="form-group">
-                            <label asp-for="TicketStatus.Name" class="control-label"></label>
-                            <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId">
-                                <option hidden>Select a Status</option>
-                            </select>
-                            <span asp-validation-for="TicketStatusId" class="text-danger"></span>
-                        </div>
-                    }
-                    else
-                    {
-                        <input type="hidden" asp-for="TicketStatusId" />
-                    }
-
-                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-                    {
-                        <div class="form-group form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" asp-for="Archived" /> @Html.DisplayNameFor(model => model.Archived)
-                            </label>
-                        </div>
-                    }
-                    else
-                    {
-                        <input type="hidden" asp-for="Archived" />
-                    }
-
-                    <div class="form-group text-center">
-                        <input type="submit" value="Submit" class="btn btn-outline-secondary btn-block text-info" />
-                    </div>
-                </form>
-                <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-                <div class="text-center">
-                    <a class="text-danger" asp-action="Details" asp-route-id="@Model.Id">Back to Ticket Details</a>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter") && Model.OwnerUser == currentUser)
+                {
+                    <div class="form-group">
+                        <label asp-for="TicketType.Name" class="control-label"></label>
+                        <select asp-for="TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId">
+                            <option hidden>Select a Type</option>
+                        </select>
+                        <span asp-validation-for="TicketTypeId" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" asp-for="TicketTypeId" />
+                }
+
+                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter") && Model.OwnerUser == currentUser)
+                {
+                    <div class="form-group">
+                        <label asp-for="TicketPriority.Name" class="control-label"></label>
+                        <select asp-for="TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId">
+                            <option hidden>Select a Priority</option>
+                        </select>
+                        <span asp-validation-for="TicketPriorityId" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" asp-for="TicketPriorityId" />
+                }
+
+                @if (!User.IsInRole("Submitter"))
+                {
+                    <div class="form-group">
+                        <label asp-for="TicketStatus.Name" class="control-label"></label>
+                        <select asp-for="TicketStatusId" class="form-control" asp-items="ViewBag.TicketStatusId">
+                            <option hidden>Select a Status</option>
+                        </select>
+                        <span asp-validation-for="TicketStatusId" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" asp-for="TicketStatusId" />
+                }
+
+                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                {
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Archived" /> @Html.DisplayNameFor(model => model.Archived)
+                        </label>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" asp-for="Archived" />
+                }
+
+                <div class="form-group text-center">
+                    <input type="submit" value="Submit" class="btn btn-outline-secondary btn-block text-info" />
+                </div>
+            </form>
+            <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+            <div class="text-center">
+                <a class="text-danger" asp-action="Details" asp-controller="Tickets" asp-route-ticketId="@Model.Id">Back to Ticket Details</a>
             </div>
         </div>
     </div>
