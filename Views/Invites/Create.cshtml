@@ -2,17 +2,17 @@
 
 <div class="col-lg-6 col-md-12 offset-lg-3">
     <div class="card shadow-lg rounded">
-        <div class="card-body">
+        <div class="card-body rounded" style="background: #080e18">
             <div class="text-center">
-                <h4 class="main-content-label mb-1">Create an Invite</h4>
+                <h4 class="main-content-label mb-1 text-info">Create an Invite</h4>
                 <h6 class="text-muted card-sub-title">Invite a new member to your team.</h6>
             </div>
             <hr style="border:1px solid; border-radius:70%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-            <div class="chard shadow-lg border bg-dark-bright p-3">
+            <div class="chard shadow-lg border rounded p-3" style="background:#5066e1">
                 <form asp-action="Create">
                     <div class="row row-xs align-items-center mg-b-20 mb-2">
                         <div class="col-md-4">
-                            <label class="mg-b-0 text-info">Email</label>
+                            <label class="mg-b-0">Email</label>
                         </div>
                         <div class="col-md-8 mg-t-5 mg-md-t-0">
                             <input type="email" asp-for="Email" class="form-control" placeholder="Enter email">
@@ -20,7 +20,7 @@
                     </div>
                     <div class="row row-xs align-items-center mg-b-20 mb-2">
                         <div class="col-md-4">
-                            <label class="mg-b-0 text-info">Firstname</label>
+                            <label class="mg-b-0">Firstname</label>
                         </div>
                         <div class="col-md-8 mg-t-5 mg-md-t-0">
                             <input type="text" asp-for="FirstName" class="form-control" placeholder="Enter first name">
@@ -28,7 +28,7 @@
                     </div>
                     <div class="row row-xs align-items-center mg-b-20 mb-2">
                         <div class="col-md-4">
-                            <label class="mg-b-0 text-info">Lastname</label>
+                            <label class="mg-b-0">Lastname</label>
                         </div>
                         <div class="col-md-8 mg-t-5 mg-md-t-0">
                             <input type="text" asp-for="LastName" class="form-control" placeholder="Enter last name">
@@ -36,7 +36,7 @@
                     </div>
                     <div class="row row-xs align-items-center mg-b-20 mb-2">
                         <div class="col-md-4">
-                            <label class="mg-b-0 text-info">Select Project</label>
+                            <label class="mg-b-0">Select Project</label>
                         </div>
                         <div class="col-md-8 mg-t-5 mg-md-t-0">
                             <select class="form-control" asp-for="ProjectId" asp-items="Model.ProjectsList">
@@ -46,7 +46,7 @@
                     </div>
                     <div class="row row-xs align-items-center mg-b-20 mb-2">
                         <div class="col-md-4">
-                            <label class="mg-b-0 text-info">Message</label>
+                            <label class="mg-b-0">Message</label>
                         </div>
                         <div class="col-md-8 mg-t-5 mg-md-t-0">
                             <textarea class="form-control" asp-for="Message" multiple="multiple"></textarea>
@@ -54,8 +54,8 @@
                     </div>
                     <div class="form-group row justify-content-end mb-0">
                         <div class="col-md-8 pl-md-2">
-                            <input type="submit" class="btn ripple btn-primary pd-x-30 mg-r-5" value="Send Invite" />
-                            <button class="btn ripple btn-secondary pd-x-30">Cancel</button>
+                            <input type="submit" class="btn ripple btn-info pd-x-30 mg-r-5" value="Send Invite" />
+                            <a asp-action="Dashboard" asp-controller="Home" class="btn ripple btn-secondary pd-x-30">Cancel</a>
                         </div>
                     </div>
                 </form>
