@@ -268,7 +268,6 @@
                                     <i data-feather="search"></i>
                                 </a>
                             </li>-->
-                          
                             @*/*FULLSCREEN*/*@
                             <li class="nav-item dropdown d-none d-md-block">
                                 <a href="#" class="nav-link" title="Fullscreen" data-toggle="fullscreen">
@@ -514,7 +513,14 @@
     </div>
 
 
-    <div class="modal fade" id="newTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'></div>
+    <div class="modal fade" id="layoutTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'>
+    </div>
+ 
+    @*<div class="modal-footer">
+            <button type="submit" id="modalDismiss" class="align-items-center d-flex link-1 justify-content-center" data-dismiss="modal">
+                <i class="ti-close font-size-14 mr-1"></i>Dismiss
+            </button>
+        </div>*@
 
 
     <!-- ./ Layout wrapper -->
@@ -546,8 +552,8 @@
             $('#LayoutNewTicketLauncher').click(function () {
                 var url = $('#newTicketModal').data('url');
                 $.get(url, function (data) {
-                    $("#newTicketModal").html(data);
-                    $("#newTicketModal").modal('show');
+                    $("#layoutTicketModal").html(data);
+                    $("#layoutTicketModal").modal('show');
                 });
             });
         });
@@ -565,8 +571,7 @@
         });
     </script>
 
-
-
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

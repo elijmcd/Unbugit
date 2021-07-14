@@ -14,7 +14,7 @@
     ViewData["Title"] = "Create";
 }
 
-<div class="modal-dialog modal-dialog-centered" role="document">
+<div id="AddNewTicketModal" class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content" style="border: 1px solid #DD44A7">
         <h4 class="text-center bg-secondary-bright text-info py-3">Add New Ticket</h4>
         <div class="modal-body text-center">
@@ -57,59 +57,15 @@
             </form>
             <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:75%; opacity:.8;" />
             <div class="text-center">
-                @*<a class="text-secondary pull-left" asp-action="MyTickets">Back to My Tickets</a>*@
                 <a class="text-primary pull-left text-secondary" asp-action="MyTickets" asp-controller="Tickets">My Tickets</a>
                 <a class="text-primary center text-info" asp-action="Dashboard" asp-controller="Home">Back to Dashboard</a>
                 <a class="text-primary pull-right text-primary" asp-action="AllTickets" asp-controller="Tickets">All Tickets</a>
             </div>
-
         </div>
-        @*<div class="modal-footer">
-            <a href="#" class="align-items-center d-flex link-1 justify-content-center" data-dismiss="modal">
-                <i class="ti-close font-size-14 mr-1"></i>Dismiss
-            </a>
-        </div>*@
     </div>
-
 </div>
-    </div>
-
 
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-@*<div class="form-group">
-        <label asp-for="Created" class="control-label"></label>
-        <input asp-for="Created" class="form-control" />
-        <span asp-validation-for="Created" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Updated" class="control-label"></label>
-        <input asp-for="Updated" class="form-control" />
-        <span asp-validation-for="Updated" class="text-danger"></span>
-    </div>
-    <div class="form-group form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" asp-for="Archived" /> @Html.DisplayNameFor(model => model.Archived)
-        </label>
-    </div>*@
-@*<div class="form-group">
-        <label asp-for="ArchivedDate" class="control-label"></label>
-        <input asp-for="ArchivedDate" class="form-control" />
-        <span asp-validation-for="ArchivedDate" class="text-danger"></span>
-    </div>*@
-
-@*<div class="form-group">
-        <label asp-for="TicketStatusId" class="control-label"></label>
-        <select asp-for="TicketStatusId" class ="form-control" asp-items="ViewBag.TicketStatusId"></select>
-    </div>*@
-@*<div class="form-group">
-        <label asp-for="OwnerUserId" class="control-label"></label>
-        <select asp-for="OwnerUserId" class ="form-control" asp-items="ViewBag.OwnerUserId" default="@User.Identity"></select>
-    </div>
-    <div class="form-group">
-        <label asp-for="DeveloperUserId" class="control-label"></label>
-        <select asp-for="DeveloperUserId" class ="form-control" asp-items="ViewBag.DeveloperUserId" default=""></select>
-    </div>*@

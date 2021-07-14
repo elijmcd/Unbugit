@@ -284,7 +284,8 @@ namespace Unbugit.Controllers
             //ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Id", ticket.TicketPriorityId);
             //ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id", ticket.TicketStatusId);
             //ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Id", ticket.TicketTypeId);
-            return View("/Home/Dashboard", ticket);
+            
+            return Redirect(returnUrl);
         }
 
         // GET: Tickets/Edit/5
