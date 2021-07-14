@@ -165,7 +165,7 @@
 </div>
 <div class="justify-content-center">
     @if (User.IsInRole("Admin") ||
- (User.IsInRole("ProjectManager") && projectManager.Id == currentUser.Id) ||
+ (User.IsInRole("ProjectManager") && projectManager?.Id == currentUser.Id) ||
  (User.IsInRole("Developer") && developers.Contains(currentUser)) ||
  (User.IsInRole("Submitter") && submitters.Contains(currentUser)))
     {
