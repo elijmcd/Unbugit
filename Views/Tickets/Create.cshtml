@@ -18,7 +18,7 @@
     <div class="modal-content" style="border: 1px solid #DD44A7">
         <h4 class="text-center bg-secondary-bright text-info py-3">Add New Ticket</h4>
         <div class="modal-body text-center">
-            <hr style="border: 1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+            <hr style="border: 1px dashed; border-radius:75%; border-color:#22DC0A; max-width:75%; opacity:.8;" />
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
@@ -55,10 +55,12 @@
                     <input type="submit" value="Submit" class="btn btn-outline-secondary btn-block text-info" />
                 </div>
             </form>
-            <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
+            <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:75%; opacity:.8;" />
             <div class="text-center">
                 @*<a class="text-secondary pull-left" asp-action="MyTickets">Back to My Tickets</a>*@
-                <a class="text-primary center" asp-action="Dashboard" asp-controller="Home">Back to Dashboard</a>
+                <a class="text-primary pull-left text-secondary" asp-action="MyTickets" asp-controller="Tickets">My Tickets</a>
+                <a class="text-primary center text-info" asp-action="Dashboard" asp-controller="Home">Back to Dashboard</a>
+                <a class="text-primary pull-right text-primary" asp-action="AllTickets" asp-controller="Tickets">All Tickets</a>
             </div>
 
         </div>

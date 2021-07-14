@@ -13,162 +13,168 @@
 
 }
 
+<!--ASSIGNED TICKETS-->
 @if (User.IsInRole("Developer"))
 {
-    <div class="table-responsive">
-        <div class="text-center">
-            <h3>Assigned Tickets</h3>
-        </div>
-        @*@if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+<div class="table-responsive">
+    <div class="text-center">
+        <br />
+        <h4>Assigned Tickets</h4>
+        <hr style="border:1px dashed; border-radius:50%; border-color:#22DC0A; max-width:75%; opacity:.8;" />
+    </div>
+    <a id="newTicketLauncher" asp-action="Create" asp-controller="Tickets" class="pull-left mx-1" data-toggle="modal" data-target="#newTicketModal">
+        <span class="btn btn-outline-secondary">
+            <i class="text-warning" data-feather="plus-square"></i>
+        </span>
+        <span>Add New Ticket</span>
+    </a>
+    <br /><br /><br />
+
+    <table id="myTable" class="table table-hover">
+        <caption>Developer tickets for @btUser.FullName</caption>
+        <thead>
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Created / Updated
+                </th>
+                @*<th>
+                        Archive
+                    </th>*@
+                <th>
+                    Project
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Priority
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Owner
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Where(t => t.DeveloperUserId == btUser.Id).Where(t => t.TicketStatusId != 1))
             {
-                <p>
-                    <a class="btn btn-gradient-primary" asp-action="Create">Create New</a>
-                </p>
-            }*@
-
-        <table id="myTable" class="table table-hover">
-            <caption>Developer tickets for @btUser.FullName</caption>
-            <thead>
                 <tr>
-                    <th>
-                        Title
-                    </th>
-                    <th>
-                        Created / Updated
-                    </th>
-                    @*<th>
-                            Archive
-                        </th>*@
-                    <th>
-                        Project
-                    </th>
-                    <th>
-                        Type
-                    </th>
-                    <th>
-                        Priority
-                    </th>
-                    <th>
-                        Status
-                    </th>
-                    <th>
-                        Owner
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Where(t => t.DeveloperUserId == btUser.Id).Where(t=>t.TicketStatusId != 1))
-                {
-                    <tr>
-                        <td>
-                            <a class="btn btn-outline-info btn-small" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                                @item.Title
-                            </a>
+                    <td>
+                        <a class="btn btn-outline-info btn-small" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                            @item.Title
+                        </a>
 
+                    </td>
+                    @if (item.Updated is null)
+                    {
+                        <td>
+                            @item.Created.ToString("D")
                         </td>
-                        @if (item.Updated is null)
+                    }
+                    else
+                    {
+                        <td>
+                            @item.Updated?.ToString("D")
+                        </td>
+                    }
+                    @*@if (!item.Archived)
                         {
                             <td>
-                                @item.Created.ToString("D")
+                                @Html.DisplayFor(modelItem => item.Archived)
                             </td>
                         }
                         else
                         {
                             <td>
-                                @item.Updated?.ToString("D")
+                                @Html.DisplayFor(modelItem => item.ArchivedDate)
                             </td>
+                        }*@
+                    <td>
+                        @item.Project.Name
+                    </td>
+                    <td>
+                        @item.TicketType.Name
+                    </td>
+                    <td>
+                        @if (item.TicketPriorityId == 1)
+                        {
+                            <span class="badge badge-danger">@item.TicketPriority.Name</span>
                         }
-                        @*@if (!item.Archived)
-                            {
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Archived)
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ArchivedDate)
-                                </td>
-                            }*@
-                        <td>
-                            @item.Project.Name
-                        </td>
-                        <td>
-                            @item.TicketType.Name
-                        </td>
-                        <td>
-                            @if (item.TicketPriorityId == 1)
-                            {
-                                <span class="badge badge-danger">@item.TicketPriority.Name</span>
-                            }
-                            else if (item.TicketPriorityId == 2)
-                            {
-                                <span class="badge badge-warning">@item.TicketPriority.Name</span>
-                            }
-                            else if (item.TicketPriorityId == 3)
-                            {
-                                <span class="badge badge-info">@item.TicketPriority.Name</span>
-                            }
-                            else if (item.TicketPriorityId == 4)
-                            {
-                                <span class="badge badge-primary">@item.TicketPriority.Name</span>
-                            }
-                        </td>
-                        <td>
-                            @if (item.TicketStatusId == 1)
-                            {
-                                <span class="text-danger">@item.TicketStatus.Name</span>
-                            }
-                            else if (item.TicketStatusId == 2)
-                            {
-                                <span class="text-warning">@item.TicketStatus.Name</span>
-                            }
-                            else if (item.TicketStatusId == 3)
-                            {
-                                <span class="text-secondary">@item.TicketStatus.Name</span>
-                            }
-                            else if (item.TicketStatusId == 4)
-                            {
-                                <span class="text-primary">@item.TicketStatus.Name</span>
-                            }
-                            else if (item.TicketStatusId == 5)
-                            {
-                                <span class="text-light">@item.TicketStatus.Name</span>
-                            }
-                            else if (item.TicketStatusId == 6)
-                            {
-                                <span class="text-muted">@item.TicketStatus.Name</span>
-                            }
-                        </td>
-                        <td>
-                            @item.OwnerUser?.FullName
-                        </td>
-                        <td>
-                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (await projectService.GetProjectManagerAsync(item.Project.Id) == btUser) || item.DeveloperUser == btUser || item.OwnerUser == btUser)
-                            {
-                                <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit text-warning"></i></a>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                        else if (item.TicketPriorityId == 2)
+                        {
+                            <span class="badge badge-warning">@item.TicketPriority.Name</span>
+                        }
+                        else if (item.TicketPriorityId == 3)
+                        {
+                            <span class="badge badge-info">@item.TicketPriority.Name</span>
+                        }
+                        else if (item.TicketPriorityId == 4)
+                        {
+                            <span class="badge badge-primary">@item.TicketPriority.Name</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.TicketStatusId == 1)
+                        {
+                            <span class="text-danger">@item.TicketStatus.Name</span>
+                        }
+                        else if (item.TicketStatusId == 2)
+                        {
+                            <span class="text-warning">@item.TicketStatus.Name</span>
+                        }
+                        else if (item.TicketStatusId == 3)
+                        {
+                            <span class="text-secondary">@item.TicketStatus.Name</span>
+                        }
+                        else if (item.TicketStatusId == 4)
+                        {
+                            <span class="text-primary">@item.TicketStatus.Name</span>
+                        }
+                        else if (item.TicketStatusId == 5)
+                        {
+                            <span class="text-light">@item.TicketStatus.Name</span>
+                        }
+                        else if (item.TicketStatusId == 6)
+                        {
+                            <span class="text-muted">@item.TicketStatus.Name</span>
+                        }
+                    </td>
+                    <td>
+                        @item.OwnerUser?.FullName
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && (await projectService.GetProjectManagerAsync(item.Project.Id) == btUser) || item.DeveloperUser == btUser || item.OwnerUser == btUser)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit text-warning"></i></a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 }
-<br />
-<hr style="border:dotted; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-<br />
+
+<!--SUBMITTED TICKETS-->
 <div class="table-responsive">
     <div class="text-center">
-        <h3>Submitted Tickets</h3>
+        <br />
+        <h4>Submitted Tickets</h4>
+        <hr style="border:1px dashed; border-radius:50%; border-color:#22DC0A; max-width:75%; opacity:.8;" />
     </div>
-    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") || User.IsInRole("Submitter"))
-    {
-        <p>
-            <a class="btn btn-gradient-primary" asp-action="Create">Add Ticket</a>
-        </p>
-    }
+    <a id="newTicketLauncher" asp-action="Create" asp-controller="Tickets" class="pull-left mx-1" data-toggle="modal" data-target="#newTicketModal">
+        <span class="btn btn-outline-secondary">
+            <i class="text-warning" data-feather="plus-square"></i>
+        </span>
+        <span>Add New Ticket</span>
+    </a>
+    <br /><br /><br />
 
     <table id="myTable2" class="table table-hover">
         <caption>Submitted Tickets for @btUser.FullName</caption>
