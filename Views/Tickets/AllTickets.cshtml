@@ -13,6 +13,7 @@
 
 @{
     BTUser btUser = await UserManager.GetUserAsync(User);
+    int companyId = User.Identity.GetCompanyId().Value;
     Company company = await CompanyInfoService.GetCompanyInfoByIdAsync(btUser.CompanyId);
     ViewData["Title"] = "All Tickets";
 }

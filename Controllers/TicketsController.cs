@@ -69,8 +69,9 @@ namespace Unbugit.Controllers
         public async Task<IActionResult> AllTickets()
         {
             int companyId = User.Identity.GetCompanyId().Value;
+            List<Ticket> tickets = new();
 
-            List<Ticket> tickets = await _companyService.GetAllTicketsAsync(companyId);
+                 tickets = await _companyService.GetAllTicketsAsync(companyId);
 
             return View(tickets);
         }
