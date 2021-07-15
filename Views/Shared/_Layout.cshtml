@@ -151,7 +151,7 @@
                                 </a>
                             </li>
                             <li class="nav-link-icon">
-                                <a id="LayoutNewTicketLauncher" data-toggle="modal" data-target="#newTicketModal" asp-action="Create" asp-controller="Tickets">
+                                <a class="LayoutNewTicketLauncher" data-toggle="modal" data-target="#newTicketModal" asp-action="Create" asp-controller="Tickets">
                                     <span class="nav-link-icon">
                                         <i style="color:#FFFF00;" data-feather="plus-square"></i>
                                     </span>
@@ -514,7 +514,6 @@
 
 
     <div class="modal fade" id="layoutTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'>
-    </div>
  
     @*<div class="modal-footer">
             <button type="submit" id="modalDismiss" class="align-items-center d-flex link-1 justify-content-center" data-dismiss="modal">
@@ -522,6 +521,9 @@
             </button>
         </div>*@
 
+   
+    
+    </div>
 
     <!-- ./ Layout wrapper -->
     <!-- Main scripts -->
@@ -549,17 +551,22 @@
     <!--LAYOUT ADD TICKET Modal Launcher-->
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#LayoutNewTicketLauncher').click(function () {
-                var url = $('#newTicketModal').data('url');
+            $('.LayoutNewTicketLauncher').click(function () {
+                var url = $('#layoutTicketModal').data('url');
                 $.get(url, function (data) {
                     $("#layoutTicketModal").html(data);
                     $("#layoutTicketModal").modal('show');
+                    $(".modal-backdrop").click(function () {
+                        $("#layoutTicketModal").modal('hide');
+                        $("#layoutTicketModal").removeClass('show')
+                    })
+
                 });
             });
         });
     </script>
     <!--ADD TICKET Modal Launcher-->
-    <script type="text/javascript">
+    @*<script type="text/javascript">
         $(document).ready(function () {
             $('#newTicketLauncher').click(function () {
                 var url = $('#newTicketModal').data('url');
@@ -569,7 +576,7 @@
                 });
             });
         });
-    </script>
+    </script>*@
 
     @await RenderSectionAsync("Scripts", required: false)
 

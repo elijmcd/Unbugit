@@ -214,7 +214,7 @@
 
             <!--TAB CONTENT-->
             <div class="tab-content">
-                <a id="newTicketLauncher" asp-action="Create" asp-controller="Tickets" class="pull-left mx-1" data-toggle="modal" data-target="#newTicketModal">
+                <a id="newTicketLauncher" asp-action="Create" asp-controller="Tickets" class="pull-left mx-1 LayoutNewTicketLauncher" data-toggle="modal" data-target="#newTicketModal">
                     <span class="btn btn-outline-secondary">
                         <i class="text-warning" data-feather="plus-square"></i>
                     </span>
@@ -662,13 +662,13 @@
             </div>
 
             <!-- Modal -->
-            <div class="modal fade" id="newTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'>
+            <!--<div class="modal fade" id="newTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'>-->
                 @*<div class="modal-footer">
                     <a href="#" class="align-items-center d-flex link-1 justify-content-center" data-dismiss="modal">
                         <i class="ti-close font-size-14 mr-1"></i>Dismiss
                     </a>
                 </div>*@
-            </div>
+            <!--</div>-->
 
             <!--<div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" style="border: 1px solid #DD44A7">
@@ -829,11 +829,15 @@
                     responsive: true,
                     plugins: {
                         legend: {
+                            labels: {
+                                fontColor: '#ddd'
+                            },
+                            display: true,
                             position: 'left'
                         }
                     }
                 }
-                const actions = [
+                const legendPosition = [
                     {
                         name: 'Position: left',
                         handler(chart) {
