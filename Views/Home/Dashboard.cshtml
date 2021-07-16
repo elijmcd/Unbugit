@@ -661,63 +661,6 @@
 
             </div>
 
-            <!-- Modal -->
-            <!--<div class="modal fade" id="newTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'>-->
-                @*<div class="modal-footer">
-                    <a href="#" class="align-items-center d-flex link-1 justify-content-center" data-dismiss="modal">
-                        <i class="ti-close font-size-14 mr-1"></i>Dismiss
-                    </a>
-                </div>*@
-            <!--</div>-->
-
-            <!--<div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" style="border: 1px solid #DD44A7">
-                    <h4 class="text-center bg-secondary-bright text-info py-3">Add New Ticket</h4>
-                    <div class="modal-body text-center">
-                        <hr style="border: 1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-                        <form method="post" asp-action="Create" asp-controller="Tickets">-->
-                            @*<div>
-                                    <input type="hidden" asp-for="@Model.Project.Id" name="ProjectId" />
-                                </div>*@
-                            <!--<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="form-group">
-                                <label asp-for="Ticket.Title" class="control-label"></label>
-                                <input asp-for="Ticket.Title" class="form-control" />
-                                <span asp-validation-for="Ticket.Title" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Ticket.Description" class="control-label"></label>
-                                <input asp-for="Ticket.Description" class="form-control" />
-                                <span asp-validation-for="Ticket.Description" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Ticket.ProjectId" class="control-label"></label>
-                                <select asp-for="Ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId">
-                                    <option hidden>Select a Project</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Ticket.TicketTypeId" class="control-label"></label>
-                                <select asp-for="Ticket.TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId">
-                                    <option hidden>Select a Ticket Type</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Ticket.TicketPriorityId" class="control-label"></label>
-                                <select asp-for="Ticket.TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId">
-                                    <option hidden>Select a Priority</option>
-
-                                </select>
-                            </div>
-                            <div class="form-group text-center">
-                                <input type="submit" value="Submit" class="btn btn-outline-secondary btn-block text-info" />
-                            </div>
-                        </form>
-                        <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:50%; opacity:.8;" />
-                    </div>
-                </div>
-            </div>-->
-
             <!-- ./ Content -->
             <!-- Footer -->
             <footer class="content-footer pull-left">
@@ -827,24 +770,14 @@
                 var donutOptions = {
                     maintainAspectRatio: false,
                     responsive: true,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                fontColor: '#ddd'
-                            },
-                            display: true,
-                            position: 'left'
-                        }
+                    legend: {
+                        labels: {
+                            fontColor: '#ddd'
+                        },
+                        display: true,
+                        position: 'left'
                     }
                 }
-                const legendPosition = [
-                    {
-                        name: 'Position: left',
-                        handler(chart) {
-                            chart.options.plugins.legend.position = 'left';
-                            chart.update();
-                        }
-                    }]
                 //Create pie or douhnut chart
                 // You can switch between pie and douhnut using the method below.
                 new Chart(donutChartCanvas, {

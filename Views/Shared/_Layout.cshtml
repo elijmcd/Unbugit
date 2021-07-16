@@ -237,26 +237,9 @@
                             <li class="nav-item ml-3">
                                 <span class="btn btn-outline-light pt-3"><h4>@companyName</h4></span>
                             </li>
-                            @*/*SEARCH*/*@
-                            @*<li class="nav-item pt-2 mr-3">
-                                    <div class="header-search-form">
-                                        <form>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <button class="btn">
-                                                        <i data-feather="search"></i>
-                                                    </button>
-                                                </div>
-                                                <input type="text" class="form-control" placeholder="Search">
-                                                <div class="input-group-append">
-                                                    <button class="btn header-search-close-btn">
-                                                        <i data-feather="x"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </li>*@
+
+                            <!--TOTO: ADD SEARCH FUNCTION TO SITE-->
+
                         </ul>
                     </div>
 
@@ -268,6 +251,7 @@
                                     <i data-feather="search"></i>
                                 </a>
                             </li>-->
+                          
                             @*/*FULLSCREEN*/*@
                             <li class="nav-item dropdown d-none d-md-block">
                                 <a href="#" class="nav-link" title="Fullscreen" data-toggle="fullscreen">
@@ -446,7 +430,7 @@
                                 </div>
                             </li>
 
-                            @*/*DROPDOWN TOGGLE*/*@
+                            @*/*IDENTITY DROPDOWN TOGGLE*/*@
                             <li class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" title="User menu" data-toggle="dropdown">
                                     <figure class="avatar avatar-sm">
@@ -493,6 +477,7 @@
                     </div>
                 </div>
 
+                @*NAVIGATION MENU TOGGLER FOR SMALL SCREEN*@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item header-toggler">
                         <a href="#" class="nav-link">
@@ -500,6 +485,7 @@
                         </a>
                     </li>
                 </ul>
+           
             </div>
         </div>
         <!-- ./ Header -->
@@ -514,23 +500,11 @@
 
 
     <div class="modal fade" id="layoutTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'>
- 
-    @*<div class="modal-footer">
-            <button type="submit" id="modalDismiss" class="align-items-center d-flex link-1 justify-content-center" data-dismiss="modal">
-                <i class="ti-close font-size-14 mr-1"></i>Dismiss
-            </button>
-        </div>*@
-
-   
-    
     </div>
 
     <!-- ./ Layout wrapper -->
     <!-- Main scripts -->
     <script src="~/vendors/bundle.js"></script>
-
-    <!-- Apex chart -->
-    @*<script src="~/vendors/charts/apex/apexcharts.min.js"></script>*@
 
     <!-- Daterangepicker -->
     <script src="~/vendors/datepicker/daterangepicker.js"></script>
@@ -548,7 +522,7 @@
     <script src="~/js/chart.min.js"></script>
     @*<script src="~/js/chartjs.js"></script>*@
 
-    <!--LAYOUT ADD TICKET Modal Launcher-->
+    <!--ADD TICKET Modal Launcher-->
     <script type="text/javascript">
         $(document).ready(function () {
             $('.LayoutNewTicketLauncher').click(function () {
@@ -565,20 +539,30 @@
             });
         });
     </script>
-    <!--ADD TICKET Modal Launcher-->
-    @*<script type="text/javascript">
-        $(document).ready(function () {
-            $('#newTicketLauncher').click(function () {
-                var url = $('#newTicketModal').data('url');
-                $.get(url, function (data) {
-                    $("#newTicketModal").html(data);
-                    $("#newTicketModal").modal('show');
-                });
-            });
-        });
-    </script>*@
 
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>
+
+
+@*/*SEARCH*/
+    <li class="nav-item pt-2 mr-3">
+        <div class="header-search-form">
+            <form>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button class="btn">
+                            <i data-feather="search"></i>
+                        </button>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search">
+                    <div class="input-group-append">
+                        <button class="btn header-search-close-btn">
+                            <i data-feather="x"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </li>*@
