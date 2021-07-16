@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="row bg-dark-gradient w-100 p-3">
-        <div class="col-6 card-shadow p-2">
+        <div class="col-lg-6 card-shadow p-2">
             <form asp-action="AssignUsers" asp-controller="Projects" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="@Model.Project.Id">
@@ -26,7 +26,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-6 card shadow p-2">
+        <div class="col-lg-6 card shadow p-2">
             <form asp-action="RemoveUsers" asp-controller="Projects" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="@Model.Project.Id">
