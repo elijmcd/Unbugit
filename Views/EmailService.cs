@@ -23,7 +23,7 @@ namespace Unbugit.Services
         {
             //step1: use MimeMessage MailboxAddress.Parse & BodyBuilder
             //to help assemble the content of an email
-
+            //This is a comment so I can push this back to github, there seemed to be a problem when creating a ticket from Project/Details...
             var emailTo = new MimeMessage();
             emailTo.Sender = MailboxAddress.Parse(_configuration["MailSettings:Mail"]);
             emailTo.To.Add(MailboxAddress.Parse(email));
