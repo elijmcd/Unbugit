@@ -35,9 +35,9 @@
             <div class="col">
                 @if (User.IsInRole("Admin") || (User.IsInRole("ProjectManager") && Model.Members.Contains(currentUser)))
                 {
-                <span>
-                    <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm text-warning fa fa-edit fa-pull-right p-3" style="font-size:1.2rem"></a><em style="font-size:1rem">@Model.Description</em>
-                </span>
+                    <span>
+                        <a asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm text-warning fa fa-edit fa-pull-right p-3" style="font-size:1.2rem"></a><em style="font-size:1rem">@Model.Description</em>
+                    </span>
                 }
                 <dl>
                     <br />
@@ -48,8 +48,8 @@
                         </div>
                     }
                     @*<dd>
-                        @Model.Description
-                    </dd>*@
+                            @Model.Description
+                        </dd>*@
                     <dt class="col-sm-6 text-light">
                         Start Date
                     </dt>
@@ -97,12 +97,12 @@
                             @if ((projectManager != null) && (User.IsInRole("Admin")))
                             {
                                 <a class="btn btn-outline-primary bg-primary-bright" asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id">
-                                    <li>
-                                        <figure class="avatar" title="@projectManager.FullName" data-toggle="tooltip">
-                                            <img src="@FileService.ConvertByteArrayToFile(projectManager.AvatarFileData, projectManager.AvatarContentType)" class="rounded-circle" alt="@projectManager.FullName">
-                                        </figure>
-                                        <span>@projectManager.FullName</span>
-                                    </li>
+                                <li>
+                                    <figure class="avatar" title="@projectManager.FullName" data-toggle="tooltip">
+                                        <img src="@FileService.ConvertByteArrayToFile(projectManager.AvatarFileData, projectManager.AvatarContentType)" class="rounded-circle" alt="@projectManager.FullName">
+                                    </figure>
+                                    <span>@projectManager.FullName</span>
+                                </li>
                                 </a>
                             }
                             else if (User.IsInRole("Admin"))
@@ -158,58 +158,59 @@
     </div>
 </div>
 
+@if (User.IsInRole("Admin") ||
+(User.IsInRole("ProjectManager") && projectManager?.Id == currentUser.Id) ||
+(User.IsInRole("Developer") && developers.Contains(currentUser)) ||
+(User.IsInRole("Submitter") && submitters.Contains(currentUser)))
+{
+    <a id="newTicketLauncher" asp-action="Create" asp-controller="Tickets" class="pull-left mx-1 LayoutNewTicketLauncher" data-toggle="modal" data-target="#newTicketModal">
+        <span class="btn btn-outline-secondary">
+            <i class="text-warning" data-feather="plus-square"></i>
+        </span>
+        <span>Add New Ticket</span>
+    </a>
+}
+<br />
+<br />
+
 <hr style="border:1px dashed; border-radius:75%; border-color:#22DC0A; max-width:75%; opacity:.8;" />
 
 <div class="text-center">
     <h5>Tickets for <strong>@Model.Name</strong></h5>
 </div>
 <div class="justify-content-center">
-    @if (User.IsInRole("Admin") ||
- (User.IsInRole("ProjectManager") && projectManager?.Id == currentUser.Id) ||
- (User.IsInRole("Developer") && developers.Contains(currentUser)) ||
- (User.IsInRole("Submitter") && submitters.Contains(currentUser)))
-    {
-        <div class="modal fade" id="newTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'></div>
-        <a id="newTicketLauncher" asp-action="Create" asp-controller="Tickets" class="mx-1" data-toggle="modal" data-target="#newTicketModal">
-            <span class="btn btn-outline-secondary">
-                <i class="text-warning" data-feather="plus-square"></i>
-            </span>
-            <span>Add New Ticket</span>
-        </a>
-    }
 </div>
-<br />
-    <div class="table-responsive">
-        <table id="myTable" class="table table-hover">
-            <caption>Tickets for @Model.Name</caption>
-            <thead>
-                <tr>
-                    <th>
-                        Title
-                    </th>
-                    <th>
-                        Created
-                    </th>
-                    <th>
-                        Submitter
-                    </th>
-                    <th>
-                        Developer
-                    </th>
-                    <th>
-                        Priority
-                    </th>
-                    <th>
-                        Status
-                    </th>
-                    <th>
-                        Type
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Ticket ticket in Model.Tickets)
-                {
+<div class="table-responsive">
+    <table id="myTable" class="table table-hover">
+        <caption>Tickets for @Model.Name</caption>
+        <thead>
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Created
+                </th>
+                <th>
+                    Submitter
+                </th>
+                <th>
+                    Developer
+                </th>
+                <th>
+                    Priority
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Type
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Ticket ticket in Model.Tickets)
+            {
                 <tr>
 
                     <td>
@@ -263,28 +264,21 @@
                         @ticket.TicketType.Name
                     </td>
                 </tr>
-                }
-            </tbody>
-        </table>
-        @*<a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">@ticket.Title</a>*@
-    </div>
-    <div class="d-block">
-        <br />
-        <div class="modal fade" id="newTicketModal" tabindex="-1" role="dialog" aria-hidden="true" data-url='@Url.Action("Create", "Tickets")'>
-            @*<div class="modal-footer">
-                <a href="#" class="align-items-center d-flex link-1 justify-content-center" data-dismiss="modal">
-                    <i class="ti-close font-size-14 mr-1"></i>Dismiss
-                </a>
-            </div>*@
-        </div>
+            }
+        </tbody>
+    </table>
+    @*<a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">@ticket.Title</a>*@
+</div>
+<div class="d-block">
+    <br />
 
-        <a asp-action="Index"><button class="btn btn-outline-light text-light">Back to Company Projects List</button></a>
-    </div>
+    <a asp-action="Index"><button class="btn btn-outline-light text-light">Back to Company Projects List</button></a>
+</div>
 
-    @section Scripts{
-        <script>
-            $(document).ready(function () {
-                $('#myTable').DataTable();
-            });
-        </script>
-    }
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+}
