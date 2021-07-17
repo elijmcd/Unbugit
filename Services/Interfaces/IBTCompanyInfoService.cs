@@ -16,6 +16,8 @@ namespace Unbugit.Services.Interfaces
 
         Task<List<Ticket>> GetAllTicketsAsync(int companyId);
 
+        Task<List<Ticket>> GetUnassignedTicketsAsync(int companyId);
+
         Task<List<BTUser>> GetMembersInRoleAsync(string roleName, int CompanyId);
     }
 }

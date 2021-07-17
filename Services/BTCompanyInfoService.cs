@@ -69,6 +69,16 @@ namespace Unbugit.Services
 
             return tickets;
         }
+        public async Task<List<Ticket>> GetUnassignedTicketsAsync(int companyId)
+        {
+            List<Project> projects = new();
+            List<Ticket> tickets = new();
+
+            projects = await GetAllProjectsAsync(companyId);
+            tickets = projects.SelectMany(p => p.Tickets).Where(t=>t.DeveloperUserId == null).ToList();
+
+            return tickets;
+        }
 
         public async Task<Company> GetCompanyInfoByIdAsync(int? companyId)
         {

@@ -18,6 +18,8 @@
                 <form asp-action="AssignTicket" method="post">
                     <input asp-for="@Model.Ticket.Id" hidden />
                     <input asp-for="@Model.Ticket.ProjectId" hidden />
+                    <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
+
                     <div class="row clearfix">
                         <div class="col-md-6 col-sm-12">
                             <label>Select Developer </label>

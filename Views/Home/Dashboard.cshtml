@@ -19,7 +19,7 @@
     List<Project> companyProjects = await CompanyInfoService.GetAllProjectsAsync(companyId);
     BTUser btUser = await UserManager.GetUserAsync(User);
     int archivedTickets = TicketService.GetArchivedTicketsByCompanyAsync(companyId).Result.Count;
-    int unassigned = TicketService.GetAllTicketsByStatusAsync(companyId, "Unassigned").Result.Count;
+    int unassigned = (CompanyInfoService.GetUnassignedTicketsAsync(companyId)).Result.Count;
 
 
     ViewData["Title"] = "Dashboard"; }
@@ -47,6 +47,53 @@
                 <div class="col-lg-3 col-md-6 col-sm-12 my-1">
                     <div class="row">
                         <div class="col-sm-12">
+                            @*UNASSIGNED TICKETS*@
+                            <div class="card shadow border">
+                                <div class="card-body bg-dark">
+                                    <p class="card-title">Unassigned Tickets</p>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="avatar">
+                                            <a asp-action="Unassigned" asp-controller="Tickets" asp-route-id="@companyId">
+                                                <span class="avatar-title bg-success-bright text-info rounded-pill">
+                                                    <i class="ti-files"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="font-weight-bold ml-1 font-size-30 ml-3">@unassigned</div>
+                                    </div>
+                                    <small class="mb-0"><a asp-action="Unassigned" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-success bg-success-bright">View Unassigned Tickets</a></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @*ACTIVE TICKETS*@
+                            <div class="card shadow border">
+                                <div class="card-body bg-dark">
+                                    <p class="card-title">Active Tickets</p>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="avatar">
+                                            <a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId">
+                                                <span class="avatar-title bg-secondary-bright text-info rounded-pill">
+                                                    <i class="ti-ticket"></i>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <div class="font-weight-bold ml-1 font-size-30 ml-3">@openTickets</div>
+                                    </div>
+                                    @if (!User.IsInRole("Admin"))
+                                    {
+                                        <small class="mb-0"><a asp-action="MyTickets" asp-controller="Tickets" asp-route-id="@btUser.Id" class="badge badge-secondary">View My Tickets</a></small>
+
+                                    }
+                                    <small class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-secondary-bright">View All Tickets</a></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
                             @*COMPANY PROJECTS*@
                             <div class="card shadow border">
                                 <div class="card-body bg-dark">
@@ -71,54 +118,6 @@
                                         <small class="mb-0"><a asp-action="MyProjects" asp-controller="Projects" asp-route-id="@btUser.Id" class="badge badge-primary bg-primary">View My Projects</a></small>
                                         <small class="mb-0"><a asp-action="Index" asp-controller="Projects" asp-route-id="@companyId" class="badge badge-primary bg-primary-bright">View All Projects</a></small>
                                     }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            @*OPEN TICKETS*@
-                            <div class="card shadow border">
-                                <div class="card-body bg-dark">
-                                    <p class="card-title">Open Tickets</p>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <div class="avatar">
-                                            <a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId">
-                                                <span class="avatar-title bg-secondary-bright text-info rounded-pill">
-                                                    <i class="ti-ticket"></i>
-                                                </span>
-                                            </a>
-                                        </div>
-                                        <div class="font-weight-bold ml-1 font-size-30 ml-3">@openTickets</div>
-                                    </div>
-                                    @if (!User.IsInRole("Admin"))
-                                    {
-                                        <small class="mb-0"><a asp-action="MyTickets" asp-controller="Tickets" asp-route-id="@btUser.Id" class="badge badge-secondary">View My Tickets</a></small>
-
-                                    }
-                                    <small class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-secondary bg-secondary-bright">View All Tickets</a></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            @*UNASSIGNED TICKETS*@
-                            <div class="card shadow border">
-                                <div class="card-body bg-dark">
-                                    <p class="card-title">Unassigned Tickets</p>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <div class="avatar">
-                                            <span class="avatar-title bg-success-bright text-success rounded-pill">
-                                                <i class="ti-files"></i>
-                                            </span>
-                                        </div>
-                                        <div class="font-weight-bold ml-1 font-size-30 ml-3">@unassigned</div>
-                                    </div>
-                                    @*@if (User.IsInRole("Admin"))
-                                        {
-                                            <small class="mb-0"><a asp-action="AllTickets" asp-controller="Tickets" asp-route-id="@companyId" class="badge badge-success bg-success-gradient">Assign Tickets</a></small>
-                                        }*@
                                 </div>
                             </div>
                         </div>

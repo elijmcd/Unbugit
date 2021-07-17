@@ -15,17 +15,16 @@
     BTUser btUser = await UserManager.GetUserAsync(User);
     int companyId = User.Identity.GetCompanyId().Value;
     Company company = await CompanyInfoService.GetCompanyInfoByIdAsync(btUser.CompanyId);
-    ViewData["Title"] = "All Tickets";
+    ViewData["Title"] = "Unassigned Tickets";
 }
 
-
-<div class="row my-1">
+<div row="row my-1">
     <div class="table-responsive">
         <div class="text-center">
-            <h3>All Tickets for @company.Name</h3>
+            <h3>Unassigned Tickets for @company.Name</h3>
         </div>
         <table id="cTTable" class="table table-hover">
-            <caption> All Tickets for @company.Name</caption>
+            <caption> Unassigned Tickets for @company.Name</caption>
             <thead>
                 <tr>
                     <th>
@@ -33,6 +32,9 @@
                     </th>
                     <th>
                         Priority
+                    </th>
+                    <th>
+                        Developer
                     </th>
 
                     <th>
@@ -47,9 +49,6 @@
                     <th>
                         Submitter
                     </th>
-                    <th>
-                        Developer
-                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -57,7 +56,7 @@
                 {
                     <tr>
                         <td>
-                            @if ((item.Project.Members.Contains(btUser)) || (User.IsInRole("Admin")))
+                            @if (User.IsInRole("ProjectManager") && (item.Project.Members.Contains(btUser)) || (User.IsInRole("Admin")))
                             {
                                 <a class="btn btn-outline-secondary text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
                                     @item.Title
@@ -94,6 +93,21 @@
                                 <span class="badge badge-primary">@item.TicketPriority.Name</span>
                             }
                         </td>
+                        <td>
+                            @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager") && ((item.Project.Members).Contains(btUser)))
+                            {
+                                <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@item.Id" class="btn btn-outline-light text-primary">
+                                    Assign Developer
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="#" class="btn btn-outline-light text-muted disabled">
+                                    Assign Developer
+                                </a>
+                            }
+                        </td>
+
                         <td>
                             @item.Project.Name
                         </td>
@@ -135,15 +149,6 @@
                             }
                             <small>@item.OwnerUser?.FullName</small>
                         </td>
-                        <td>
-                            @if (item.DeveloperUser is not null)
-                            {
-                                <figure class="avatar avatar-sm mr-3 bring-forward" title="@item.DeveloperUser.FullName" data-toggle="tooltip">
-                                    <img src="@FileService.ConvertByteArrayToFile(item.DeveloperUser.AvatarFileData, item.DeveloperUser.AvatarContentType)" title="@item.DeveloperUser.FullName" data-toggle="tooltip" alt="@item.DeveloperUser.FullName" class="rounded-circle">
-                                </figure>
-                            }
-                            <small>@item.DeveloperUser?.FullName</small>
-                        </td>
                     </tr>
                 }
             </tbody>
@@ -152,93 +157,9 @@
 </div>
 
 @section Scripts {
-
     <script>
         $(document).ready(function () {
             $('#cTTable').DataTable();
         });
     </script>
-
 }
-
-    @*<div class="row sort">
-            @foreach (var item in Model)
-            {
-                <div class="col-lg-3 col-md-6 col-sm-12 my-1">
-
-                    <div class="card shadow p-2" style="border: 1px solid #DD44A7">
-                        <dl class="text-center bg-success-bright text-success">
-                            @item.Project.Name
-                        </dl>
-                        @if (User.IsInRole("Admin") ||
-                     (item.OwnerUserId == btUser.Id) ||
-                     (item.DeveloperUserId == btUser.Id) ||
-                     (await ProjectService.GetProjectManagerAsync(item.ProjectId) == btUser))
-                        {
-                            <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                                <button class="btn btn-block bg-hover text-center bg-secondary-bright text-secondary py-3">@item.Title</button>
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
-                                <h5 class="text-center text-muted py-3" style="border: 1px solid #DD44A7">@item.Title</h5>
-                            </a>
-                        }
-                        <dl class="text-light">
-                            Ticket Priority
-                        </dl>
-                        <dd>
-                            @if (item.TicketPriorityId == 1)
-                            {
-                                <span class="badge badge-danger text-danger bg-danger-bright">@item.TicketPriority.Name</span>
-                            }
-                            else if (item.TicketPriorityId == 2)
-                            {
-                                <span class="badge badge-warning text-warning bg-warning-bright">@item.TicketPriority.Name</span>
-                            }
-                            else if (item.TicketPriorityId == 3)
-                            {
-                                <span class="badge badge-info text-info bg-info-bright">@item.TicketPriority.Name</span>
-                            }
-                            else if (item.TicketPriorityId == 4)
-                            {
-                                <span class="badge badge-primary text-primary bg-primary-bright">@item.TicketPriority.Name</span>
-                            }
-                        </dd>
-                        <dl class="text-light">
-                            Created
-                        </dl>
-                        <dd>
-                            @item.Created.ToString("d")
-                        </dd>
-                        <dl class="text-light">
-                            Owner
-                        </dl>
-                        <dd>
-                            <figure class="avatar" title="@item.OwnerUser.FullName">
-                                <img src="@FileService.ConvertByteArrayToFile(item.OwnerUser.AvatarFileData, item.OwnerUser.AvatarContentType)" class="rounded-circle" alt="@item.OwnerUser.FullName">
-                            </figure>
-                            @item.OwnerUser.FullName
-                        </dd>
-                        <dl class="text-light">
-                            Developer
-                        </dl>
-                        <dd>
-                            @if (item.DeveloperUser != null)
-                            {
-                                <figure class="avatar" title="@item.DeveloperUser?.FullName">
-                                    <img src="@FileService.ConvertByteArrayToFile(item.DeveloperUser.AvatarFileData, item.DeveloperUser.AvatarContentType)" class="rounded-circle" alt="@item.DeveloperUser.FullName">
-                                </figure>
-                                @item.DeveloperUser?.FullName
-                            }
-                            else
-                            {
-                                <p>No Developer Assigned</p>
-                            }
-                        </dd>
-                    </div>
-                </div>
-            }
-        </div>*@
-

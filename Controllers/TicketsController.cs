@@ -76,6 +76,16 @@ namespace Unbugit.Controllers
             return View(tickets);
         }
 
+        public async Task<IActionResult> Unassigned()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+            List<Ticket> tickets = new();
+
+                tickets = await _companyService.GetUnassignedTicketsAsync(companyId);
+
+            return View(tickets);
+        }
+
         public async Task<IActionResult> MyTickets()
         {
             string userId = (await _userManager.GetUserAsync(User)).Id;
@@ -105,6 +115,7 @@ namespace Unbugit.Controllers
             //await _context.Ticket.FirstOrDefaultAsync(t => t.Id == ticketId);
             //
             model.Developers = new SelectList(await _projectService.DevelopersOnProjectAsync(model.Ticket.ProjectId), "Id", "FullName");
+            ViewBag.returnUrl = Request.Headers["Referer"].ToString();
 
             return View(model);
         }
@@ -112,7 +123,7 @@ namespace Unbugit.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles="Admin,ProjectManager")]
-        public async Task<IActionResult> AssignTicket(AssignDeveloperViewModel viewModel)
+        public async Task<IActionResult> AssignTicket(AssignDeveloperViewModel viewModel, string returnUrl)
         {
             if (!string.IsNullOrEmpty(viewModel.DeveloperId))
             {
@@ -155,7 +166,9 @@ namespace Unbugit.Controllers
 
                 await _historyService.AddHistoryAsync(oldTicket, newTicket, currentUser.Id);
             }
-            return RedirectToAction("Details", new { id = viewModel.Ticket.Id });
+            return Redirect(returnUrl);
+
+            //return RedirectToAction("Details", new { id = viewModel.Ticket.Id });
         }
 
         // GET: Tickets/Details/5
