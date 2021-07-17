@@ -829,12 +829,18 @@
                         yAxes: [{
                             ticks: {
                                 beginAtZero: true
-                            }
-                        }]
+                            },
+                        }],
                     },
                     maintainAspectRatio: false,
                     responsive: true,
-                    legend: { display: false },
+                    legend: {
+                        display: false,
+                        labels: {
+                            fontColor: '#ddd'
+                        },
+
+                    },
                 }
                 //Create pie or douhnut chart
                 // You can switch between pie and douhnut using the method below.
