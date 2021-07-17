@@ -133,7 +133,7 @@
                         <div class="col-lg-9 col-md-12 col-sm-12">
                             <div class="card shadow border">
                                 <div class="card-header">
-                                    <h3 class="card-title pt-1">Company Ticket Distribution</h3>
+                                    <h4 class="card-title pt-1">Ticket Distribution Across Projects</h4>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="donutChart">
@@ -146,7 +146,7 @@
                         <div class="col-lg-3 col-md-12 col-sm-12">
                             <div class="card shadow border">
                                 <div class="card-header">
-                                    <h4 class="card-title pt-1">Tickets by Priority</h4>
+                                    <h5 class="card-title pt-1">Tickets by Priority</h5>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="donutChartPriority">
@@ -702,6 +702,14 @@
                 var donutOptions = {
                     maintainAspectRatio: false,
                     responsive: true,
+                    legend: {
+                        labels: {
+                            fontColor: '#ddd'
+                        },
+                        display: true,
+                        position: 'left'
+                    }
+
                 }
                 //Create pie or douhnut chart
                 // You can switch between pie and douhnut using the method below.
@@ -736,6 +744,14 @@
                 var donutOptions = {
                     maintainAspectRatio: false,
                     responsive: true,
+                    legend: {
+                        labels: {
+                            fontColor: '#ddd'
+                        },
+                        display: true,
+                        position: 'left'
+                    }
+
                 }
                 //Create pie or douhnut chart
                 // You can switch between pie and douhnut using the method below.
