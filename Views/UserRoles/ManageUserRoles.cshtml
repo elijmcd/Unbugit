@@ -11,10 +11,10 @@
 
 @if (User.IsInRole("Admin"))
 {
+        <div class="row">
     @foreach (var member in Model)
     {
-        <div class="row">
-            <div class="card shadow col-6 offset-3 my-2">
+            <div class="card shadow col-lg-3 m-2">
                 <div class="card-body">
                     <h2 class="m-t-0 h3"><b>Assign Roles to @member.BTUser.FullName</b></h2>
                     <p class="text-muted font-13 m-b-30">
@@ -42,8 +42,8 @@
                     </form>
                 </div>
             </div>
-        </div>
     }
+        </div>
 }
 else
 {
