@@ -208,6 +208,14 @@
                         <a class="nav-link" id="companyProjects-tab" data-toggle="tab" href="#companyProjects" role="tab"
                            aria-controls="companyProjects" aria-selected="false">Company Projects</a>
                     </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" id="archived-tab" data-toggle="tab" href="#archivedTickets" role="tab"
+                               aria-controls="archiveTab" aria-selected="false">Archived</a>
+                        </li>
+
+                    }
                 </ul>
             </div>
 
@@ -265,7 +273,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in (Model.Tickets).Where(t => t.OwnerUserId == btUser.Id || t.DeveloperUserId == btUser.Id))
+                                    @foreach (var item in (Model.Tickets).Where(t => t.Archived is not true && (t.OwnerUserId == btUser.Id || t.DeveloperUserId == btUser.Id)))
                                     {
                                         <tr>
                                             <td>
@@ -472,7 +480,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in (Model.Tickets).Where(t => t.Project.CompanyId == companyId))
+                                    @foreach (var item in (Model.Tickets).Where(t => t.Project.CompanyId == companyId && t.Archived != true))
                                     {
                                         <tr>
                                             <td>
@@ -658,6 +666,140 @@
                     </div>
                 </div>
 
+                <!--ARCHIVED TICKETS TAB-->
+                <div class="tab-pane fade" id="archivedTickets" role="tabpanel" aria-labelledby="home-tab">
+                    <div row="row my-1">
+                        <div class="table-responsive">
+                            <div class="text-center">
+                                <h3>Archived Tickets for @company</h3>
+                            </div>
+                            <table id="archivedTable" class="table table-hover">
+                                <caption> Archived Tickets for @company</caption>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Title
+                                        </th>
+                                        <th>
+                                            Priority
+                                        </th>
+
+                                        <th>
+                                            Project
+                                        </th>
+                                        <th>
+                                            Type
+                                        </th>
+                                        <th>
+                                            Status
+                                        </th>
+                                        <th>
+                                            Submitter
+                                        </th>
+                                        <th>
+                                            Developer
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in (Model.Tickets).Where(t => t.Project.CompanyId == companyId && t.Archived))
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if ((item.Project.Members.Contains(btUser)) || (User.IsInRole("Admin")))
+                                                {
+                                                    <a class="btn btn-outline-secondary text-info" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                        @item.Title
+                                                    </a>
+                                                }
+                                                else if (item.OwnerUserId == btUser.Id && item.DeveloperUserId != btUser.Id)
+                                                {
+                                                    <a class="btn btn-outline-secondary text-primary" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                        @item.Title
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-outline-secondary text-dark" asp-action="Details" asp-controller="Tickets" asp-route-id="@item.Id">
+                                                        @item.Title
+                                                    </a>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.TicketPriorityId == 1)
+                                                {
+                                                    <span class="badge badge-danger">@item.TicketPriority.Name</span>
+                                                }
+                                                else if (item.TicketPriorityId == 2)
+                                                {
+                                                    <span class="badge badge-warning">@item.TicketPriority.Name</span>
+                                                }
+                                                else if (item.TicketPriorityId == 3)
+                                                {
+                                                    <span class="badge badge-info">@item.TicketPriority.Name</span>
+                                                }
+                                                else if (item.TicketPriorityId == 4)
+                                                {
+                                                    <span class="badge badge-primary">@item.TicketPriority.Name</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @item.Project.Name
+                                            </td>
+                                            <td>
+                                                @item.TicketType.Name
+                                            </td>
+                                            <td>
+                                                @if (item.TicketStatusId == 1)
+                                                {
+                                                    <span class="text-danger">@item.TicketStatus.Name</span>
+                                                }
+                                                else if (item.TicketStatusId == 2)
+                                                {
+                                                    <span class="text-success">@item.TicketStatus.Name</span>
+                                                }
+                                                else if (item.TicketStatusId == 3)
+                                                {
+                                                    <span class="text-secondary">@item.TicketStatus.Name</span>
+                                                }
+                                                else if (item.TicketStatusId == 4)
+                                                {
+                                                    <span class="text-primary">@item.TicketStatus.Name</span>
+                                                }
+                                                else if (item.TicketStatusId == 5)
+                                                {
+                                                    <span class="text-light">@item.TicketStatus.Name</span>
+                                                }
+                                                else if (item.TicketStatusId == 6)
+                                                {
+                                                    <span class="text-muted">@item.TicketStatus.Name</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.OwnerUser is not null)
+                                                {
+                                                    <figure class="avatar avatar-sm mr-3 bring-forward" title="@item.OwnerUser.FullName" data-toggle="tooltip">
+                                                        <img src="@FileService.ConvertByteArrayToFile(item.OwnerUser.AvatarFileData, item.OwnerUser.AvatarContentType)" title="@item.OwnerUser?.FullName" data-toggle="tooltip" alt="@item.OwnerUser?.FullName" class="rounded-circle">
+                                                    </figure>
+                                                }
+                                                <small>@item.OwnerUser?.FullName</small>
+                                            </td>
+                                            <td>
+                                                @if (item.DeveloperUser is not null)
+                                                {
+                                                    <figure class="avatar avatar-sm mr-3 bring-forward" title="@item.DeveloperUser.FullName" data-toggle="tooltip">
+                                                        <img src="@FileService.ConvertByteArrayToFile(item.DeveloperUser.AvatarFileData, item.DeveloperUser.AvatarContentType)" title="@item.DeveloperUser.FullName" data-toggle="tooltip" alt="@item.DeveloperUser.FullName" class="rounded-circle">
+                                                    </figure>
+                                                }
+                                                <small>@item.DeveloperUser?.FullName</small>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- ./ Content -->
@@ -876,6 +1018,11 @@
     <script>
         $(document).ready(function () {
             $('#cPTable').DataTable();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#archivedTable').DataTable();
         });
     </script>
 
