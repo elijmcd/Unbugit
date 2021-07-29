@@ -372,6 +372,7 @@ namespace Unbugit.Controllers
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();
 
+
                     //create and save a notification
                     notification = new()
                     {
