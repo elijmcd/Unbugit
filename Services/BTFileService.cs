@@ -56,7 +56,7 @@ namespace Unbugit.Services
             image.Mutate(x => x.Resize(new ResizeOptions
             {
                 Mode = ResizeMode.Min,
-                Size = new Size(1024)
+                Size = new Size(128)
             }));
 
             using (var memoryStream = new MemoryStream())
