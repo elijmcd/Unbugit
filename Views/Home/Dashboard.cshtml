@@ -14,7 +14,7 @@
 
 @{
     BTUser btUser = await UserManager.GetUserAsync(User);
-    int companyId = btUser.CompanyId.Value;
+    int companyId = btUser.CompanyId?.Value;
     var company = (CompanyInfoService.GetCompanyInfoByIdAsync(companyId)).Result.Name;
     int companyTickets = Model.Tickets.Count();
     int openTickets = Model.Tickets.Where(t => t.TicketStatusId != 1 && t.TicketStatusId != 2).Count();
