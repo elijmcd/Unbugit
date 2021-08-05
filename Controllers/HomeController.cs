@@ -56,15 +56,8 @@ namespace Unbugit.Controllers
 
             BTUser currentUser = await _userManager.GetUserAsync(User);
             int companyId = (int)currentUser.CompanyId;
-            if (User.IsInRole("Admin"))
-            {
-                dashboard.Projects = await _projectService.GetAllProjectsByCompany(companyId);
-            }
-            else
-            {
-                dashboard.Projects = await _projectService.ListUserProjectsAsync(currentUser.Id);
-            }
 
+            dashboard.Projects = await _projectService.GetAllProjectsByCompany(companyId);
             dashboard.Tickets = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
             dashboard.Users = await _companyInfoService.GetAllMembersAsync(companyId);
 

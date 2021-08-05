@@ -12,14 +12,14 @@
 @inject IBTFileService FileService
 @inject UserManager<BTUser> UserManager
 
-@{ int companyId = User.Identity.GetCompanyId().Value;
-    var company = (CompanyInfoService.GetCompanyInfoByIdAsync(companyId)).Result.Name;
-    int companyTickets = (CompanyInfoService.GetAllTicketsAsync(companyId)).Result.Count;
-    int openTickets = CompanyInfoService.GetAllTicketsAsync(companyId).Result.Where(t => t.TicketStatusId != 1 && t.TicketStatusId != 2).Count();
-    List<Project> companyProjects = await CompanyInfoService.GetAllProjectsAsync(companyId);
+@{
     BTUser btUser = await UserManager.GetUserAsync(User);
-    int archivedTickets = TicketService.GetArchivedTicketsByCompanyAsync(companyId).Result.Count;
-    int unassigned = (CompanyInfoService.GetUnassignedTicketsAsync(companyId)).Result.Count;
+    int companyId = btUser.CompanyId.Value;
+    var company = btUser.Company.Name.ToString();
+    int companyTickets = Model.Tickets.Count();
+    int openTickets = Model.Tickets.Where(t => t.TicketStatusId != 1 && t.TicketStatusId != 2).Count();
+    int archivedTickets = Model.Tickets.Where(t => t.Archived == true).Count();
+    int unassigned = Model.Tickets.Where(t => t.TicketStatus.Id == 5 || t.DeveloperUser == null).Count();
 
 
     ViewData["Title"] = "Dashboard"; }
@@ -106,7 +106,7 @@
                                                 </span>
                                             </a>
                                         </div>
-                                        <div class="font-weight-bold ml-1 font-size-30 ml-3">@companyProjects.Count</div>
+                                        <div class="font-weight-bold ml-1 font-size-30 ml-3">@Model.Projects.Count</div>
                                     </div>
                                     @if (User.IsInRole("Admin"))
                                     {
@@ -611,7 +611,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in companyProjects)
+                                    @foreach (var item in Model.Projects)
                                     {
                                         <tr>
                                             <td>
