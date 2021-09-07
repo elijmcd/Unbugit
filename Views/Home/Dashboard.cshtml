@@ -14,7 +14,7 @@
 
 @{
     BTUser btUser = await UserManager.GetUserAsync(User);
-    int companyId = btUser.CompanyId?.Value;
+    int companyId = btUser.CompanyId.Value;
     var company = (CompanyInfoService.GetCompanyInfoByIdAsync(companyId)).Result.Name;
     int companyTickets = Model.Tickets.Count();
     int openTickets = Model.Tickets.Where(t => t.TicketStatusId != 1 && t.TicketStatusId != 2).Count();
@@ -211,7 +211,7 @@
                     @if (User.IsInRole("Admin"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" id="archived-tab" data-toggle="tab" href="#archivedTickets" role="tab"
+                            <a class="nav-link bg-danger" id="archived-tab" data-toggle="tab" href="#archivedTickets" role="tab"
                                aria-controls="archiveTab" aria-selected="false">Archived</a>
                         </li>
 
