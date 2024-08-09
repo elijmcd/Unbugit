@@ -10,7 +10,7 @@ namespace Unbugit.Models.ViewModels
     public class InviteViewModel : Invite
     {
         [Display(Name = "Company")]
-        public Company Company { get; set; }
+        public new Company Company { get; set; }
 
         [Required]
         [EmailAddress]
@@ -29,7 +29,7 @@ namespace Unbugit.Models.ViewModels
 
         [Required]
         [Display(Name = "Project")]
-        public int ProjectId { get; set; }
+        public new int ProjectId { get; set; }
 
         public SelectList ProjectsList { get; set; }
 

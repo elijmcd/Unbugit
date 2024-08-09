@@ -14,6 +14,7 @@ using Unbugit.Models.Enums;
 using Unbugit.Models.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Unbugit.Controllers
 {
@@ -492,7 +493,7 @@ namespace Unbugit.Controllers
             byte[] fileData = ticketAttachment.FileData;
             string ext = Path.GetExtension(fileName).Replace(".", "");
 
-            Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
+            Response.Headers.Append("Content-Disposition", $"inline; filename={fileName}");
             return File(fileData, $"application/{ext}");
         }
     }

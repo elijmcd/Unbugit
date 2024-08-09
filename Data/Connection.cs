@@ -29,7 +29,7 @@ namespace Unbugit.Data
                 Password = userInfo[1],
                 Database = DatabaseUri.LocalPath.TrimStart('/'),
                 SslMode = SslMode.Prefer,
-                TrustServerCertificate = true
+                //TrustServerCertificate = true
             }.ToString();
         }
     }
